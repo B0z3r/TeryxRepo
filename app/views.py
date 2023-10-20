@@ -11,6 +11,7 @@ def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
 
 def regcolaborador(request):
+    
     data = {
         'form': ColaboradorForm()
     }
