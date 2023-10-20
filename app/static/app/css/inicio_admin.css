@@ -1,0 +1,251 @@
+* {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: grid;
+    grid-template-columns: 50% 30% 20%;
+    column-gap: 10px;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 2fr 2fr;
+  }
+  /* cajas crud*/
+  .box {
+    background-color: rgb(238, 237, 234);
+  
+    padding: 7px;
+    color: rgb(238, 237, 234);
+    text-align: center;
+    border: 2px solid;
+    border-radius: 15px;
+  
+  }
+  
+  .box1 {
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 12;
+    margin-right: -13px;
+  }
+  
+  .box2 {
+    margin-left: 10px;
+    grid-column: 0;
+    grid-row: 13 / span 50;
+  }
+  
+  .box3 {
+    grid-column: 2 / span 4;
+    grid-row: 13 / span 8;
+  }
+  .box4 {
+    grid-column: 2 / span 4;
+    grid-row: 21 / span 62;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .imglogo {
+    float: left;
+    padding-left: 20px;
+    width: 200px;
+    height: 70px;
+    padding-top: 20px;
+  }
+  
+  /* css para el menu */
+  .navmenu {
+    width: 300px;
+    margin-left: 10px;
+  }
+  .nav_link {
+    color: #303440;
+    display: block;
+    padding: 20px 0;
+    text-decoration: none;
+    text-align: left;
+  }
+  .nav_link--inside:hover {
+    background: #d1d1d1;
+  }
+  
+  .nav_link--inside {
+    border-radius: 6px;
+    padding-left: 20px;
+  }
+  
+  .list {
+    width: 100%;
+    height: 100vh; /*estaba en 120vh*/
+    display: flex;
+    justify-content: top;
+    flex-direction: column;
+    border-radius: 16px;
+    background: #fff;
+    padding-top: 30px;
+    box-shadow: 0 0.4rem 0.8rem #0005;
+  }
+  
+  .list_item {
+    list-style: none;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .list_item--click {
+    cursor: pointer;
+  }
+  
+  .list_boton {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .arrow .list_flecha {
+    transform: rotate(90deg);
+  }
+  
+  .list_flecha {
+    margin-left: auto;
+    transition: transform 0.3s;
+  }
+  
+  .list_show {
+    width: 80%;
+    margin-left: auto;
+    border-left: 2px solid #303440;
+    list-style: none;
+    transition: height 0.4s;
+    height: 0;
+  }
+  
+  /* tabla contenido*/
+  
+  th,
+  td,
+  h1 {
+    color: black;
+    vertical-align: middle;
+  }
+  
+  main.tablavendedor {
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    backdrop-filter: blur(7px);
+    box-shadow: 0 0.4rem 0.8rem #0005;
+    border-radius: 0.8rem;
+    overflow: hidden;
+  }
+  
+  .tabla_body {
+    width: 95%;
+    max-height: calc(89% - 0.8rem);
+    background-color: #fffb;
+    margin: 0.8rem auto;
+    border-radius: 0.6rem;
+    overflow: auto;
+  }
+  
+  .table_body::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+  
+  .table_body::-webkit-scrollbar-thumb {
+    border-radius: 0.5rem;
+    background-color: #0004;
+    visibility: hidden;
+  }
+  
+  .table_body:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+  }
+  table {
+    width: 100%;
+  }
+  
+  table,
+  th,
+  td {
+    padding: 1rem;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  thead th {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #6894b8;
+  }
+  
+ 
+  .imglogo {
+    float: left;
+    padding-left: 20px;
+    width: 200px;
+    height: 70px;
+    padding-top: 20px;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #0000000b;
+  }
+  tbody tr:hover {
+    background-color: #fff6;
+  }
+  
+  /*titulo ventana*/
+  
+  .tituloH {
+    border-radius: 5px;
+    padding: 0 10px 0 10px;
+    color: white;
+    text-align: center;
+    background: #6894b8;
+    float: left;
+    margin: 10px 25px;
+  }
+  
+  .inputrut {
+    width: 250px;
+    padding: 14px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .boton {
+    width: 100px;
+    background: #6894b8;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .inputc {
+    float: right;
+    padding-right: 30px;
+    margin: 10px;
+  }
+  
+  @media (max-width: 1000px) {
+    td:not(:first-of-type) {
+      min-width: 12.1rem;
+    }
+  }
+  

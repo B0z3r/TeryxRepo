@@ -1,0 +1,30 @@
+{%  extends 'app/base.html' %}
+
+<!--
+    {% load static %}
+-->
+{%  block contenido %}
+{% load crispy_forms_tags %}
+    <div class="box box3"> 
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2> Registro Colaborador</h2>
+                    <hr>
+                    <form action="/ColaboradorForm/" method="post">
+                        {% csrf_token %}    
+                        {{ form | crispy }}
+                        <br>
+                        <hr>
+                        <div class="d-flex justify-content-center">
+                            <input type="reset" value="Cancelar" class="btn btn-secondary">
+                            &nbsp;
+                            <button type="submit" value="btnEnviar" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock %}
