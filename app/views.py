@@ -4,8 +4,12 @@ from .forms import ColaboradorForm, ClienteForm
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'app/home.html')
+
+def login(request):
+    return render(request, 'registration/accounst/login.html')
+
+
+
 
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
