@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .forms import ColaboradorForm, ClienteForm
+from .models import Cliente
 
 
 # Create your views here.
@@ -7,8 +8,6 @@ from .forms import ColaboradorForm, ClienteForm
 
 def login(request):
     return render(request, 'registration/accounst/login.html')
-
-
 
 
 def inicio_admin(request):
@@ -43,6 +42,9 @@ def agregar_cliente(request):
         else:
             data["form"] = formulario
 
-   # clientes = ClienteForm.objects.all()
+    clientes = Cliente.objects.all()
+    data = {
+        'clientes': clientes
+    }
 
     return render(request, 'app/histCliente/agregar_cliente.html', data)
