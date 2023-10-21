@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  inicio_admin, regcolaborador, agregar_cliente
+from .views import  inicio_admin, regcolaborador, agregar_cliente, listar_cliente
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
     path('inicio-admin/', inicio_admin, name="inicio_admin"),
     path('regcolaborador/', regcolaborador, name="regcolaborador"),
     path('agregar-cliente/', agregar_cliente, name="agregar_cliente"),
+    path('listar-cliente/', listar_cliente, name="listar_cliente"),
 ]

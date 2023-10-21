@@ -1,26 +1,28 @@
 {% extends 'app/base.html' %}
 
 {% block contenido %}
-
-    <table>
-        <tr>
-            <th>Rut</th>
-            <th>Nombre</th>
-            <th>Apellido Paterno</th>
-            <th>Apellido Materno</th>
-            <th>Correo</th>
-            <th>Telefono</th>
-        </tr>
-
-        {% for p in clientes %}
-        <tr>
-            <td>{% p.rut_cliente | tittle %}</td>
-            <td>{% p.nombre_cliente | tittle %}</td>
-            <td>{% p.apePaterno | tittle %}</td>
-            <td>{% p.apeMaterno | tittle %}</td>
-            <td>{% p.email | tittle %}</td>
-            <td>{% p.fono | tittle %}</td>
-        </tr>
-
-    </table>
+            <h2>Historial de Clientes</h2>
+            <table>
+                <tr>
+                    <th>Rut</th>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                </tr>
+        
+                {% for p in clientes %}
+        
+                    <tr>
+                        <td>{{ p.rut_cliente  }}</td>
+                        <td>{{ p.nombre_cliente  }}</td>
+                        <td>{{ p.apePaterno  }}</td>
+                        <td>{{ p.apeMaterno  }}</td>
+                        <td>{{ p.email  }}</td>
+                        <td>{{ p.fono   }}</td>
+                    </tr>
+        
+                {% endfor %}
+            </table>
 {% endblock %}

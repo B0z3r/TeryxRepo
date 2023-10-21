@@ -42,9 +42,12 @@ def agregar_cliente(request):
         else:
             data["form"] = formulario
 
+    return render(request, 'app/histCliente/agregar_cliente.html', data)
+
+def listar_cliente(request):
     clientes = Cliente.objects.all()
-    data1 = {
+    data = {
         'clientes': clientes
     }
 
-    return render(request, 'app/histCliente/agregar_cliente.html', data, data1)
+    return render(request, 'app/histCliente/listar_cliente.html', data)
