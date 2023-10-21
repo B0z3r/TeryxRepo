@@ -3,6 +3,7 @@
 {% block contenido %}
 
             <h2>Historial de Clientes</h2>
+            <a href="{% url 'agregar_cliente' %}" class="btn btn-primary"> Agregar Cliente</a>
             <table>
                 <tr>
                     <th>Rut</th>
@@ -11,6 +12,7 @@
                     <th>Apellido Materno</th>
                     <th>Correo</th>
                     <th>Telefono</th>
+                    <th>Opciones</th>
                 </tr>
         
                 {% for p in clientes %}
@@ -22,6 +24,8 @@
                         <td>{{ p.apeMaterno  }}</td>
                         <td>{{ p.email  }}</td>
                         <td>{{ p.fono   }}</td>
+                        <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="{% url 'eliminar_cliente' p.rut_cliente %}" class="btn btn-danger btn-sm">Eliminar</a></td>
                     </tr>
         
                 {% endfor %}

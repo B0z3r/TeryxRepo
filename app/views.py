@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ColaboradorForm, ClienteForm
 from .models import Cliente
 
@@ -51,3 +51,32 @@ def listar_cliente(request):
     }
 
     return render(request, 'app/histCliente/listar_cliente.html', data)
+
+
+
+def modificar_cliente(request, id):
+
+    cliente = get_object_or_404(Cliente, pk=id)
+
+    data = {
+        'form': ClienteForm(instance = cliente)
+    }
+
+    if request.method == 'POST':
+        formulario = ClienteForm(data=request.POST, instance=cliente)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="listar_cliente")
+        data["form"] = formulario
+            #data["mensaje"] = "Cliente Modificado Exitosamente!"
+        #else:
+          
+
+    return render(request, 'app/histCliente/modificar_cliente.html', data)
+
+
+
+def eliminar_cliente(request, id):
+    cliente = get_object_or_404(Cliente, pk=id)
+    cliente.delete()
+    return redirect(to="listar_cliente")
