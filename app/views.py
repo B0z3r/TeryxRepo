@@ -43,8 +43,8 @@ def agregar_cliente(request):
             data["form"] = formulario
 
     clientes = Cliente.objects.all()
-    data = {
+    data1 = {
         'clientes': clientes
     }
 
-    return render(request, 'app/histCliente/agregar_cliente.html', data)
+    return render(request, 'app/histCliente/agregar_cliente.html', data, data1)
