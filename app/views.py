@@ -80,3 +80,7 @@ def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     cliente.delete()
     return redirect(to="listar_cliente")
+
+
+def maqueta(request):
+    return render(request, 'app/histCliente/maqueta.html')
