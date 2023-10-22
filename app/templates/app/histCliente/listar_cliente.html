@@ -1,26 +1,56 @@
 {% extends 'app/base.html' %}
 
+{% block js %}
+    <script>
+        function eliminarCliente(id){
+            Swal.fire({
+                "title": "¿Estas Seguro?",
+                "text": "Que deseas Eliminar este Cliente",
+                "icon": "warning", 
+                "showCancelButton": true,
+                "cancelButtonText": "Cancelar",
+                "confirmButtonText": "Eliminar",
+                "reverseButtons": true,
+                "confirmButtonColor": "#dc3545"
+            })
+            .then(function(result){
+                if(result.isConfirmed){
+                    window.location.href = "/eliminar-cliente/"+id+"/"
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
 {% block contenido %}
 
-    <table>
-        <tr>
-            <th>Rut</th>
-            <th>Nombre</th>
-            <th>Apellido Paterno</th>
-            <th>Apellido Materno</th>
-            <th>Correo</th>
-            <th>Telefono</th>
-        </tr>
-
-        {% for p in clientes %}
-        <tr>
-            <td>{% p.rut_cliente | tittle %}</td>
-            <td>{% p.nombre_cliente | tittle %}</td>
-            <td>{% p.apePaterno | tittle %}</td>
-            <td>{% p.apeMaterno | tittle %}</td>
-            <td>{% p.email | tittle %}</td>
-            <td>{% p.fono | tittle %}</td>
-        </tr>
-
-    </table>
+            <h2>Historial de Clientes</h2>
+            <a href="{% url 'agregar_cliente' %}" class="btn btn-primary"> Agregar Cliente</a>
+            <table>
+                <tr>
+                    <th>Rut</th>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Opciones</th>
+                </tr>
+        
+                {% for p in clientes %}
+        
+                    <tr>
+                        <td>{{ p.rut_cliente  }}</td>
+                        <td>{{ p.nombre_cliente  }}</td>
+                        <td>{{ p.apePaterno  }}</td>
+                        <td>{{ p.apeMaterno  }}</td>
+                        <td>{{ p.email  }}</td>
+                        <td>{{ p.fono   }}</td>
+                        <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                    </tr>
+        
+                {% endfor %}
+            </table>
 {% endblock %}

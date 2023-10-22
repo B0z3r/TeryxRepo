@@ -11,7 +11,7 @@ class Cliente(models.Model):
     fono = models.IntegerField()
     
     def __str__(self):
-        return self.rut_cliente
+        return self.nombre_cliente
     
 
 opciones_consulta = [
@@ -30,7 +30,7 @@ class Persona(models.Model):
     tipo_perfil = models.IntegerField(choices=opciones_consulta)
     
     def __str__(self):
-        return self.tipo_perfil
+        return self.nombre_completo
 
 
 class Proveedor(models.Model):
@@ -83,7 +83,7 @@ class Venta(models.Model):
     tipopago = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.fecha
+        return self.descripcion
     
 class Taller(models.Model):
     nombre_trabajo = models.CharField(max_length=50)

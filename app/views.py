@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ColaboradorForm, ClienteForm
 from .models import Cliente
+from django.contrib  import messages
 
 
 # Create your views here.
@@ -22,7 +23,7 @@ def regcolaborador(request):
         formulario = ColaboradorForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
-            data["mensaje"] = "Colaborador Registrado Exitosamente!"
+            messages.success(request, "Colaborador Registrado Correctamente!")
         else:
             data["form"] = formulario
         
@@ -38,18 +39,22 @@ def agregar_cliente(request):
         formulario = ClienteForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
-            data["mensaje"] = "Cliente Registrado Exitosamente!"
+            messages.success(request, "Cliente Registrado Correctamente!")
+            return redirect(to="listar_cliente")
         else:
             data["form"] = formulario
 
+    return render(request, 'app/histCliente/agregar_cliente.html', data)
+
+def listar_cliente(request):
     clientes = Cliente.objects.all()
-    data1 = {
+    data = {
         'clientes': clientes
     }
 
-<<<<<<< Updated upstream
+
     return render(request, 'app/histCliente/agregar_cliente.html', data, data1)
-=======
+
     return render(request, 'app/histCliente/listar_cliente.html', data)
 
 
@@ -81,6 +86,7 @@ def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     cliente.delete()
     messages.success(request, "Eliminado Correctamente!")
+
     return redirect(to="listar_cliente")
 
 
@@ -98,4 +104,7 @@ def maqueta(request):
 
 
 
->>>>>>> Stashed changes
+
+
+    return redirect(to="listar_cliente")
+
