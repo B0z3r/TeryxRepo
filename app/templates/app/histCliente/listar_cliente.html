@@ -1,5 +1,28 @@
 {% extends 'app/base.html' %}
 
+{% block js %}
+    <script>
+        function eliminarCliente(id){
+            Swal.fire({
+                "title": "¿Estas Seguro?",
+                "text": "Que deseas Eliminar este Cliente",
+                "icon": "warning", 
+                "showCancelButton": true,
+                "cancelButtonText": "Cancelar",
+                "confirmButtonText": "Eliminar",
+                "reverseButtons": true,
+                "confirmButtonColor": "#dc3545"
+            })
+            .then(function(result){
+                if(result.isConfirmed){
+                    window.location.href = "/eliminar-cliente/"+id+"/"
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
 {% block contenido %}
 
             <h2>Historial de Clientes</h2>
@@ -25,7 +48,7 @@
                         <td>{{ p.email  }}</td>
                         <td>{{ p.fono   }}</td>
                         <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        <td><a href="{% url 'eliminar_cliente' p.rut_cliente %}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
                     </tr>
         
                 {% endfor %}
