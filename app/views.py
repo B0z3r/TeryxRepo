@@ -52,9 +52,6 @@ def listar_cliente(request):
         'clientes': clientes
     }
 
-
-    return render(request, 'app/histCliente/agregar_cliente.html', data, data1)
-
     return render(request, 'app/histCliente/listar_cliente.html', data)
 
 
@@ -85,26 +82,14 @@ def modificar_cliente(request, id):
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     cliente.delete()
+<<<<<<< HEAD
+    return redirect(to="listar_cliente")
+
+
+
+def home(request):
+    return render(request, 'app/home.html')
+=======
     messages.success(request, "Eliminado Correctamente!")
-
     return redirect(to="listar_cliente")
-
-
-
-
-def login(request):
-    return render(request, 'registration/accounst/login.html')
-
-
-
-
-def maqueta(request):
-    return render(request, 'app/histCliente/maqueta.html')
-
-
-
-
-
-
-    return redirect(to="listar_cliente")
-
+>>>>>>> 15c8babacd396a64980e96ff4351e3c9ce775a9e
