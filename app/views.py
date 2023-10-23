@@ -14,6 +14,14 @@ def login(request):
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
 
+
+def inicio_vendedor(request):
+    return render(request, 'app/inicio_vendedor.html')
+
+
+def inicio_mecanico(request):
+    return render(request, 'app/inicio_mecanico.html')
+
 def regcolaborador(request):
     
     data = {
