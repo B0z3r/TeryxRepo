@@ -22,7 +22,8 @@ opciones_consulta = [
 
 
 class Persona(models.Model):
-    rut_usuario = models.IntegerField(primary_key=True)
+    nomUsuario = models.CharField(primary_key=True ,max_length=20)
+    rut_usuario = models.IntegerField()
     nombre_completo = models.CharField(max_length=50)
     fono = models.IntegerField()
     email = models.EmailField()
@@ -50,6 +51,7 @@ class Producto(models.Model):
     precio_unitario = models.IntegerField()
     stock = models.IntegerField()
     categoria = models.CharField(max_length=30)
+    marca = models.CharField(max_length=50)
     
     def __str__(self):
         return self.nombre_producto

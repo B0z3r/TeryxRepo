@@ -1,7 +1,7 @@
 from django import forms
 from .models import Persona, Cliente
-#from django.contrib.auth.forms import UserCreationForm
-#from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class ColaboradorForm(forms.ModelForm):
     
@@ -15,10 +15,11 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
 
-"""
+
 class CustomUserCreationForm(UserCreationForm):
     
-    username = forms.IntegerField(label='Rut')
+    username = forms.CharField(label='Nombre Usuario', max_length=20)
+    rut = forms.IntegerField(label='Rut')
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput)
     first_name = forms.CharField(label='Nombre Completo', max_length=100)
@@ -36,6 +37,6 @@ class CustomUserCreationForm(UserCreationForm):
         return cleaned_data
 
     class Meta:
-        model = Persona
-        fields = ["username", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
-"""
+        model = User
+        fields = ["username", "rut", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
+

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  ColaboradorForm, ClienteForm
+from .forms import  ClienteForm,CustomUserCreationForm
 from .models import Cliente
 from django.contrib  import messages
 from django.core.paginator import Paginator
@@ -18,10 +18,10 @@ def regcolaborador(request):
     
     data = {
         #ColaboradorForm()
-        'form': ColaboradorForm()
+        'form': CustomUserCreationForm()
     }
     if request.method == 'POST':
-        formulario = ColaboradorForm(data=request.POST)
+        formulario = CustomUserCreationForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Colaborador Registrado Correctamente!")
