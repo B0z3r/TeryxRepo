@@ -38,7 +38,7 @@
                     <th>Opciones</th>
                 </tr>
         
-                {% for p in clientes %}
+                {% for p in entity %}
         
                     <tr>
                         <td>{{ p.rut_cliente  }}</td>
@@ -53,4 +53,8 @@
         
                 {% endfor %}
             </table>
+
+            <div>
+                {% include 'app/paginator.html' %}
+            </div>
 {% endblock %}

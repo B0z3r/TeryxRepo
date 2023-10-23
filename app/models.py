@@ -23,7 +23,6 @@ opciones_consulta = [
 
 class Persona(models.Model):
     rut_usuario = models.IntegerField(primary_key=True)
-    contrasenna = models.CharField(max_length=30)
     nombre_completo = models.CharField(max_length=50)
     fono = models.IntegerField()
     email = models.EmailField()

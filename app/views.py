@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ColaboradorForm, ClienteForm
+from .forms import  ColaboradorForm, ClienteForm
 from .models import Cliente
 from django.contrib  import messages
+from django.core.paginator import Paginator
+from django.http import Http404
+from django.contrib.auth import authenticate, login
 
 
 # Create your views here.
-
-
 def login(request):
     return render(request, 'registration/accounst/login.html')
-
 
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
@@ -17,6 +17,7 @@ def inicio_admin(request):
 def regcolaborador(request):
     
     data = {
+        #ColaboradorForm()
         'form': ColaboradorForm()
     }
     if request.method == 'POST':
@@ -28,7 +29,6 @@ def regcolaborador(request):
             data["form"] = formulario
         
     return render(request, 'app/regcolaborador.html', data)
-
 
 def agregar_cliente(request):
 
@@ -48,13 +48,20 @@ def agregar_cliente(request):
 
 def listar_cliente(request):
     clientes = Cliente.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(clientes, 5)
+        clientes = paginator.page(page)
+    except:
+        raise Http404
+
     data = {
-        'clientes': clientes
+        'entity': clientes,
+        'paginator': paginator
     }
 
     return render(request, 'app/histCliente/listar_cliente.html', data)
-
-
 
 def modificar_cliente(request, id):
 
@@ -77,10 +84,9 @@ def modificar_cliente(request, id):
 
     return render(request, 'app/histCliente/modificar_cliente.html', data)
 
-
-
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     cliente.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
+
