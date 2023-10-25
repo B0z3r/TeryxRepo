@@ -1,21 +1,21 @@
 {%  extends 'app/base.html' %}
 
-<!--
-    {% load static %}
--->
+{%  load static %}
 
+{%  block contenido %}
 
-{% block contenido %}
+<div class="box box3"> 
+    <main class="tablavendedor">
+        
+        <h1 id="saludo" style="color: black;"></h1>
+        <h1 style="color: aqua;">Bienvenido a Teryx</h1>
+        <h2> {{user.username}} </h2>
+        
+        <script src="{% static  '/app/js/scriptinicio.js' %} "></script>
+        
+    </main>
+    
+</div>
 
-    <div class="box box3">
+{%  endblock %}
 
-
-    </div>
-
-    <div class="box box4">
-
-
-    </div>
-
-
-{% endblock %}
