@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm
-from .models import Cliente, Producto
+from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm
+from .models import Cliente, Producto, Proveedor
 from django.contrib  import messages
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -14,10 +14,8 @@ def login(request):
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
 
-
 def inicio_vendedor(request):
     return render(request, 'app/inicio_vendedor.html')
-
 
 def inicio_mecanico(request):
     return render(request, 'app/inicio_mecanico.html')
@@ -84,10 +82,6 @@ def modificar_cliente(request, id):
             messages.success(request, "Modificado Correctamente!")
             return redirect(to="listar_cliente")
         data["form"] = formulario
-            #data["mensaje"] = "Cliente Modificado Exitosamente!"
-        #else:
-          
-
     return render(request, 'app/histCliente/modificar_cliente.html', data)
 
 def eliminar_cliente(request, id):
@@ -140,8 +134,6 @@ def modificar_producto(request, id):
             messages.success(request, "Modificado Correctamente!")
             return redirect(to="listar_producto")
         data["form"] = formulario
-            #data["mensaje"] = "Cliente Modificado Exitosamente!"
-        #else:
     return render(request, 'app/Productos/modificar_producto.html', data)
 
 def eliminar_producto(request, id):
@@ -149,3 +141,55 @@ def eliminar_producto(request, id):
     producto.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_producto")
+
+def agregar_proveedor(request):
+    data = {
+        'form': ProveedorForm()
+    }
+    if request.method == 'POST':
+        formulario = ProveedorForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Proveedor Registrado Correctamente!")
+            return redirect(to="listar_proveedor")
+        else:
+            data["form"] = formulario
+
+    return render(request, 'app/proveedor/agregar_proveedor.html', data) 
+
+def listar_proveedor(request):
+    proveedor = Proveedor.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(proveedor, 5)
+        proveedor = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': proveedor,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/proveedor/listar_proveedor.html', data)
+
+def modificar_proveedor(request, id):
+    proveedor = get_object_or_404(Proveedor, pk=id)
+    data = {
+        'form': ProveedorForm(instance = proveedor)
+    }
+    if request.method == 'POST':
+        formulario = ProveedorForm(data=request.POST, instance=proveedor)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="listar_proveedor")
+        data["form"] = formulario
+    return render(request, 'app/proveedor/modificar_proveedor.html', data)
+
+def eliminar_proveedor(request, id):
+    proveedor = get_object_or_404(Proveedor, pk=id)
+    proveedor.delete()
+    messages.success(request, "Eliminado Correctamente!")
+    return redirect(to="listar_proveedor")

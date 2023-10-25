@@ -3,13 +3,13 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
-    nombre_usuario = models.CharField(max_length=20)
-    rut_cliente =  models.IntegerField(primary_key=True)
+    nombre_usuario = models.CharField('Nombre de Usuario', unique=True, max_length=20)
+    rut_cliente =  models.IntegerField(primary_key=True, unique=True)
     nombre_cliente = models.CharField(max_length=30)
     apePaterno = models.CharField(max_length=30)
     apeMaterno = models.CharField(max_length=30)
-    email = models.EmailField()
-    fono = models.IntegerField()
+    email = models.EmailField(unique=True)
+    fono = models.IntegerField(unique=True)
     
     def __str__(self):
         return self.nombre_usuario
@@ -22,24 +22,30 @@ opciones_consulta = [
     ]
 
 class Persona(models.Model):
-    nomUsuario = models.CharField(max_length=20)
-    rut_colaborador = models.IntegerField(primary_key=True)
-    nombre_completo = models.CharField(max_length=50)
-    fono = models.IntegerField()
-    email = models.EmailField()
+    nomUsuario = models.CharField(max_length=20, unique=True)
+    rut_colaborador = models.IntegerField(primary_key=True, unique=True)
+    nombre_completo = models.CharField(max_length=50, unique=True)
+    fono = models.IntegerField( unique=True)
+    email = models.EmailField( unique=True)
     tipo_perfil = models.IntegerField(choices=opciones_consulta)
     
     def __str__(self):
         return self.nombre_completo
 
 
+opc_consl_cat = [
+        [0,"Indumentaria"],
+        [1,"Accesorio"],
+        [2,"Repuestos"]
+    ]
+
 class Proveedor(models.Model):
-    rut_proveedor =  models.AutoField(primary_key=True)
-    nombre_proveedor = models.CharField(max_length=30)
-    email = models.EmailField()
-    fono = models.IntegerField()
-    categoria = models.IntegerField()
-    pagina_web = models.URLField()
+    rut_proveedor =  models.AutoField(primary_key=True, unique=True)
+    nombre_proveedor = models.CharField(max_length=30, unique=True)
+    email = models.EmailField( unique=True)
+    fono = models.IntegerField( unique=True)
+    categoria = models.IntegerField(choices=opc_consl_cat)
+    pagina_web = models.URLField(blank=True)
 
     def __str__(self):
         return self.nombre_proveedor
@@ -96,11 +102,18 @@ class Detalle_venta(models.Model):
     def __str__(self):
         return self.tipo_servicio
     
+opc_estado = [
+        [0,"Listo"],
+        [1,"Pendiente"],
+        [2,"Atrasado"],
+        [3,"En proceso"]
+    ]
+
 class Taller(models.Model):
     nombre_trabajo = models.CharField(max_length=50)
     valor = models.IntegerField()
     descripcion = models.CharField(max_length=100)
-    estado = models.CharField(max_length=30)
+    estado = models.IntegerField(choices=opc_estado)
     fecha = models.DateField
     detalle_venta_detalle_venta_id = models.ForeignKey(Detalle_venta, on_delete = models.PROTECT)
 

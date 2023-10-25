@@ -71,7 +71,7 @@
                     </div>
                     <ul class="list_show">
                     <li class="list_inside">
-                        <a href="#" class="nav_link nav_link--inside">Agregar Proveedor</a>
+                        <a href="{% url 'agregar_proveedor'%}" class="nav_link nav_link--inside">Agregar Proveedor</a>
                     </li>
                     </ul>
                 </li>
@@ -96,6 +96,7 @@
     </div>
     <script src="{% static  '/app/js/menu.js' %} "></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static  '/app/js/buscador.js' %}"></script>
         {% if messages %}
             {% for m in messages %}
                 <script>
