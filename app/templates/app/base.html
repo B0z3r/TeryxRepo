@@ -53,7 +53,12 @@
                     </div>
                     <ul class="list_show">
                     <li class="list_inside">
-                        <a href="#" class="nav_link nav_link--inside">Agregar Productos</a>
+                        <a href="{% url 'agregar_producto'%}" class="nav_link nav_link--inside">Agregar Productos</a>
+                    </li>
+                    </ul>
+                    <ul class="list_show">
+                    <li class="list_inside">
+                        <a href="{% url 'listar_producto' %}" class="nav_link nav_link--inside">Listado Productos</a>
                     </li>
                     </ul>
                 </li>

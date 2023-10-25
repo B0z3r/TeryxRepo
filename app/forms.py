@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona, Cliente
+from .models import Persona, Cliente, Producto
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -40,3 +40,9 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ["username", "rut", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
 
+
+class ProductoForm(forms.ModelForm):
+    
+    class Meta:
+        model = Producto
+        fields = '__all__' 

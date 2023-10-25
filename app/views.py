@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  ClienteForm,CustomUserCreationForm
-from .models import Cliente
+from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm
+from .models import Cliente, Producto
 from django.contrib  import messages
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -23,7 +23,6 @@ def inicio_mecanico(request):
     return render(request, 'app/inicio_mecanico.html')
 
 def regcolaborador(request):
-    
     data = {
         #ColaboradorForm()
         'form': CustomUserCreationForm()
@@ -39,7 +38,6 @@ def regcolaborador(request):
     return render(request, 'app/regcolaborador.html', data)
 
 def agregar_cliente(request):
-
     data = {
         'form': ClienteForm()
     }
@@ -98,3 +96,56 @@ def eliminar_cliente(request, id):
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
 
+def agregar_producto(request):
+    data = {
+        'form': ProductoForm()
+    }
+    if request.method == 'POST':
+        formulario = ProductoForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Producto Registrado Correctamente!")
+            return redirect(to="listar_producto")
+        else:
+            data["form"] = formulario
+
+    return render(request, 'app/Productos/agregar_producto.html', data) 
+
+def listar_producto(request):
+    productos = Producto.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(productos, 5)
+        productos = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': productos,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/Productos/listar_producto.html', data)
+
+def modificar_producto(request, id):
+    producto = get_object_or_404(Producto, pk=id)
+    data = {
+        'form': ProductoForm(instance = producto)
+    }
+    if request.method == 'POST':
+        formulario = ProductoForm(data=request.POST, instance=producto)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="listar_producto")
+        data["form"] = formulario
+            #data["mensaje"] = "Cliente Modificado Exitosamente!"
+        #else:
+    return render(request, 'app/Productos/modificar_producto.html', data)
+
+def eliminar_producto(request, id):
+    producto = get_object_or_404(Producto, pk=id)
+    producto.delete()
+    messages.success(request, "Eliminado Correctamente!")
+    return redirect(to="listar_producto")

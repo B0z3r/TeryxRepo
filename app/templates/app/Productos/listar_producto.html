@@ -1,0 +1,60 @@
+{% extends 'app/base.html' %}
+
+{% block js %}
+    <script>
+        function eliminarProducto(id){
+            Swal.fire({
+                "title": "¿Estas Seguro?",
+                "text": "Que deseas Eliminar este Producto",
+                "icon": "warning", 
+                "showCancelButton": true,
+                "cancelButtonText": "Cancelar",
+                "confirmButtonText": "Eliminar",
+                "reverseButtons": true,
+                "confirmButtonColor": "#dc3545"
+            })
+            .then(function(result){
+                if(result.isConfirmed){
+                    window.location.href = "/eliminar-producto/"+id+"/"
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
+{% block contenido %}
+
+            <h2>Historial de Productos</h2>
+            <a href="{% url 'agregar_producto' %}" class="btn btn-primary"> Agregar Producto</a>
+            <table>
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Marca</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>stock</th>
+                    <th>categoria</th>
+                    <th>Opciones</th>
+                </tr>
+                       
+                {% for p in entity %}
+        
+                    <tr>
+                        <td>{{ p.nombre_producto  }}</td>
+                        <td>{{ p.marca  }}</td>
+                        <td>{{ p.descripcion  }}</td>
+                        <td>{{ p.precio_unitario  }}</td>
+                        <td>{{ p.stock  }}</td>
+                        <td>{{ p.categoria   }}</td>
+                        <td><a href="{% url 'modificar_producto' p.id %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="#" onclick="eliminarProducto({{p.id}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                    </tr>
+        
+                {% endfor %}
+            </table>
+
+            <div>
+                {% include 'app/paginator.html' %}
+            </div>
+{% endblock %}
