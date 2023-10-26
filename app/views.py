@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm
-from .models import Cliente, Producto, Proveedor
+from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm
+from .models import Cliente, Producto, Proveedor, Taller
 from django.contrib  import messages
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -193,3 +193,55 @@ def eliminar_proveedor(request, id):
     proveedor.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_proveedor")
+
+def agregar_taller(request):
+    data = {
+        'form': TallerForm()
+    }
+    if request.method == 'POST':
+        formulario = TallerForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Agendamiento Creado Correctamente!")
+            return redirect(to="listar_taller")
+        else:
+            data["form"] = formulario
+
+    return render(request, 'app/taller/agregar_taller.html', data) 
+
+def listar_taller(request):
+    taller = Taller.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(taller, 5)
+        taller = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': taller,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/taller/listar_taller.html', data)
+
+def modificar_taller(request, id):
+    taller = get_object_or_404(Taller, pk=id)
+    data = {
+        'form': TallerForm(instance = taller)
+    }
+    if request.method == 'POST':
+        formulario = TallerForm(data=request.POST, instance=taller)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="listar_taller")
+        data["form"] = formulario
+    return render(request, 'app/taller/modificar_taller.html', data)
+
+def eliminar_taller(request, id):
+    taller = get_object_or_404(Taller, pk=id)
+    taller.delete()
+    messages.success(request, "Eliminado Correctamente!")
+    return redirect(to="listar_taller")

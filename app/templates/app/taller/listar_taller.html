@@ -2,10 +2,10 @@
 
 {% block js %}
     <script>
-        function eliminarAgenda(id){
+        function eliminarTaller(id){
             Swal.fire({
                 "title": "¿Estas Seguro?",
-                "text": "Que deseas Eliminar este Agenda",
+                "text": "Que deseas Eliminar este Agendamiento",
                 "icon": "warning", 
                 "showCancelButton": true,
                 "cancelButtonText": "Cancelar",
@@ -25,39 +25,34 @@
 
 {% block contenido %}
 
-            <h2>Historial de Agendamiento</h2>
-            <a href="{% url 'agregar_taller' %}" class="btn btn-primary"> Agregar Agendamiento</a>
+            <h2>Historial de Taller</h2>
+            <a href="{% url 'agregar_taller' %}" class="btn btn-primary"> Agregar Taller</a>
             <table>
                 <tr>
-                    <th>nombre_trabajo</th>
-                    <th>valor</th>
-                    <th>descripción</th>
-                    <th>estado</th>
-                    <th>fecha</th>
-                    <th>Detalle_venta</th>
+                    <th>Nº</th>
+                    <th>Fecha Ingreso</th>
+                    <th>Fecha Término</th>
+                    <th>Nombre del Trabajo</th>
+                    <th>Valor</th>
+                    <th>Motivo Agendamiento</th>
+                    <th>Estado</th>
+                    <th>Modelo Bicicleta</th>
                     <th>Opciones</th>
                 </tr>
 
-                <!--
-    nombre_trabajo = models.CharField(max_length=50)
-    valor = models.IntegerField()
-    descripcion = models.CharField(max_length=100)
-    estado = models.CharField(max_length=30)
-    fecha = models.DateField
-    detalle_venta_detalle_venta_id = models.ForeignKey(Detalle_venta, on_delete = models.PROTECT)
-                -->
-        
                 {% for p in entity %}
         
                     <tr>
-                        <td>{{ p.rut_proveedor  }}</td>
-                        <td>{{ p.nombre_proveedor  }}</td>
-                        <td>{{ p.email  }}</td>
-                        <td>{{ p.fono   }}</td>
-                        <td>{{ p.categoria  }}</td>
-                        <td>{{ p.pagina_web  }}</td>
-                        <td><a href="{% url 'modificar_taller' p.rut_proveedor  %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        <td><a href="#" onclick="eliminarAgenda({{p.rut_proveedor }})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        <td>{{ p.id_taller  }}</td>
+                        <td>{{ p.fecha_ingreso  }}</td>
+                        <td>{{ p.fecha_termino  }}</td>
+                        <td>{{ p.nombre_trabajo   }}</td>
+                        <td>{{ p.valor  }}</td>
+                        <td>{{ p.descripcion  }}</td>
+                        <td>{{ p.estado  }}</td>
+                        <td>{{ p.modelo_bicicleta  }}</td>
+                        <td><a href="{% url 'modificar_taller' p.id_taller  %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="#" onclick="eliminarTaller({{p.id_taller }})" class="btn btn-danger btn-sm">Eliminar</a></td>
                     </tr>
         
                 {% endfor %}

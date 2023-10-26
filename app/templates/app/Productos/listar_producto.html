@@ -29,6 +29,7 @@
             <a href="{% url 'agregar_producto' %}" class="btn btn-primary"> Agregar Producto</a>
             <table>
                 <tr>
+                    <th>Nº</th>
                     <th>Nombre Producto</th>
                     <th>Marca</th>
                     <th>Descripción</th>
@@ -41,14 +42,15 @@
                 {% for p in entity %}
         
                     <tr>
+                        <td>{{ p.id_producto  }}</td>
                         <td>{{ p.nombre_producto  }}</td>
                         <td>{{ p.marca  }}</td>
                         <td>{{ p.descripcion  }}</td>
                         <td>{{ p.precio_unitario  }}</td>
                         <td>{{ p.stock  }}</td>
                         <td>{{ p.categoria   }}</td>
-                        <td><a href="{% url 'modificar_producto' p.id %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        <td><a href="#" onclick="eliminarProducto({{p.id}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        <td><a href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="#" onclick="eliminarProducto({{p.id_producto}})" class="btn btn-danger btn-sm">Eliminar</a></td>
                     </tr>
         
                 {% endfor %}

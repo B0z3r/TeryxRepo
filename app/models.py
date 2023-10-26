@@ -40,8 +40,9 @@ opc_consl_cat = [
     ]
 
 class Proveedor(models.Model):
-    rut_proveedor =  models.AutoField(primary_key=True, unique=True)
+    id_proveedor = models.AutoField(primary_key=True)
     nombre_proveedor = models.CharField(max_length=30, unique=True)
+    rut_proveedor =  models.IntegerField(unique=True)
     email = models.EmailField( unique=True)
     fono = models.IntegerField( unique=True)
     categoria = models.IntegerField(choices=opc_consl_cat)
@@ -59,6 +60,7 @@ opc_consl_cat = [
 
 
 class Producto(models.Model):
+    id_producto = models.AutoField(primary_key=True)
     nombre_producto = models.CharField(max_length=30)
     marca = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=80)
@@ -74,14 +76,15 @@ class Detalle_Factura(models.Model):
     precio = models.IntegerField()
     total = models.IntegerField()
     fecha = models.DateField()
-    proveedor_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    proveedor_rut = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
+    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
+    proveedor_id_proveedor = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
     
     def __str__(self):
         return self.cantidad
 
     
 class Venta(models.Model):
+    id_venta = models.AutoField(primary_key=True)
     fecha = models.DateField()
     descripcion = models.CharField(max_length=50)
     total = models.IntegerField()
@@ -89,18 +92,6 @@ class Venta(models.Model):
 
     def __str__(self):
         return self.descripcion
-
-
-class Detalle_venta(models.Model):
-    cantidad = models.IntegerField()
-    tipo_servicio = models.IntegerField()
-    venta_id_venta = models.ForeignKey(Venta, on_delete = models.PROTECT)
-    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
-    persona_id_persona = models.ForeignKey(Persona, on_delete = models.PROTECT)
-    
-    def __str__(self):
-        return self.tipo_servicio
     
 opc_estado = [
         [0,"Listo"],
@@ -110,23 +101,27 @@ opc_estado = [
     ]
 
 class Taller(models.Model):
+    id_taller = models.AutoField(primary_key=True)
+    fecha_ingreso = models.DateField()
+    fecha_termino = models.DateField()
     nombre_trabajo = models.CharField(max_length=50)
     valor = models.IntegerField()
     descripcion = models.CharField(max_length=100)
     estado = models.IntegerField(choices=opc_estado)
-    fecha = models.DateField
-    detalle_venta_detalle_venta_id = models.ForeignKey(Detalle_venta, on_delete = models.PROTECT)
+    modelo_bicicleta = models.CharField(max_length=30)
 
     def __str__(self):
         return self.nombre_servicio
     
-class Agenda(models.Model):
-    fecha_ingreso = models.DateTimeField()
-    fecha_termino = models.DateTimeField()
-    descripcion = models.TextField(max_length=100)
+class Detalle_venta(models.Model):
+    id_detalle = models.AutoField(primary_key=True)
+    tipo_servicio = models.IntegerField()
+    venta_id_venta = models.ForeignKey(Venta, on_delete = models.PROTECT)
+    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
+    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
+    persona_rut_colaborador = models.ForeignKey(Persona, on_delete = models.PROTECT)
     taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT)
     
     def __str__(self):
-        return self.fecha_ingreso
-    
+        return self.tipo_servicio
 
