@@ -1,18 +1,18 @@
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
 class Cliente(models.Model):
-    nombre_usuario = models.CharField('Nombre de Usuario', unique=True, max_length=20)
-    rut_cliente =  models.IntegerField(primary_key=True, unique=True)
-    nombre_cliente = models.CharField(max_length=30)
-    apePaterno = models.CharField(max_length=30)
-    apeMaterno = models.CharField(max_length=30)
-    email = models.EmailField(unique=True)
-    fono = models.IntegerField(unique=True)
+    rut_cliente =  models.IntegerField('Rut', primary_key=True, unique=True)
+    nombre_cliente = models.CharField('Nombre ', max_length=30)
+    apePaterno = models.CharField('Apellido Paterno', max_length=30)
+    apeMaterno = models.CharField('Apellido Materno', max_length=30)
+    email = models.EmailField('Correo Electrónico', unique=True)
+    fono = models.IntegerField('Teléfono', unique=True)
     
     def __str__(self):
-        return self.nombre_usuario
+        return self.nombre_cliente
     
 
 opciones_consulta = [
@@ -30,7 +30,7 @@ class Persona(models.Model):
     tipo_perfil = models.IntegerField(choices=opciones_consulta)
     
     def __str__(self):
-        return self.nombre_completo
+        return self.nomUsuario
 
 
 opc_consl_cat = [
@@ -75,20 +75,21 @@ class Detalle_Factura(models.Model):
     cantidad = models.IntegerField()
     precio = models.IntegerField()
     total = models.IntegerField()
-    fecha = models.DateField()
+    fecha = models.DateField(default=datetime.now)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
     proveedor_id_proveedor = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
     
     def __str__(self):
         return self.cantidad
 
-    
+
+
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
-    fecha = models.DateField()
+    fecha = models.DateField(default=datetime.now)
     descripcion = models.CharField(max_length=50)
     total = models.IntegerField()
-    tipopago = models.CharField(max_length=30)
+    tipopago = models.CharField(choices=[('EFECTIVO','EFECTIVO'), ('DEBITO', 'DEBITO'), ('CREDITO', 'CREDITO')], max_length=30)
 
     def __str__(self):
         return self.descripcion
@@ -102,8 +103,8 @@ opc_estado = [
 
 class Taller(models.Model):
     id_taller = models.AutoField(primary_key=True)
-    fecha_ingreso = models.DateField()
-    fecha_termino = models.DateField()
+    fecha_ingreso = models.DateField(default=datetime.now)
+    fecha_termino = models.DateField(default=datetime.now)
     nombre_trabajo = models.CharField(max_length=50)
     valor = models.IntegerField()
     descripcion = models.CharField(max_length=100)
@@ -111,11 +112,12 @@ class Taller(models.Model):
     modelo_bicicleta = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.nombre_servicio
+        return self.nombre_trabajo
+    
     
 class Detalle_venta(models.Model):
     id_detalle = models.AutoField(primary_key=True)
-    tipo_servicio = models.IntegerField()
+    tipo_servicio = models.CharField(choices=[('PRODUCTO','PRODUCTO'), ('TALLER', 'TALLER'), ('AMBOS', 'AMBOS')], max_length=30)
     venta_id_venta = models.ForeignKey(Venta, on_delete = models.PROTECT)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
     cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
@@ -123,5 +125,5 @@ class Detalle_venta(models.Model):
     taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT)
     
     def __str__(self):
-        return self.tipo_servicio
+        return self.id_detalle
 

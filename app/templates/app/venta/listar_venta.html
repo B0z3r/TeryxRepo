@@ -1,0 +1,58 @@
+{% extends 'app/base.html' %}
+
+{% block js %}
+    <script>
+        function eliminarVenta(id){
+            Swal.fire({
+                "title": "¿Estas Seguro?",
+                "text": "Que deseas Eliminar este Venta",
+                "icon": "warning", 
+                "showCancelButton": true,
+                "cancelButtonText": "Cancelar",
+                "confirmButtonText": "Eliminar",
+                "reverseButtons": true,
+                "confirmButtonColor": "#dc3545"
+            })
+            .then(function(result){
+                if(result.isConfirmed){
+                    window.location.href = "/eliminar-venta/"+id+"/"
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
+{% block contenido %}
+
+            <h2>Listado de Ventas</h2>
+            <a href="{% url 'agregar_venta' %}" class="btn btn-primary"> Crear Venta</a>
+            <table>
+                <tr>
+                    <th>Nº</th>
+                    <th>Fecha Venta</th>
+                    <th>Descripción</th>
+                    <th>Tipo de Pago</th>
+                    <th>total</th>
+                    <th>Opciones</th>
+                </tr>
+                       
+                {% for p in entity %}
+        
+                    <tr>
+                        <td>{{ p.id_venta  }}</td>
+                        <td>{{ p.fecha  }}</td>
+                        <td>{{ p.descripcion  }}</td>
+                        <td>{{ p.tipopago  }}</td>
+                        <td>{{ p.total  }}</td>
+                        <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                    </tr>
+        
+                {% endfor %}
+            </table>
+
+            <div>
+                {% include 'app/paginator.html' %}
+            </div>
+{% endblock %}

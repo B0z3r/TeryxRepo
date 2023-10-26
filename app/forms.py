@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona, Cliente, Producto, Proveedor, Taller
+from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -64,3 +64,19 @@ class TallerForm(forms.ModelForm):
             "fecha_ingreso": forms.SelectDateWidget(),
             "fecha_termino": forms.SelectDateWidget()
         }
+
+class VentaForm(forms.ModelForm):
+    
+    class Meta:
+        model = Venta
+        fields = '__all__' 
+
+        widgets = {
+            "fecha": forms.SelectDateWidget(),
+        }
+
+class HistorialForm(forms.ModelForm):
+    
+    class Meta:
+        model = Detalle_venta
+        fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 

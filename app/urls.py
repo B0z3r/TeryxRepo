@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import  inicio_admin,regcolaborador, agregar_cliente, listar_cliente, modificar_cliente, eliminar_cliente, inicio_vendedor, inicio_mecanico,\
 agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
-agregar_taller, listar_taller, modificar_taller, eliminar_taller
+agregar_taller, listar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta, agregar_historial, \
+listar_historial, modificar_historial,  eliminar_historial
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -26,6 +27,14 @@ urlpatterns = [
     path('listar-taller/', listar_taller, name="listar_taller"),
     path('modificar-taller/<id>/', modificar_taller, name="modificar_taller"),
     path('eliminar-taller/<id>/', eliminar_taller, name="eliminar_taller"),
+    path('agregar-venta/', agregar_venta, name="agregar_venta"),
+    path('listar-venta/', listar_venta, name="listar_venta"),
+    path('modificar-venta/<id>/', modificar_venta, name="modificar_venta"),
+    path('eliminar-venta/<id>/', eliminar_venta, name="eliminar_venta"),
+    path('agregar-historial/', agregar_historial, name="agregar_historial"),
+    path('listar-historial/', listar_historial, name="listar_historial"),
+    path('modificar-historial/<id>/', modificar_historial, name="modificar_historial"),
+    path('eliminar-historial/<id>/', eliminar_historial, name="eliminar_historial"),
     
 
    
