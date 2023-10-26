@@ -25,43 +25,78 @@
 
 {% block contenido %}
 
-            <h2>Historial de Clientes</h2>
-            <a href="{% url 'agregar_cliente' %}" class="btn btn-primary"> Agregar Cliente</a>
-            <br>
-            <div class="container-fluid">
-                <form class="d-flex">
-                    <input class="form-control me-2 light-table-filter" data-table="table_id" type="text" 
-                    placeholder="Buscar con JAVA">
-                    <hr>
-                </form>
-            </div>
-            <br>
-            <table class="table table-striped table_id">
-                <tr>
-                    <th>Rut</th>
-                    <th>Nombre</th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
-                    <th>Correo</th>
-                    <th>Telefono</th>
-                    <th>Opciones</th>
-                </tr>
-        
-                {% for p in entity %}
-        
-                    <tr>
-                        <td>{{ p.rut_cliente  }}</td>
-                        <td>{{ p.nombre_cliente  }}</td>
-                        <td>{{ p.apePaterno  }}</td>
-                        <td>{{ p.apeMaterno  }}</td>
-                        <td>{{ p.email  }}</td>
-                        <td>{{ p.fono   }}</td>
-                        <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
-                    </tr>
-        
-                {% endfor %}
-            </table>
+           
+           
+            <main class="mt-5 pt-3" >
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h4>Historial cliente</h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                 <div class="col-md-6 mb-3">
+
+                   
+                    
+                        <a href="{% url 'agregar_cliente' %}" class="btn btn-primary col-md-6"> Agregar Cliente</a>
+                        <br>
+                        <form class="d-flex col-md-6"">
+                            <input class="form-control me-2 light-table-filter " data-table="table_id" type="text" 
+                            placeholder="Buscar con JAVA">
+                            <hr>
+                        </form>
+                
+                   
+                 </div>
+                    
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-12 mb-12">
+                      <div class="card">
+                        <div class="card-header">
+                          <span><i class="bi bi-table me-2"></i></span> Tabla clientes
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table 
+                            id="example"
+                            class="table table-striped data-table"
+                            style="width: 100%" "
+                            >
+                              <tr>
+                                  <th>Rut</th>
+                                  <th>Nombre</th>
+                                  <th>Apellido Paterno</th>
+                                  <th>Apellido Materno</th>
+                                  <th>Correo</th>
+                                  <th>Telefono</th>
+                                  <th>Opciones</th>
+                              </tr>
+                      
+                              {% for p in entity %}
+                      
+                                  <tr>
+                                      <td>{{ p.rut_cliente  }}</td>
+                                      <td>{{ p.nombre_cliente  }}</td>
+                                      <td>{{ p.apePaterno  }}</td>
+                                      <td>{{ p.apeMaterno  }}</td>
+                                      <td>{{ p.email  }}</td>
+                                      <td>{{ p.fono   }}</td>
+                                      <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                      <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                  </tr>
+                      
+                              {% endfor %}
+                          </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
 
             <div>
                 {% include 'app/paginator.html' %}
