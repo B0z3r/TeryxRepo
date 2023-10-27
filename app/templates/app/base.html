@@ -11,7 +11,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="box box1"><img class="imglogo" src="{% static 'app/img/logo.png' %}"  alt="logo"> </div>
+        <div class="box box1"><img class="imglogo" src="{% static 'app/img/logo.png' %}"  alt="logo"> 
+            
+
+            <label class="switch">
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider"></span>
+              </label>
+
+
+
+        </div>
         <div class="box box2">
             <nav class="navmenu">
                 <ul class="list">
@@ -97,6 +107,7 @@
     <script src="{% static  '/app/js/menu.js' %} "></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static  '/app/js/buscador.js' %}"></script> 
+    <script src="{% static  '/app/js/darkmode.js' %}"></script>
         {% if messages %}
             {% for m in messages %}
                 <script>
