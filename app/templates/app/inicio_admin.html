@@ -5,11 +5,13 @@
 {%  block contenido %}
 
 <div class="box box3"> 
-    <main class="tablavendedor">
-
-        <h1 id="saludo" style="color: black;"></h1>
-        <h1 style="color: aqua;">Bienvenido a Teryx</h1>
-        <h2> {{user.username}} </h2>
+    <main class="tablavendedor" style="padding-top:300px;">
+        <div class="card" >
+            <h1 id="saludo" style="color: rgb(0, 0, 0);"></h1>
+            <h1 style="color: rgb(0, 0, 0);">Bienvenido a Teryx</h1>
+            <h2> {{user.username}} </h2>
+        </div>
+        
 
         <script src="{% static  '/app/js/scriptinicio.js' %} "></script>
 

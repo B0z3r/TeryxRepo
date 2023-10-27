@@ -11,88 +11,77 @@
 </head>
 <body>
     <div class="container">
-        <div class="box box1"><img class="imglogo" src="{% static 'app/img/logo.png' %}"  alt="logo"> </div>
+        <div class="box box1"><img class="imglogo" src="{% static 'app/img/logo.png' %}"  alt="logo" > 
+            <label class="switch">
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
         <div class="box box2">
             <nav class="navmenu">
                 <ul class="list">
-                <li class="list_item">
-                    <div class="list_boton">
-                    <img src="{% static '/app/img/img_menu/casa.png' %}" class="li_img" alt="" />
-                    <a href="{% url 'inicio_admin' %}" class="nav_link">Inicio</a>
-                    </div>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton">
-                    <img src="{% static '/app/img/img_menu/clientes.png' %}" class="li_img" alt="" />
-                    <a href="{% url 'regcolaborador' %}" class="nav_link">Registro Colaborador</a>
-                    </div>
-                </li>
-                <li class="list_item list_item--click">
-                    <div class="list_boton list_boton--click">
-                    <img src="{% static '/app/img/img_menu/clientes.png' %}" alt="" class="li_img" />
-                    <a href="{% url 'listar_cliente' %}" class="nav_link">Cliente</a>
-                    </div>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton list_boton--click">
-                    <img src="{% static '/app/img/img_menu/barras.png' %}" alt="" class="li_img" />
-                    <a href="#" class="nav_link">Ventas</a>
-                    <img src="{% static '/app/img/img_menu/flecha.png' %}" class="list_flecha" alt="" />
-                    </div>
-                    <ul class="list_show">
-                    <li class="list_inside">
-                        <a href="{% url 'agregar_venta' %}" class="nav_link nav_link--inside">Crear Venta</a>
+                    <li class="list_item">
+                        <div class="list_boton">
+                            <img src="{% static '/app/img/img_menu/casa.png' %}" class="li_img" alt="" />
+                            <a href="{% url 'inicio_admin' %}" class="nav_link">Inicio</a>
+                        </div>
                     </li>
-                    </ul>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton list_boton--click">
-                    <img src="{% static '/app/img/img_menu/taller.png' %}" alt="" class="li_img" />
-                    <a href="{% url 'listar_taller' %}" class="nav_link">Taller</a>
-                    </div>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton list_boton--click">
-                    <img src="{% static '/app/img/img_menu/tienda.png' %}" alt="" class="li_img" />
-                    <a href="#" class="nav_link">Productos || Insumos</a>
-                    <img src="{% static '/app/img/img_menu/flecha.png' %}" class="list_flecha" alt="" />
-                    </div>
-                    <ul class="list_show">
-                    <li class="list_inside">
-                        <a href="{% url 'agregar_producto'%}" class="nav_link nav_link--inside">Agregar Productos</a>
+                        {% if perms.app.add_regcolaborador %}
+                            <li class="list_item">
+                                <div class="list_boton">
+                                    <img src="{% static '/app/img/img_menu/clientes.png' %}" class="li_img" alt="" />
+                                    <a href="{% url 'regcolaborador' %}" class="nav_link">Registro Colaborador</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if perms.app.view_cliente %}
+                        <li class="list_item list_item--click">
+                            <div class="list_boton list_boton--click">
+                                <img src="{% static '/app/img/img_menu/clientes.png' %}" alt="" class="li_img" />
+                                <a href="{% url 'listar_cliente' %}" class="nav_link">Cliente</a>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if perms.app.view_venta %}
+                            <li class="list_item">
+                                <div class="list_boton list_boton--click">
+                                    <img src="{% static '/app/img/img_menu/barras.png' %}" alt="" class="li_img" />
+                                    <a href="{% url 'listar_venta' %}" class="nav_link">Ventas</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                    <li class="list_item">
+                        <div class="list_boton list_boton--click">
+                            <img src="{% static '/app/img/img_menu/taller.png' %}" alt="" class="li_img" />
+                            <a href="{% url 'listar_taller' %}" class="nav_link">Taller</a>
+                        </div>
                     </li>
-                    </ul>
-                    <ul class="list_show">
-                    <li class="list_inside">
-                        <a href="{% url 'listar_producto' %}" class="nav_link nav_link--inside">Listado Productos</a>
+                    <li class="list_item">
+                        <div class="list_boton list_boton--click">
+                            <img src="{% static '/app/img/img_menu/tienda.png' %}" alt="" class="li_img" />
+                            <a href="{% url 'listar_producto' %}" class="nav_link">Productos || Insumos</a>
+                        </div>
                     </li>
-                    </ul>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton list_boton--click">
-                    <img src="{% static '/app/img/img_menu/clientes.png' %}" alt="" class="li_img" />
-                    <a href="#" class="nav_link">Proveedor</a>
-                    <img
-                        src="{% static '/app/img/img_menu/flecha.png' %}" class="list_flecha" alt=""/>
-                    </div>
-                    <ul class="list_show">
-                    <li class="list_inside">
-                        <a href="{% url 'agregar_proveedor'%}" class="nav_link nav_link--inside">Agregar Proveedor</a>
+                    {% if perms.app.view_proveedor %}
+                        <li class="list_item">
+                            <div class="list_boton list_boton--click">
+                                <img src="{% static '/app/img/img_menu/clientes.png' %}" alt="" class="li_img" />
+                                <a href="{% url 'listar_proveedor' %}" class="nav_link">Proveedor</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                    <li class="list_item">
+                        <div class="list_boton">
+                            <img src="{% static '/app/img/img_menu/cuenta.png' %}" class="li_img" alt="" />
+                            <a href="{% url 'agregar_historial'%}" class="nav_link">Mi cuenta</a>
+                        </div>
                     </li>
-                    </ul>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton">
-                    <img src="{% static '/app/img/img_menu/cuenta.png' %}" class="li_img" alt="" />
-                    <a href="{% url 'agregar_historial'%}" class="nav_link">Mi cuenta</a>
-                    </div>
-                </li>
-                <li class="list_item">
-                    <div class="list_boton">
-                    <img src="{% static '/app/img/img_menu/salircuenta.png' %}" class="li_img" alt=""/>
-                    <a href="{% url 'logout' %}" class="nav_link">Cerrar sesión</a>
-                    </div>
-                </li>
+                    <li class="list_item">
+                        <div class="list_boton">
+                            <img src="{% static '/app/img/img_menu/salircuenta.png' %}" class="li_img" alt=""/>
+                            <a href="{% url 'logout' %}" class="nav_link">Cerrar sesión</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -103,6 +92,7 @@
     <script src="{% static  '/app/js/menu.js' %} "></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static  '/app/js/buscador.js' %}"></script>
+    <script src="{% static  '/app/js/darkmode.js' %}"></script>
         {% if messages %}
             {% for m in messages %}
                 <script>

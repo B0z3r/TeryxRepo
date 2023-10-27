@@ -26,7 +26,9 @@
 {% block contenido %}
 
             <h2>Historiales</h2>
-            <a href="{% url 'agregar_historial' %}" class="btn btn-primary"> Crear Historial</a>
+            {% if perms.app.add_historial %}
+                <a href="{% url 'agregar_historial' %}" class="btn btn-primary"> Crear Historial</a>
+            {% endif %}
             <table>
                 <tr>
                     <th>Nº</th>
@@ -38,15 +40,6 @@
                     <th>Nº Taller</th>
                     <th>Opciones</th>
                 </tr>
-                <!--
-    id_detalle = models.AutoField(primary_key=True)
-    tipo_servicio = models.IntegerField()
-    venta_id_venta = models.ForeignKey(Venta, on_delete = models.PROTECT)
-    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
-    persona_rut_colaborador = models.ForeignKey(Persona, on_delete = models.PROTECT)
-    taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT)
-                -->
                        
                 {% for p in entity %}
         
@@ -58,8 +51,12 @@
                         <td>{{ p.cliente_rut_cliente  }}</td>
                         <td>{{ p.persona_rut_colaborador  }}</td>
                         <td>{{ p.taller_id_taller  }}</td>
-                        <td><a href="{% url 'modificar_historial' p.id_detalle %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        <td><a href="#" onclick="eliminarHistorial({{p.id_detalle}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        {% if perms.app.change_historial %}
+                            <td><a href="{% url 'modificar_historial' p.id_detalle %}" class="btn btn-info btn-sm">Modificar</a></td>
+                        {% endif %}
+                        {% if perms.app.delete_historial %}
+                            <td><a href="#" onclick="eliminarHistorial({{p.id_detalle}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        {% endif %}
                     </tr>
         
                 {% endfor %}

@@ -5,9 +5,11 @@ from django.contrib  import messages
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 # Create your views here.
+
 def login(request):
     return render(request, 'registration/accounst/login.html')
 
@@ -20,6 +22,7 @@ def inicio_vendedor(request):
 def inicio_mecanico(request):
     return render(request, 'app/inicio_mecanico.html')
 
+@permission_required('app.add_regcolaborador')
 def regcolaborador(request):
     data = {
         #ColaboradorForm()
@@ -33,8 +36,9 @@ def regcolaborador(request):
         else:
             data["form"] = formulario
         
-    return render(request, 'app/regcolaborador.html', data)
+    return render(request, 'app/colaborador/regcolaborador.html', data)
 
+@permission_required('app.add_cliente')
 def agregar_cliente(request):
     data = {
         'form': ClienteForm()
@@ -50,6 +54,7 @@ def agregar_cliente(request):
 
     return render(request, 'app/Cliente/agregar_cliente.html', data)
 
+@permission_required('app.view_cliente')
 def listar_cliente(request):
     clientes = Cliente.objects.all()
     page = request.GET.get('page',1)
@@ -67,6 +72,7 @@ def listar_cliente(request):
 
     return render(request, 'app/Cliente/listar_cliente.html', data)
 
+@permission_required('app.change_cliente')
 def modificar_cliente(request, id):
 
     cliente = get_object_or_404(Cliente, pk=id)
@@ -84,12 +90,14 @@ def modificar_cliente(request, id):
         data["form"] = formulario
     return render(request, 'app/Cliente/modificar_cliente.html', data)
 
+@permission_required('app.delete_cliente')
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     cliente.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
 
+@permission_required('app.add_producto')
 def agregar_producto(request):
     data = {
         'form': ProductoForm()
@@ -105,6 +113,7 @@ def agregar_producto(request):
 
     return render(request, 'app/Productos/agregar_producto.html', data) 
 
+@permission_required('app.view_producto')
 def listar_producto(request):
     productos = Producto.objects.all()
     page = request.GET.get('page',1)
@@ -122,6 +131,7 @@ def listar_producto(request):
 
     return render(request, 'app/Productos/listar_producto.html', data)
 
+@permission_required('app.change_producto')
 def modificar_producto(request, id):
     producto = get_object_or_404(Producto, pk=id)
     data = {
@@ -136,12 +146,14 @@ def modificar_producto(request, id):
         data["form"] = formulario
     return render(request, 'app/Productos/modificar_producto.html', data)
 
+@permission_required('app.delete_producto')
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, pk=id)
     producto.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_producto")
 
+@permission_required('app.add_proveedor')
 def agregar_proveedor(request):
     data = {
         'form': ProveedorForm()
@@ -157,6 +169,7 @@ def agregar_proveedor(request):
 
     return render(request, 'app/proveedor/agregar_proveedor.html', data) 
 
+@permission_required('app.view_proveedor')
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()
     page = request.GET.get('page',1)
@@ -174,6 +187,7 @@ def listar_proveedor(request):
 
     return render(request, 'app/proveedor/listar_proveedor.html', data)
 
+@permission_required('app.change_proveedor')
 def modificar_proveedor(request, id):
     proveedor = get_object_or_404(Proveedor, pk=id)
     data = {
@@ -188,12 +202,14 @@ def modificar_proveedor(request, id):
         data["form"] = formulario
     return render(request, 'app/proveedor/modificar_proveedor.html', data)
 
+@permission_required('app.delete_proveedor')
 def eliminar_proveedor(request, id):
     proveedor = get_object_or_404(Proveedor, pk=id)
     proveedor.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_proveedor")
 
+@permission_required('app.add_taller')
 def agregar_taller(request):
     data = {
         'form': TallerForm()
@@ -209,6 +225,7 @@ def agregar_taller(request):
 
     return render(request, 'app/taller/agregar_taller.html', data) 
 
+@permission_required('app.view_taller')
 def listar_taller(request):
     taller = Taller.objects.all()
     page = request.GET.get('page',1)
@@ -226,6 +243,7 @@ def listar_taller(request):
 
     return render(request, 'app/taller/listar_taller.html', data)
 
+@permission_required('app.change_taller')
 def modificar_taller(request, id):
     taller = get_object_or_404(Taller, pk=id)
     data = {
@@ -240,12 +258,14 @@ def modificar_taller(request, id):
         data["form"] = formulario
     return render(request, 'app/taller/modificar_taller.html', data)
 
+@permission_required('app.delete_taller')
 def eliminar_taller(request, id):
     taller = get_object_or_404(Taller, pk=id)
     taller.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_taller")
 
+@permission_required('app.add_venta')
 def agregar_venta(request):
     data = {
         'form': VentaForm()
@@ -261,6 +281,7 @@ def agregar_venta(request):
 
     return render(request, 'app/venta/agregar_venta.html', data) 
 
+@permission_required('app.view_venta')
 def listar_venta(request):
     venta = Venta.objects.all()
     page = request.GET.get('page',1)
@@ -278,6 +299,7 @@ def listar_venta(request):
 
     return render(request, 'app/venta/listar_venta.html', data)
 
+@permission_required('app.change_venta')
 def modificar_venta(request, id):
     venta = get_object_or_404(Venta, pk=id)
     data = {
@@ -292,12 +314,14 @@ def modificar_venta(request, id):
         data["form"] = formulario
     return render(request, 'app/venta/modificar_venta.html', data)
 
+@permission_required('app.delete_venta')
 def eliminar_venta(request, id):
     venta = get_object_or_404(Venta, pk=id)
     venta.delete()
     messages.success(request, "Eliminada Correctamente!")
     return redirect(to="listar_venta")
 
+@permission_required('app.add_historial')
 def agregar_historial(request):
     data = {
         'form': HistorialForm()
@@ -334,6 +358,7 @@ def agregar_historial(request):
 
     return render(request, 'app/Historial/agregar_historial.html', data) 
 
+@permission_required('app.view_historial')
 def listar_historial(request):
     historial = Detalle_venta.objects.all()
     page = request.GET.get('page',1)
@@ -351,6 +376,7 @@ def listar_historial(request):
 
     return render(request, 'app/Historial/listar_historial.html', data)
 
+@permission_required('app.change_historial')
 def modificar_historial(request, id):
     historial = get_object_or_404(Detalle_venta, pk=id)
     data = {
@@ -365,6 +391,7 @@ def modificar_historial(request, id):
         data["form"] = formulario
     return render(request, 'app/Historial/modificar_historial.html', data)
 
+@permission_required('app.delete_historial')
 def eliminar_historial(request, id):
     historial = get_object_or_404(Detalle_venta, pk=id)
     historial.delete()

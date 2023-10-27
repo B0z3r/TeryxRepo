@@ -2,10 +2,10 @@
 
 {% block js %}
     <script>
-        function eliminarProducto(id){
+        function eliminarColaborador(id){
             Swal.fire({
                 "title": "¿Estas Seguro?",
-                "text": "Que deseas Eliminar este Producto",
+                "text": "Que deseas Eliminar este Colaborador",
                 "icon": "warning", 
                 "showCancelButton": true,
                 "cancelButtonText": "Cancelar",
@@ -15,7 +15,7 @@
             })
             .then(function(result){
                 if(result.isConfirmed){
-                    window.location.href = "/eliminar-producto/"+id+"/"
+                    window.location.href = "/eliminar-colaborador/"+id+"/"
                 }
             })
         }
@@ -25,9 +25,9 @@
 
 {% block contenido %}
 
-            <h2>Historial de Productos</h2>
+            <h2>Historial de Colaboradores</h2>
             {% if perms.app.add_producto %}
-                <a href="{% url 'agregar_producto' %}" class="btn btn-primary"> Agregar Producto</a>
+                <a href="{% url 'agregar_colaborador' %}" class="btn btn-primary"> Agregar Colaborador</a>
             {% endif %}
             <table>
                 <tr>

@@ -20,7 +20,6 @@
             })
         }
     </script>
-
 {% endblock %}
 
 {% block contenido %}
@@ -38,8 +37,9 @@
                  <div class="col-md-6 mb-3">
 
                    
-                    
+                      {% if perms.app.add_cliente %}
                         <a href="{% url 'agregar_cliente' %}" class="btn btn-primary col-md-6"> Agregar Cliente</a>
+                      {% endif %}
                         <br>
                         <form class="d-flex col-md-6"">
                             <input class="form-control me-2 light-table-filter " data-table="table_id" type="text" 
@@ -84,8 +84,12 @@
                                       <td>{{ p.apeMaterno  }}</td>
                                       <td>{{ p.email  }}</td>
                                       <td>{{ p.fono   }}</td>
-                                      <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
-                                      <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                      {% if perms.app.change_cliente %}
+                                        <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                      {% endif %}
+                                      {% if perms.app.delete_cliente %}
+                                        <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                      {% endif %}
                                   </tr>
                       
                               {% endfor %}
