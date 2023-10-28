@@ -397,3 +397,13 @@ def eliminar_historial(request, id):
     historial.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_historial")
+#probando esto
+def lista_productos_por_cliente(request):
+    clientes = Cliente.objects.all()
+    data = []
+
+    for cliente in clientes:
+        productos_comprados = Detalle_venta.objects.filter(cliente_rut_cliente=cliente)
+        data.append({'cliente': cliente, 'productos_comprados': productos_comprados})
+
+    return render(request, 'tu_app/lista_productos.html', {'data': data})
