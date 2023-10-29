@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm, HistorialForm
+from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm, HistorialForm
 from .models import Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta, Persona
 from django.contrib  import messages
 from django.core.paginator import Paginator
@@ -407,3 +407,63 @@ def lista_productos_por_cliente(request):
         data.append({'cliente': cliente, 'productos_comprados': productos_comprados})
 
     return render(request, 'tu_app/lista_productos.html', {'data': data})
+
+
+
+
+def crear_venta(request):
+    if request.method == 'POST':
+        venta_form = tventa(request.POST)
+        cliente_form = tcliente(request.POST)
+        taller_form = ttaller(request.POST)
+
+        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
+            # Save data in the respective databases
+            cliente = cliente_form.save()
+            taller = taller_form.save()
+            venta = venta_form.save(commit=False)
+            cliente.save()
+            taller.save()
+            venta.save()
+
+            return redirect('crear_venta')  # Redirect to a success page
+
+    else:
+        venta_form = tventa()
+        cliente_form = tcliente()
+        taller_form = ttaller()
+
+    return render(request, 'app/taller/crear_venta.html', {
+        'venta_form': venta_form,
+        'cliente_form': cliente_form,
+        'taller_form': taller_form,
+    })
+
+
+
+def listar_datos(request):
+    ventas = Venta.objects.all()
+    talleres = Taller.objects.all()
+    clientes = Cliente.objects.all()
+
+    datos_combinados = []
+
+    for venta, taller, cliente in zip(ventas, talleres, clientes):
+        datos_combinados.append({
+            'id_taller': taller.id_taller,
+            'total': venta.total,
+            'tipopago': venta.tipopago,
+            'fecha_ingreso': taller.fecha_ingreso,
+            'fecha_termino': taller.fecha_termino,
+            'nombre_trabajo': taller.nombre_trabajo,
+            'estado': taller.get_estado_display(),
+            'modelo_bicicleta': taller.modelo_bicicleta,
+            'rut_cliente' : cliente.rut_cliente,
+            'nombre_cliente': cliente.nombre_cliente,
+            'apePaterno': cliente.apePaterno,
+            'apeMaterno': cliente.apeMaterno,
+            'id_venta' : venta.id_venta,
+
+        })
+
+    return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})

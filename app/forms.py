@@ -80,3 +80,36 @@ class HistorialForm(forms.ModelForm):
     class Meta:
         model = Detalle_venta
         fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 
+
+
+
+
+
+
+class tventa(forms.ModelForm):
+    
+    class Meta:
+        model = Venta
+        fields = '__all__' 
+        widgets = {
+            "fecha": forms.SelectDateWidget(),
+        }
+
+class tcliente(forms.ModelForm):
+    
+    class Meta:
+        model = Cliente
+        fields = '__all__' 
+
+
+class ttaller(forms.ModelForm):
+    
+    class Meta:
+        model = Taller
+        fields = '__all__'   
+        widgets = {
+             "fecha_ingreso": forms.SelectDateWidget(),
+            "fecha_termino": forms.SelectDateWidget()
+ 
+        }
+    

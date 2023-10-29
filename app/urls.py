@@ -4,6 +4,7 @@ agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar
 agregar_taller, listar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta, agregar_historial, \
 listar_historial, modificar_historial,  eliminar_historial
 from django.contrib.auth import views as auth_views
+from . import views
 
 urlpatterns = [
      path('accounts/', auth_views.LoginView.as_view(), name='login'),
@@ -35,7 +36,8 @@ urlpatterns = [
     path('listar-historial/', listar_historial, name="listar_historial"),
     path('modificar-historial/<id>/', modificar_historial, name="modificar_historial"),
     path('eliminar-historial/<id>/', eliminar_historial, name="eliminar_historial"),
+    path('crear-venta/', views.crear_venta, name='crear_venta'),
+    path('listar-datos/', views.listar_datos, name='listar_datos'),
     
 
-   
 ]

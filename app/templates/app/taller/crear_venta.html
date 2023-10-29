@@ -1,0 +1,30 @@
+{% extends 'app/base.html' %}
+
+
+{% load crispy_forms_tags %}
+ 
+
+
+{% block contenido %}
+
+
+<h1>Crear taller</h1>
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Formulario de Venta -->
+    {{ venta_form |  crispy }}
+
+    <!-- Formulario de Cliente -->
+    {{ cliente_form |  crispy  }}
+
+    <!-- Formulario de Taller -->
+    {{ taller_form |  crispy  }}
+
+    <button type="submit">Guardar</button>
+</form>
+
+            <div>
+                {% include 'app/paginator.html' %}
+            </div>
+{% endblock %}

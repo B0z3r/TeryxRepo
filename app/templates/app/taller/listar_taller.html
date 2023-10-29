@@ -1,70 +1,60 @@
-{% extends 'app/base.html' %}
+{% extends 'app/base.html' %} {% block js %} {% load humanize%}
+<script>
+  function eliminarTaller(id) {
+    Swal.fire({
+      title: "¿Estas Seguro?",
+      text: "Que deseas Eliminar este Agendamiento",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Eliminar",
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545",
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-taller/" + id + "/";
+      }
+    });
+  }
+</script>
 
-{% block js %}
-    <script>
-        function eliminarTaller(id){
-            Swal.fire({
-                "title": "¿Estas Seguro?",
-                "text": "Que deseas Eliminar este Agendamiento",
-                "icon": "warning", 
-                "showCancelButton": true,
-                "cancelButtonText": "Cancelar",
-                "confirmButtonText": "Eliminar",
-                "reverseButtons": true,
-                "confirmButtonColor": "#dc3545"
-            })
-            .then(function(result){
-                if(result.isConfirmed){
-                    window.location.href = "/eliminar-taller/"+id+"/"
-                }
-            })
-        }
-    </script>
+{% endblock %} {% block contenido %}
 
-{% endblock %}
+<h2>Historial de Taller</h2>
+{% if perms.app.add_taller %}
+<a href="{% url 'agregar_taller' %}" class="btn btn-primary"> Agregar Taller</a>
+{% endif %}
+<table>
+  <tr>
+    <th>rut</th>
+    <th>Total</th>
+    <th>Tipo pago</th>
+    <th>Fecha de Inicio:</th>
+    <th>Fecha de Término:</th>
+    <th>Nombre del Trabajo:</th>
+    <th>Estado:</th>
+    <th>Modelo de Bicicleta:</th>
+    <th>Nombre cliente:</th>
 
-{% block contenido %}
+    {% for datos in datos_combinados %}
+  </tr>
+  {% for datos in datos_combinados %}
 
-            <h2>Historial de Taller</h2>
-            {% if perms.app.add_taller %}
-                <a href="{% url 'agregar_taller' %}" class="btn btn-primary"> Agregar Taller</a>
-            {% endif %}
-            <table>
-                <tr>
-                    <th>Nº</th>
-                    <th>Fecha Ingreso</th>
-                    <th>Fecha Término</th>
-                    <th>Nombre del Trabajo</th>
-                    <th>Valor</th>
-                    <th>Motivo Agendamiento</th>
-                    <th>Estado</th>
-                    <th>Modelo Bicicleta</th>
-                    <th>Opciones</th>
-                </tr>
+  <tr>
+    <td>{{ datos.id_taller }}</td>
+    <td>${{ datos.total | intcomma }}</td>
+    <td>{{ datos.tipopago }}</td>
+    <td>{{ datos.fecha_ingreso }}</td>
+    <td>{{ datos.fecha_termino }}</td>
+    <td>{{ datos.nombre_trabajo }}</td>
+    <td>{{ datos.estado }}</td>
+    <td>{{ datos.modelo_bicicleta }}</td>
+    <td>
+      {{ datos.nombre_cliente }} {{ datos.apePaterno }} {{ datos.apeMaterno }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 
-                {% for p in entity %}
-        
-                    <tr>
-                        <td>{{ p.id_taller  }}</td>
-                        <td>{{ p.fecha_ingreso  }}</td>
-                        <td>{{ p.fecha_termino  }}</td>
-                        <td>{{ p.nombre_trabajo   }}</td>
-                        <td>{{ p.valor  }}</td>
-                        <td>{{ p.descripcion  }}</td>
-                        <td>{{ p.estado  }}</td>
-                        <td>{{ p.modelo_bicicleta  }}</td>
-                        {% if perms.app.change_taller %}
-                            <td><a href="{% url 'modificar_taller' p.id_taller  %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        {% endif %}
-                        {% if perms.app.delete_taller %}
-                            <td><a href="#" onclick="eliminarTaller({{p.id_taller }})" class="btn btn-danger btn-sm">Eliminar</a></td>
-                        {% endif %}
-                    </tr>
-        
-                {% endfor %}
-            </table>
-
-            <div>
-                {% include 'app/paginator.html' %}
-            </div>
+<div>{% include 'app/paginator.html' %}</div>
 {% endblock %}
