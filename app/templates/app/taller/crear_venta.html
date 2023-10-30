@@ -6,23 +6,40 @@
 
 
 {% block contenido %}
+<div class="box box3"> 
+    <div class="col-12 col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h1>Crear taller</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    
+                    <h3>Datos Venta</h3>
+                    <!-- Formulario de Venta -->
+                    <div class="form-group">
+                        {{ venta_form|crispy }}
+                    </div>
+                    
+                    <h3>Datos cliente</h3>
+                    <!-- Formulario de Cliente -->
+                    <div class="form-group">
+                        {{ cliente_form|crispy }}
+                    </div>
+                    
+                    <h3>Datos taller</h3>
+                    <!-- Formulario de Taller -->
+                    <div class="form-group">
+                        {{ taller_form|crispy }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<h1>Crear taller</h1>
-<form method="post">
-    {% csrf_token %}
-
-    <!-- Formulario de Venta -->
-    {{ venta_form |  crispy }}
-
-    <!-- Formulario de Cliente -->
-    {{ cliente_form |  crispy  }}
-
-    <!-- Formulario de Taller -->
-    {{ taller_form |  crispy  }}
-
-    <button type="submit">Guardar</button>
-</form>
 
             <div>
                 {% include 'app/paginator.html' %}

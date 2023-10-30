@@ -422,9 +422,9 @@ def crear_venta(request):
             cliente = cliente_form.save()
             taller = taller_form.save()
             venta = venta_form.save(commit=False)
-            cliente.save()
+            taller.cliente = cliente
+            taller.venta = venta
             taller.save()
-            venta.save()
 
             return redirect('crear_venta')  # Redirect to a success page
 
@@ -458,12 +458,18 @@ def listar_datos(request):
             'nombre_trabajo': taller.nombre_trabajo,
             'estado': taller.get_estado_display(),
             'modelo_bicicleta': taller.modelo_bicicleta,
-            'rut_cliente' : cliente.rut_cliente,
             'nombre_cliente': cliente.nombre_cliente,
             'apePaterno': cliente.apePaterno,
             'apeMaterno': cliente.apeMaterno,
-            'id_venta' : venta.id_venta,
+            'id_venta': venta.id_venta,
+            'rut_cliente': cliente.rut_cliente,
 
         })
 
     return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})
+
+
+
+
+def test_view(request):
+    return render(request, 'app/test.html')

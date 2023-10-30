@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  inicio_admin,regcolaborador, agregar_cliente, listar_cliente, modificar_cliente, eliminar_cliente, inicio_vendedor, inicio_mecanico,\
+from .views import  test_view,inicio_admin,regcolaborador, agregar_cliente, listar_cliente, modificar_cliente, eliminar_cliente, inicio_vendedor, inicio_mecanico,\
 agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
 agregar_taller, listar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta, agregar_historial, \
 listar_historial, modificar_historial,  eliminar_historial
@@ -38,6 +38,8 @@ urlpatterns = [
     path('eliminar-historial/<id>/', eliminar_historial, name="eliminar_historial"),
     path('crear-venta/', views.crear_venta, name='crear_venta'),
     path('listar-datos/', views.listar_datos, name='listar_datos'),
+     path('test/', views.test_view, name='test_view'),
+
     
 
 ]
