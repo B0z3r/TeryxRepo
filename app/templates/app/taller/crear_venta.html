@@ -10,7 +10,7 @@
     <div class="col-12 col-md-6 offset-md-3">
         <div class="card">
             <div class="card-body">
-                <h1>Crear taller</h1>
+                <h1>Crear Agendamiento</h1>
                 <form action="" method="post">
                     {% csrf_token %}
                     
@@ -18,21 +18,14 @@
                     <!-- Formulario de Venta -->
                     <div class="form-group">
                         {{ venta_form|crispy }}
-                    </div>
-                    
-                    <h3>Datos cliente</h3>
-                    <!-- Formulario de Cliente -->
-                    <div class="form-group">
                         {{ cliente_form|crispy }}
-                    </div>
-                    
-                    <h3>Datos taller</h3>
-                    <!-- Formulario de Taller -->
-                    <div class="form-group">
                         {{ taller_form|crispy }}
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'list_taller' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
+                        &nbsp;
+                        <input type="submit" value="Guardar" class="btn btn-primary">
+                    </div>
                 </form>
             </div>
         </div>

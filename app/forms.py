@@ -15,11 +15,10 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
 
-
 class CustomUserCreationForm(UserCreationForm):
     
     username = forms.CharField(label='Nombre Usuario', max_length=20)
-    rut = forms.IntegerField(label='Rut')
+    rut = forms.IntegerField(label='Rut', )
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput)
     first_name = forms.CharField(label='Nombre Completo', max_length=100)
@@ -40,13 +39,11 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ["username", "rut", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
 
-
 class ProductoForm(forms.ModelForm):
     
     class Meta:
         model = Producto
         fields = '__all__' 
-
 
 class ProveedorForm(forms.ModelForm):
     
@@ -82,34 +79,30 @@ class HistorialForm(forms.ModelForm):
         fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 
 
 
-
-
-
-
 class tventa(forms.ModelForm):
     
     class Meta:
         model = Venta
-        fields = '__all__' 
+        fields = ["total","tipopago"]
         widgets = {
             "fecha": forms.SelectDateWidget(),
         }
+
 
 class tcliente(forms.ModelForm):
     
     class Meta:
         model = Cliente
-        fields = '__all__' 
+        fields = ["rut_cliente","nombre_cliente","apePaterno","apeMaterno",]
 
 
 class ttaller(forms.ModelForm):
     
     class Meta:
         model = Taller
-        fields = '__all__'   
+        fields = ["id_taller","estado", "modelo_bicicleta","nombre_trabajo", "fecha_ingreso","fecha_termino",]   
         widgets = {
              "fecha_ingreso": forms.SelectDateWidget(),
             "fecha_termino": forms.SelectDateWidget()
  
         }
-    

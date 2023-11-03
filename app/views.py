@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -15,12 +16,6 @@ def login(request):
 
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
-
-def inicio_vendedor(request):
-    return render(request, 'app/inicio_vendedor.html')
-
-def inicio_mecanico(request):
-    return render(request, 'app/inicio_mecanico.html')
 
 @permission_required('app.add_regcolaborador')
 def regcolaborador(request):
@@ -37,6 +32,47 @@ def regcolaborador(request):
             data["form"] = formulario
         
     return render(request, 'app/colaborador/regcolaborador.html', data)
+
+@permission_required('app.view_colaborador')
+def listar_colaborador(request):
+    persona = User.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(persona, 5)
+        personas = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': personas,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/colaborador/listar_colaborador.html', data)
+
+@permission_required('app.change_colaborador')
+def modificar_colaborador(request, id):
+    persona = get_object_or_404(User, pk=id)
+    data = {
+        'form': CustomUserCreationForm(instance = persona)
+    }
+
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data=request.POST, instance=persona)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="listar_colaborador")
+        data["form"] = formulario
+    return render(request, 'app/colaborador/modificar_colaborador.html', data)
+
+@permission_required('app.delete_colaborador')
+def eliminar_colaborador(request, id):
+    persona = get_object_or_404(User, pk=id)
+    persona.delete()
+    messages.success(request, "Eliminado Correctamente!")
+    return redirect(to="listar_colaborador")
 
 @permission_required('app.add_cliente')
 def agregar_cliente(request):
@@ -74,9 +110,7 @@ def listar_cliente(request):
 
 @permission_required('app.change_cliente')
 def modificar_cliente(request, id):
-
     cliente = get_object_or_404(Cliente, pk=id)
-
     data = {
         'form': ClienteForm(instance = cliente)
     }
@@ -243,27 +277,12 @@ def listar_taller(request):
 
     return render(request, 'app/taller/listar_taller.html', data)
 
-@permission_required('app.change_taller')
-def modificar_taller(request, id):
-    taller = get_object_or_404(Taller, pk=id)
-    data = {
-        'form': TallerForm(instance = taller)
-    }
-    if request.method == 'POST':
-        formulario = TallerForm(data=request.POST, instance=taller)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Modificado Correctamente!")
-            return redirect(to="listar_taller")
-        data["form"] = formulario
-    return render(request, 'app/taller/modificar_taller.html', data)
-
 @permission_required('app.delete_taller')
 def eliminar_taller(request, id):
     taller = get_object_or_404(Taller, pk=id)
     taller.delete()
     messages.success(request, "Eliminado Correctamente!")
-    return redirect(to="listar_taller")
+    return redirect(to="list_taller")
 
 @permission_required('app.add_venta')
 def agregar_venta(request):
@@ -397,19 +416,6 @@ def eliminar_historial(request, id):
     historial.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_historial")
-#probando esto
-def lista_productos_por_cliente(request):
-    clientes = Cliente.objects.all()
-    data = []
-
-    for cliente in clientes:
-        productos_comprados = Detalle_venta.objects.filter(cliente_rut_cliente=cliente)
-        data.append({'cliente': cliente, 'productos_comprados': productos_comprados})
-
-    return render(request, 'tu_app/lista_productos.html', {'data': data})
-
-
-
 
 def crear_venta(request):
     if request.method == 'POST':
@@ -418,15 +424,15 @@ def crear_venta(request):
         taller_form = ttaller(request.POST)
 
         if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
-            # Save data in the respective databases
+        
             cliente = cliente_form.save()
             taller = taller_form.save()
-            venta = venta_form.save(commit=False)
+            venta = venta_form.save()
             taller.cliente = cliente
             taller.venta = venta
             taller.save()
 
-            return redirect('crear_venta')  # Redirect to a success page
+            return redirect('crear_venta') 
 
     else:
         venta_form = tventa()
@@ -439,9 +445,7 @@ def crear_venta(request):
         'taller_form': taller_form,
     })
 
-
-
-def listar_datos(request):
+def list_taller(request):
     ventas = Venta.objects.all()
     talleres = Taller.objects.all()
     clientes = Cliente.objects.all()
@@ -463,12 +467,51 @@ def listar_datos(request):
             'apeMaterno': cliente.apeMaterno,
             'id_venta': venta.id_venta,
             'rut_cliente': cliente.rut_cliente,
-
         })
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(datos_combinados, 5)
+    try:
+        datos_combinados = paginator.page(page)
+    except PageNotAnInteger:
+        datos_combinados = paginator.page(1)
+    except EmptyPage:
+        datos_combinados = paginator.page(paginator.num_pages)
 
     return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})
 
+@permission_required('app.change_taller')
+def modificar_taller(request, id):
+    taller = get_object_or_404(Taller, pk=id)
+    cliente = get_object_or_404(Cliente, pk=id)
+    venta = get_object_or_404(Venta, pk=id)
 
+
+    if request.method == 'POST':
+        taller_form = ttaller(request.POST, instance=taller)
+        cliente_form = tcliente(request.POST, instance=cliente)
+        venta_form = tventa(request.POST, instance=venta)
+
+        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
+            cliente = cliente_form.save()
+            taller = taller_form.save()
+            venta = venta_form.save()
+            taller.cliente = cliente
+            taller.venta = venta
+            taller.save()
+            return redirect('list_taller') 
+
+    else:
+        venta_form = tventa()
+        cliente_form = tcliente()
+        taller_form = ttaller()
+
+        return render(request, 'app/taller/modificar_taller.html',{
+        'venta_form': venta_form,
+        'cliente_form': cliente_form,
+        'taller_form': taller_form,
+    })
 
 
 def test_view(request):
