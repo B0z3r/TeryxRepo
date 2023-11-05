@@ -95,10 +95,9 @@ class Venta(models.Model):
         return self.descripcion
     
 opc_estado = [
-        [0,"Listo"],
-        [1,"Pendiente"],
-        [2,"Atrasado"],
-        [3,"En proceso"]
+        [0,"Términado"],
+        [1,"En proceso"],
+        [2,"Atrasado"]
     ]
 
 class Taller(models.Model):

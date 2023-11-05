@@ -25,7 +25,7 @@
 
 {% block contenido %}
 
-            <h2>Listado de Ventas</h2>
+            <h2>Historial de Ventas</h2>
             {% if perms.app.add_venta %}
                 <a href="{% url 'agregar_venta' %}" class="btn btn-primary"> Crear Venta</a>
             {% endif %}
