@@ -1,0 +1,30 @@
+{%  extends 'app/base.html' %}
+
+{%  load static %}
+
+{%  block contenido %}
+
+<div class="box box3"> 
+    <main class="micuenta">
+        
+        <div class="card" style="width: 30rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body" style="text-align: start;">
+              <h1 style="padding-bottom: 20px;">Datos personales</h1>
+              
+              <h5 class="card-text"> Nombre usuario :  {{ user.username }}</h5>
+             
+              <h5 class="card-text">Id del usuario:  {{user.id }}</h5>
+              
+              <h5 class="card-text"> Nombre :  {{ user.first_name }} {{ user.last_name }}</h5>
+              {% if perms.app.change_colaborador %}
+              <td><a href="{% url 'modificar_colaborador' user.id %}" class="btn btn-info btn-sm">Modificar datos</a></td>
+          {% endif %}
+            </div>
+          </div>
+       
+    </main>
+    
+</div>
+
+{%  endblock %}

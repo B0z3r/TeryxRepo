@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm, HistorialForm
 from .models import Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta, Persona
 from django.contrib  import messages
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
@@ -13,6 +13,10 @@ from django.contrib.auth.models import User
 
 def login(request):
     return render(request, 'registration/accounst/login.html')
+
+def micuenta(request):
+    return render(request, 'app/Micuenta/micuenta.html')
+
 
 def inicio_admin(request):
     return render(request, 'app/inicio_admin.html')
@@ -51,6 +55,27 @@ def listar_colaborador(request):
 
     return render(request, 'app/colaborador/listar_colaborador.html', data)
 
+
+def listar_micuenta(request):
+    persona = User.objects.all()
+    page = request.GET.get('page',1)
+
+    try:
+        paginator = Paginator(persona, 5)
+        personas = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': personas,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/Micuenta/micuenta.html', data)
+    
+
+    
+
 @permission_required('app.change_colaborador')
 def modificar_colaborador(request, id):
     persona = get_object_or_404(User, pk=id)
@@ -64,8 +89,30 @@ def modificar_colaborador(request, id):
             formulario.save()
             messages.success(request, "Modificado Correctamente!")
             return redirect(to="listar_colaborador")
+           
         data["form"] = formulario
     return render(request, 'app/colaborador/modificar_colaborador.html', data)
+
+
+
+@permission_required('app.change_colaborador')
+def modificar_cuenta(request, id):
+    persona = get_object_or_404(User, pk=id)
+    data = {
+        'form': CustomUserCreationForm(instance = persona)
+    }
+
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data=request.POST, instance=persona)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="micuenta")
+           
+        data["form"] = formulario
+        return render(request, 'app/Micuenta/micuenta.html', data)
+
+
 
 @permission_required('app.delete_colaborador')
 def eliminar_colaborador(request, id):

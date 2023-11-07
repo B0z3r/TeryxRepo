@@ -41,6 +41,12 @@ urlpatterns = [
     path('crear-venta/', views.crear_venta, name='crear_venta'),
     path('list-taller/', views.list_taller, name='list_taller'),
     path('test/', views.test_view, name='test_view'),
+    path('micuenta/', views.micuenta, name='micuenta'),
+    path('listar-micuenta/', views.listar_micuenta, name='listar_micuenta'),
+    path('modificar_cuenta/', views.modificar_cuenta, name='modificar_cuenta'),
+    
+   
+  
 
     
 
