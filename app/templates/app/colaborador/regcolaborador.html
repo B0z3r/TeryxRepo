@@ -1,8 +1,5 @@
 {%  extends 'app/base.html' %}
 
-<!--
-    {% load static %}
--->
 {%  block contenido %}
 {% load crispy_forms_tags %}
     <div class="box box3"> 
@@ -14,7 +11,6 @@
                     <form action="" method="post">
                         {% csrf_token %}    
                         {{ form | crispy }}
-                        <br>
                         <hr>
                         <div class="d-flex justify-content-center">
                             <a href="{% url 'inicio_admin' %}" class="btn btn-secondary">Volver Inicio</a>

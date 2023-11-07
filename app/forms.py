@@ -16,15 +16,42 @@ class ClienteForm(forms.ModelForm):
         fields = '__all__'
 
 class CustomUserCreationForm(UserCreationForm):
-    
-    username = forms.CharField(label='Nombre Usuario', max_length=20)
-    rut = forms.IntegerField(label='Rut', )
-    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput)
-    first_name = forms.CharField(label='Nombre Completo', max_length=100)
-    fono = forms.IntegerField(label='Teléfono')
-    email = forms.EmailField(label='Correo Electrónico', max_length=100)
-    tipo_perfil = forms.ChoiceField(label='Tipo de Perfil', choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],widget=forms.Select)
+    username = forms.CharField(
+        label='Nombre Usuario',
+        max_length=20,
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    rut = forms.IntegerField(
+        label='Rut',
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    password1 = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'required': False})
+    )
+    password2 = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'required': False})
+    )
+    first_name = forms.CharField(
+        label='Nombre Completo',
+        max_length=100,
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    fono = forms.IntegerField(
+        label='Teléfono',
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    email = forms.EmailField(
+        label='Correo Electrónico',
+        max_length=100,
+        widget=forms.EmailInput(attrs={'required': False})
+    )
+    tipo_perfil = forms.ChoiceField(
+        label='Tipo de Perfil',
+        choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],
+        widget=forms.Select(attrs={'required': False})
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -37,7 +64,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "rut", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
+        fields = ["username", "rut", "password1", "password2", "first_name", "fono", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
     

@@ -15,7 +15,17 @@ def login(request):
     return render(request, 'registration/accounst/login.html')
 
 def inicio_admin(request):
-    return render(request, 'app/inicio_admin.html')
+    clientes = Cliente.objects.all()
+    total_clientes = clientes.count()
+    proveedores = Proveedor.objects.all()
+    total_proveedores = proveedores.count()
+    data = {
+        'clientes': clientes,
+        'total_clientes': total_clientes,
+        'proveedores': proveedores,
+        'total_proveedores': total_proveedores
+    }
+    return render(request, 'app/inicio_admin.html', data)
 
 @permission_required('app.add_regcolaborador')
 def regcolaborador(request):

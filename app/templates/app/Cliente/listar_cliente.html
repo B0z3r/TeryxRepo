@@ -23,9 +23,6 @@
 {% endblock %}
 
 {% block contenido %}
-
-           
-           
             <main class="mt-5 pt-3" >
                 <div class="container-fluid">
                   <div class="row">
@@ -63,8 +60,7 @@
                             <table 
                             id="example"
                             class="table table-striped data-table"
-                            style="width: 100%" "
-                            >
+                            style="width: 100%">
                               <tr>
                                   <th>Rut</th>
                                   <th>Nombre</th>
@@ -101,6 +97,10 @@
                   </div>
                 </div>
               </main>
+              <div class="cuadro-clientes">
+                <h2>Conteo de Clientes</h2>
+                <p>Total de Clientes: {{ total_clientes }}</p>
+            </div>
 
             <div>
                 {% include 'app/paginator.html' %}
