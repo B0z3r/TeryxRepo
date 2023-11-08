@@ -11,12 +11,25 @@
             <h1 style="color: rgb(0, 0, 0);">Bienvenido a Teryx</h1>
             <h2> {{user.username}} </h2>
         </div>
-        <div class="cuadro-clientes">
+        <div class="cuadro-clientes" style="background-color: rgb(44, 172, 32); color: white; padding: 20px;"  >
             <h2>Conteo de Clientes</h2>
-            <img src="{% static '/app/img/img_menu/clientes.png' %}" class="li_img" alt="" />
+            <img src="{% static '/app/img/img_menu/clientes.png' %}" class="li_img" alt="">
             <p>Total de Clientes: {{ total_clientes }}</p>
         </div>
-        <div class="cuadro-proveedores">
+        <hr>
+        <div class="card mb-3" style="max-width: 290px; padding-top: 5px;" >
+            <div class="row g-0">
+              <div class="col-md-2" style="padding: 3%;">
+                <img src="{% static '/app/img/img_menu/clientes.png' %}" class="img-fluid rounded-start" alt="">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                    <p>Total de Clientes: {{ total_clientes }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="cuadro-proveedores" style="background-color: rgb(22, 25, 187); color: white; padding: 20px;" >
             <h2>Conteo de Proveedores</h2>
             <img src="{% static '/app/img/img_menu/clientes.png' %}" class="li_img" alt="" />
             <p>Total de Proveedores: {{ total_proveedores }}</p>
@@ -25,7 +38,6 @@
         <script src="{% static  '/app/js/scriptinicio.js' %} "></script>
 
     </main>
-    
 </div>
 
 {%  endblock %}
