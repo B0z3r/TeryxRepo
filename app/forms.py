@@ -15,6 +15,7 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
 
+
 class CustomUserCreationForm(UserCreationForm):
     
     username = forms.CharField(label='Nombre Usuario', max_length=20)
