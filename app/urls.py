@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import  test_view,inicio_admin,regcolaborador, listar_colaborador, modificar_colaborador, eliminar_colaborador, agregar_cliente, listar_cliente,\
-modificar_cliente, eliminar_cliente,\
+from .views import  cambio_pass,inicio_admin,regcolaborador, listar_colaborador, modificar_colaborador, eliminar_colaborador, agregar_cliente, listar_cliente,\
+modificar_cliente, eliminar_cliente,ProfilePasswordChangeView,\
 agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
 agregar_taller, listar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta, agregar_historial, \
 listar_historial, modificar_historial,  eliminar_historial, list_taller
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from . import views
 
 urlpatterns = [
@@ -44,10 +45,9 @@ urlpatterns = [
     path('micuenta/', views.micuenta, name='micuenta'),
     path('listar-micuenta/', views.listar_micuenta, name='listar_micuenta'),
     path('modificar_cuenta/', views.modificar_cuenta, name='modificar_cuenta'),
-    
-   
-  
+    path('cambio-pass/', views.cambio_pass, name='cambio_pass'),
+    path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',)
 
-    
+ 
 
 ]

@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm, HistorialForm
 from .models import Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta, Persona
@@ -7,6 +8,9 @@ from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib.auth import update_session_auth_hash
 
 
 # Create your views here.
@@ -563,3 +567,39 @@ def modificar_taller(request, id):
 
 def test_view(request):
     return render(request, 'app/test.html')
+
+
+def cambio_pass(request):
+    return render(request, 'app/Micuenta/cambio_pass.html')
+
+def cambio_pass(request):
+    return render(request, 'app/Micuenta/cambio_pass.html')
+
+
+
+
+
+#cambio contraseña
+class ProfilePasswordChangeView(PasswordChangeView):
+    template_name = 'app/Micuenta/cambio_pass.html'
+    success_url = reverse_lazy('micuenta')
+
+    def get_context_data(self, **kwargs ):
+        context = super().get_context_data(**kwargs)
+        context['password_change'] = self.request.session.get('password_changed', False) 
+        return context
+
+    def form_valid (self, form):
+        messages.success(self.request, 'Cambio contraseña exitoso')
+        update_session_auth_hash(self.request, form.user)
+        self.request.session['password_changed'] = True
+        return super().form_valid(form)
+  
+
+  
+    def form_invalid(self, form):
+        messages.error(self.request, 'Cambio contraseña inválida')
+        return super().form_invalid(form)
+    
+
+    
