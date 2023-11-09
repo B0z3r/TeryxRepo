@@ -40,9 +40,8 @@ opc_consl_cat = [
     ]
 
 class Proveedor(models.Model):
-    id_proveedor = models.AutoField('Nº Proveedor', primary_key=True)
     nombre_proveedor = models.CharField('Nombre del Proveedor', max_length=30, unique=True)
-    rut_proveedor =  models.IntegerField('Rut Proveedor', unique=True)
+    rut_proveedor =  models.IntegerField('Rut Proveedor', primary_key=True , unique=True)
     email = models.EmailField('Correo Electrónico', unique=True)
     fono = models.IntegerField('Teléfono', unique=True)
     categoria = models.IntegerField('Categoría', choices=opc_consl_cat)
@@ -57,7 +56,6 @@ opc_consl_cat = [
         [1,"Accesorio"],
         [2,"Repuestos"]
     ]
-
 
 class Producto(models.Model):
     id_producto = models.AutoField('Nº Producto', primary_key=True)
@@ -79,20 +77,8 @@ class Detalle_Factura(models.Model):
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
     proveedor_id_proveedor = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
     
-    def __str__(self):
+    def __int__(self):
         return self.cantidad
-
-
-
-class Venta(models.Model):
-    id_venta = models.AutoField('Nº Venta', primary_key=True)
-    fecha = models.DateField('Fecha', default=datetime.now)
-    descripcion = models.CharField('Descipción', max_length=50)
-    total = models.IntegerField('Total')
-    tipopago = models.CharField('Tipo De Pago', choices=[('EFECTIVO','EFECTIVO'), ('DEBITO', 'DEBITO'), ('CREDITO', 'CREDITO')], max_length=30)
-
-    def __str__(self):
-        return self.descripcion
     
 opc_estado = [
         [0,"Términado"],
@@ -113,16 +99,17 @@ class Taller(models.Model):
     def __str__(self):
         return self.nombre_trabajo
     
-    
-class Detalle_venta(models.Model):
-    id_detalle = models.AutoField('Nº Detalle', primary_key=True)
-    tipo_servicio = models.CharField('Tipo De Servicio', choices=[('PRODUCTO','PRODUCTO'), ('TALLER', 'TALLER'), ('AMBOS', 'AMBOS')], max_length=30)
-    venta_id_venta = models.ForeignKey(Venta, on_delete = models.PROTECT)
-    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
-    persona_rut_colaborador = models.ForeignKey(Persona, on_delete = models.PROTECT)
-    taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT)
-    
-    def __str__(self):
-        return self.id_detalle
 
+class Venta(models.Model):
+    id_venta = models.AutoField('Nº Venta', primary_key=True)
+    fecha = models.DateField('Fecha', default=datetime.now)
+    descripcion = models.CharField('Descipción', max_length=50)
+    total = models.IntegerField('Total')
+    tipopago = models.CharField('Tipo De Pago', choices=[('EFECTIVO','EFECTIVO'), ('DEBITO', 'DEBITO'), ('CREDITO', 'CREDITO')], max_length=30)
+    tipo_servicio = models.CharField('Tipo De Servicio', choices=[('PRODUCTOS','PRODUCTOS'), ('TALLER', 'TALLER')], max_length=30)
+    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT, null=True, blank=True)
+    taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT, null=True, blank=True)
+    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
+
+    def __str__(self):
+        return self.tipo_servicio

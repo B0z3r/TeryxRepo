@@ -34,7 +34,6 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nombre Usuario</th>
                         <th>Nombre Completo</th>
                         <th>Correo Electrónico</th>
@@ -44,7 +43,6 @@
                 {% for p in entity %}
                 <tbody>
                     <tr>
-                        <td>{{ p.id  }}</td>
                         <td>{{ p.username }}</td>
                         <td>{{ p.first_name }} {{ p.last_name }}</td>
                         <td>{{ p.email  }}</td>

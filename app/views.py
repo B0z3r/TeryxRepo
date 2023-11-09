@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm, HistorialForm
-from .models import Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta, Persona
+from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm
+from .models import Cliente, Producto, Proveedor, Taller, Venta
 from django.contrib  import messages
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -140,6 +140,12 @@ def eliminar_cliente(request, id):
     cliente.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
+
+def historial_cliente(request, id):
+    cliente = Cliente.objects.get(rut_cliente=id)
+    ventas_productos = Venta.objects.filter(cliente_rut_cliente=cliente, tipo_servicio='PRODUCTOS')
+    ventas_talleres = Venta.objects.filter(cliente_rut_cliente=cliente, tipo_servicio='TALLER')
+    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'ventas_productos': ventas_productos, 'ventas_talleres': ventas_talleres})
 
 @permission_required('app.add_producto')
 def agregar_producto(request):
@@ -349,83 +355,6 @@ def eliminar_venta(request, id):
     venta.delete()
     messages.success(request, "Eliminada Correctamente!")
     return redirect(to="listar_venta")
-
-@permission_required('app.add_historial')
-def agregar_historial(request):
-    data = {
-        'form': HistorialForm()
-    }
-    if request.method == 'POST':
-        formulario = HistorialForm(data=request.POST)
-        if formulario.is_valid():
-            
-            venta_id = formulario.cleaned_data['venta_id_venta']
-            producto_id = formulario.cleaned_data['producto_id_producto']
-            cliente_rut = formulario.cleaned_data['cliente_rut_cliente']
-            colaborador_rut = formulario.cleaned_data['persona_rut_colaborador']
-            taller_id = formulario.cleaned_data['taller_id_taller']
-
-            venta = Venta.objects.get(id_venta=venta_id)
-            producto = Producto.objects.get(id_producto=producto_id)
-            cliente = Cliente.objects.get(rut_cliente=cliente_rut)
-            colaborador = Persona.objects.get(rut_colaborador=colaborador_rut)
-            taller = Taller.objects.get(id_taller=taller_id)
-
-            detalle_venta = Detalle_venta(
-                venta_id_venta=venta,
-                producto_id_producto=producto,
-                cliente_rut_cliente=cliente,
-                persona_rut_colaborador=colaborador,
-                taller_id_taller=taller
-            )
-        
-            formulario.save()
-            messages.success(request, "Historial Creado Correctamente!")
-            return redirect(to="listar_historial")
-        else:
-            data["form"] = formulario
-
-    return render(request, 'app/Historial/agregar_historial.html', data) 
-
-@permission_required('app.view_historial')
-def listar_historial(request):
-    historial = Detalle_venta.objects.all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(historial, 5)
-        historial = paginator.page(page)
-    except:
-        raise Http404
-
-    data = {
-        'entity': historial,
-        'paginator': paginator
-    }
-
-    return render(request, 'app/Historial/listar_historial.html', data)
-
-@permission_required('app.change_historial')
-def modificar_historial(request, id):
-    historial = get_object_or_404(Detalle_venta, pk=id)
-    data = {
-        'form': HistorialForm(instance = historial)
-    }
-    if request.method == 'POST':
-        formulario = HistorialForm(data=request.POST, instance=historial)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Modificado Correctamente!")
-            return redirect(to="listar_historial")
-        data["form"] = formulario
-    return render(request, 'app/Historial/modificar_historial.html', data)
-
-@permission_required('app.delete_historial')
-def eliminar_historial(request, id):
-    historial = get_object_or_404(Detalle_venta, pk=id)
-    historial.delete()
-    messages.success(request, "Eliminado Correctamente!")
-    return redirect(to="listar_historial")
 
 def crear_venta(request):
     if request.method == 'POST':

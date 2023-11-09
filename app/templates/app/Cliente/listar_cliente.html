@@ -44,7 +44,7 @@
             <th>Correo</th>
             <th>Telefono</th>
             <th>Opciones</th>
-      </tr>
+          </tr>
         </thead>
         {% for p in entity %}
           <tbody>
@@ -60,6 +60,8 @@
                   <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a>
                 </td>
               {% endif %}
+                
+              <td><a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn btn-secondary btn-sm">Historial</a></td>
               {% if perms.app.delete_cliente %}
                 <td>
                   <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a>

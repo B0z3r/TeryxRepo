@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta
+from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -21,10 +21,6 @@ class CustomUserCreationForm(UserCreationForm):
         max_length=20,
         widget=forms.TextInput(attrs={'required': False})
     )
-    rut = forms.IntegerField(
-        label='Rut',
-        widget=forms.TextInput(attrs={'required': False})
-    )
     password1 = forms.CharField(
         label='Contraseña',
         widget=forms.PasswordInput(attrs={'required': False})
@@ -36,10 +32,6 @@ class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(
         label='Nombre Completo',
         max_length=100,
-        widget=forms.TextInput(attrs={'required': False})
-    )
-    fono = forms.IntegerField(
-        label='Teléfono',
         widget=forms.TextInput(attrs={'required': False})
     )
     email = forms.EmailField(
@@ -64,7 +56,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "rut", "password1", "password2", "first_name", "fono", "email", "tipo_perfil"]
+        fields = ["username", "password1", "password2", "first_name", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
     
@@ -93,18 +85,18 @@ class VentaForm(forms.ModelForm):
     
     class Meta:
         model = Venta
-        fields = '__all__' 
+        fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
 
         widgets = {
             "fecha": forms.SelectDateWidget(),
         }
-
+'''
 class HistorialForm(forms.ModelForm):
     
     class Meta:
         model = Detalle_venta
         fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 
-
+'''
 
 class tventa(forms.ModelForm):
     

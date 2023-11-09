@@ -34,8 +34,9 @@
                     <thead>
                         <tr>
                             <th>Nº</th>
+                            <th>Nombre Cliente</th>
                             <th>Fecha Venta</th>
-                            <th>Descripción</th>
+                            <th>Tipo de Servicio</th>
                             <th>Tipo de Pago</th>
                             <th>total</th>
                             <th>Opciones</th>
@@ -44,11 +45,12 @@
                     {% for p in entity %}
                         <tbody>
                             <tr>
-                                <td>{{ p.id_venta  }}</td>
-                                <td>{{ p.fecha  }}</td>
-                                <td>{{ p.descripcion  }}</td>
-                                <td>{{ p.tipopago  }}</td>
-                                <td>{{ p.total  }}</td>
+                                <td>{{ p.id_venta }}</td>
+                                <td>{{ p.cliente.nombre }}</td>
+                                <td>{{ p.fecha }}</td>
+                                <td>{{ p.descripcion }}</td>
+                                <td>{{ p.tipopago }}</td>
+                                <td>{{ p.total }}</td>
                                 {% if perms.app.change_venta %}
                                     <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn btn-info btn-sm">Modificar</a></td>
                                 {% endif %}
