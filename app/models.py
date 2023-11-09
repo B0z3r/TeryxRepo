@@ -45,7 +45,7 @@ class Proveedor(models.Model):
     email = models.EmailField('Correo Electrónico', unique=True)
     fono = models.IntegerField('Teléfono', unique=True)
     categoria = models.IntegerField('Categoría', choices=opc_consl_cat)
-    pagina_web = models.URLField('Página Web', blank=True)
+    pagina_web = models.URLField('Página Web', null=True, blank=True)
 
     def __str__(self):
         return self.nombre_proveedor
@@ -75,26 +75,32 @@ class Detalle_Factura(models.Model):
     total = models.IntegerField('Total')
     fecha = models.DateField('Fecha', default=datetime.now)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    proveedor_id_proveedor = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
+    proveedor_rut = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
     
     def __int__(self):
         return self.cantidad
     
 opc_estado = [
-        [0,"Términado"],
-        [1,"En proceso"],
+        [0,"En proceso"],
+        [1,"Términado"],
         [2,"Atrasado"]
     ]
+
+opc_estado_pago = [
+    [0, "Pendiente"],
+    [1, "Pagado"],
+]
 
 class Taller(models.Model):
     id_taller = models.AutoField('Nº en Taller', primary_key=True)
     fecha_ingreso = models.DateField(' Fecha de Inicio', default=datetime.now)
     fecha_termino = models.DateField('Fecha de Término', default=datetime.now)
-    nombre_trabajo = models.CharField('Nombre Del Trabajo', max_length=50)
+    tipo_arreglo = models.CharField('Tipo De Arreglo', max_length=50)
     valor = models.IntegerField('Valor')
     descripcion = models.CharField('Descripción', max_length=100)
-    estado = models.IntegerField('Estado', choices=opc_estado)
+    estado = models.IntegerField('Estado', choices=opc_estado, default=0)
     modelo_bicicleta = models.CharField('Modelo De Bicicleta', max_length=30)
+    estado_pago = models.IntegerField('Estado de Pago', choices=opc_estado_pago, default=0, null=True, blank=True)
 
     def __str__(self):
         return self.nombre_trabajo

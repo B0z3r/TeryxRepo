@@ -90,13 +90,6 @@ class VentaForm(forms.ModelForm):
         widgets = {
             "fecha": forms.SelectDateWidget(),
         }
-'''
-class HistorialForm(forms.ModelForm):
-    
-    class Meta:
-        model = Detalle_venta
-        fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 
-'''
 
 class tventa(forms.ModelForm):
     
@@ -107,21 +100,19 @@ class tventa(forms.ModelForm):
             "fecha": forms.SelectDateWidget(),
         }
 
-
 class tcliente(forms.ModelForm):
     
     class Meta:
         model = Cliente
         fields = ["rut_cliente","nombre_cliente","apePaterno","apeMaterno",]
 
-
 class ttaller(forms.ModelForm):
     
     class Meta:
         model = Taller
-        fields = ["id_taller","estado", "modelo_bicicleta","nombre_trabajo", "fecha_ingreso","fecha_termino",]   
+        fields = ["id_taller","estado", "modelo_bicicleta","tipo_arreglo", "fecha_ingreso","fecha_termino",]   
         widgets = {
-             "fecha_ingreso": forms.SelectDateWidget(),
+            "fecha_ingreso": forms.SelectDateWidget(),
             "fecha_termino": forms.SelectDateWidget()
  
         }

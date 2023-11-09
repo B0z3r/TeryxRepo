@@ -142,10 +142,10 @@ def eliminar_cliente(request, id):
     return redirect(to="listar_cliente")
 
 def historial_cliente(request, id):
-    cliente = Cliente.objects.get(rut_cliente=id)
-    ventas_productos = Venta.objects.filter(cliente_rut_cliente=cliente, tipo_servicio='PRODUCTOS')
-    ventas_talleres = Venta.objects.filter(cliente_rut_cliente=cliente, tipo_servicio='TALLER')
-    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'ventas_productos': ventas_productos, 'ventas_talleres': ventas_talleres})
+    cliente = get_object_or_404(Cliente, rut_cliente=id)
+    
+    ventas = cliente.venta_set.all()
+    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'ventas': ventas})
 
 @permission_required('app.add_producto')
 def agregar_producto(request):
@@ -275,24 +275,6 @@ def agregar_taller(request):
 
     return render(request, 'app/taller/agregar_taller.html', data) 
 
-@permission_required('app.view_taller')
-def listar_taller(request):
-    taller = Taller.objects.all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(taller, 5)
-        taller = paginator.page(page)
-    except:
-        raise Http404
-
-    data = {
-        'entity': taller,
-        'paginator': paginator
-    }
-
-    return render(request, 'app/taller/listar_taller.html', data)
-
 @permission_required('app.delete_taller')
 def eliminar_taller(request, id):
     taller = get_object_or_404(Taller, pk=id)
@@ -358,31 +340,17 @@ def eliminar_venta(request, id):
 
 def crear_venta(request):
     if request.method == 'POST':
-        venta_form = tventa(request.POST)
-        cliente_form = tcliente(request.POST)
         taller_form = ttaller(request.POST)
 
-        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
-        
-            cliente = cliente_form.save()
-            taller = taller_form.save()
-            venta = venta_form.save()
-            taller.cliente = cliente
-            taller.venta = venta
-            taller.save()
+        if taller_form.is_valid():
+            taller_form.save()
 
             return redirect('crear_venta') 
 
     else:
-        venta_form = tventa()
-        cliente_form = tcliente()
         taller_form = ttaller()
 
-    return render(request, 'app/taller/crear_venta.html', {
-        'venta_form': venta_form,
-        'cliente_form': cliente_form,
-        'taller_form': taller_form,
-    })
+    return render(request, 'app/taller/crear_venta.html', {'taller_form': taller_form})
 
 def list_taller(request):
     ventas = Venta.objects.all()
@@ -398,7 +366,7 @@ def list_taller(request):
             'tipopago': venta.tipopago,
             'fecha_ingreso': taller.fecha_ingreso,
             'fecha_termino': taller.fecha_termino,
-            'nombre_trabajo': taller.nombre_trabajo,
+            'tipo_arreglo': taller.tipo_arreglo,
             'estado': taller.get_estado_display(),
             'modelo_bicicleta': taller.modelo_bicicleta,
             'nombre_cliente': cliente.nombre_cliente,
@@ -451,7 +419,6 @@ def modificar_taller(request, id):
         'cliente_form': cliente_form,
         'taller_form': taller_form,
     })
-
 
 def test_view(request):
     return render(request, 'app/test.html')

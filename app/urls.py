@@ -2,7 +2,7 @@ from django.urls import path
 from .views import  test_view,inicio_admin,regcolaborador, listar_colaborador, modificar_colaborador, eliminar_colaborador, agregar_cliente, listar_cliente,\
 modificar_cliente, eliminar_cliente,historial_cliente,\
 agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
-agregar_taller, listar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta,\
+agregar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta,\
 list_taller
 from django.contrib.auth import views as auth_views
 from . import views
@@ -28,7 +28,6 @@ urlpatterns = [
     path('modificar-proveedor/<id>/', modificar_proveedor, name="modificar_proveedor"),
     path('eliminar-proveedor/<id>/', eliminar_proveedor, name="eliminar_proveedor"),
     path('agregar-taller/', agregar_taller, name="agregar_taller"),
-    path('listar-taller/', listar_taller, name="listar_taller"),
     path('modificar-taller/<id>/', modificar_taller, name="modificar_taller"),
     path('eliminar-taller/<id>/', eliminar_taller, name="eliminar_taller"),
     path('agregar-venta/', agregar_venta, name="agregar_venta"),
