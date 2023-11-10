@@ -25,7 +25,8 @@
 {% endblock %}
 
 {% block contenido %}
-    <div class="box box3">
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
         <h2 style="color: black;">Historial de Colaboradores</h2>       
             <a href="{% url 'inicio_admin' %}" class="btn btn-secondary list_boton">INICIO</a>
             {% if perms.app.add_colaborador %}
@@ -65,4 +66,6 @@
                 {% include 'app/paginator.html' %}
             </div>
     </div>
+    </div>
+   </main>
 {% endblock %}

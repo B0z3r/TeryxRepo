@@ -23,7 +23,10 @@
 {% endblock %}
 
 {% block contenido %}
-  <div class="box box3">
+ 
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+
     <h2 style="color: black;">Historial Cliente</h2>
     {% if perms.app.add_cliente %}
       <a href="{% url 'agregar_cliente' %}" class="btn btn-primary">Agregar Cliente</a>
@@ -75,5 +78,9 @@
     <div>
       {% include 'app/paginator.html' %}
     </div>
-  </div>                
+
+
+  </div>  
+</div>  
+</main>              
 {% endblock %}
