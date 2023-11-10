@@ -4,42 +4,35 @@
 
 {%  block contenido %}
 
-<div class="box box3"> 
-    <main class="tablavendedor" >
-        <div class="card" >
-            <h1 id="saludo" style="color: rgb(0, 0, 0);"></h1>
-            <h1 style="color: rgb(0, 0, 0);">Bienvenido a Teryx</h1>
-            <h2> {{user.username}} </h2>
-        </div>
-        <hr>
-        <div class="card mb-3" style="max-width: 290px; padding-top: 5px; background-color: rgb(142, 172, 32);" >
-          <div class="row g-0">
-            <div class="col-md-2" style="padding: 3%;">
-                <img src="{% static '/app/img/img_menu/clientes.png' %}" class="img-fluid rounded-start" alt="">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <p>Total de Clientes: {{ total_clientes }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <div class="card mb-3" style="max-width: 290px; padding-top: 5px; background-color: rgb(22, 176, 187); color: black;">
-          <div class="row g-0">
-            <div class="col-md-2" style="padding: 3%;">
-                <img src="{% static '/app/img/img_menu/clientes.png' %}" class="img-fluid rounded-start" alt="">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <p>Total de Proveedores: {{ total_proveedores }}</p>
-              </div>
-            </div>
-          </div>
-        </div>       
-        <script src="{% static  '/app/js/scriptinicio.js' %} "></script>
 
-    </main>
-</div>
+ <!-- offcanvas -->
+ <main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12" style="padding-bottom: 30px; padding-top: 30px; text-align: center;">
+        <h4>Bievenido a teryx {{ user.username }}  </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="card bg-primary text-white h-100" style="text-align: center;">
+          <div class="card-body py-5"><p>Total de Clientes: {{ total_clientes }}</p></div>
+        
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="card bg-success text-white h-100" style="text-align: center;">
+          <div class="card-body py-5"> <p>Total de Proveedores: {{ total_proveedores }}</p></div>
+          
+        </div>
+      </div>
+     
+     
+    </div>
+    
+  
+  </div>
+</main>
+
 
 {%  endblock %}

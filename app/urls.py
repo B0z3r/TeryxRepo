@@ -1,12 +1,7 @@
 from django.urls import path
-<<<<<<< HEAD
 from .views import  cambio_pass,inicio_admin,regcolaborador, listar_colaborador, modificar_colaborador, eliminar_colaborador, agregar_cliente, listar_cliente,\
 modificar_cliente, eliminar_cliente,ProfilePasswordChangeView,\
-=======
-from .views import  test_view,inicio_admin,regcolaborador, listar_colaborador, modificar_colaborador, eliminar_colaborador, agregar_cliente, listar_cliente,\
-modificar_cliente, eliminar_cliente,historial_cliente,\
->>>>>>> Manuel
-agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
+historial_cliente,agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
 agregar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta,\
 list_taller
 from django.contrib.auth import views as auth_views
