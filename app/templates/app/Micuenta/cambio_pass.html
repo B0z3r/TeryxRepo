@@ -1,0 +1,55 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block contenido %}
+  <div class="box box3">
+    <h5 class="titulo" style="color: black; text-align: start">
+      Cambiar contraseña
+    </h5>
+
+    <div class="container my-4">
+      <div class="card mx-auto" style="width: 40rem">
+        <div class="card-body">
+          <form action="{% url 'Profile_password_change' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="old_password">Contraseña actual</label>
+              <input
+                class="form-control"
+                type="password"
+                name="old_password"
+                id="old_password"
+              />
+            </div>
+
+            <div class="mb-3">
+            
+              <label for="new_password1">Nueva contraseña</label>
+              <input
+                class="form-control"
+                type="password"
+                name="new_password1"
+                id="new_password1"
+              />
+            </div>
+
+            <div class="mb-3">
+            
+              <label for="new_password2">Confirme contraseña</label>
+              <input
+                class="form-control"
+                type="password"
+                name="new_password2"
+                id="new_password2"
+              />
+            </div>
+            <input
+              class="btn btn-info"
+              type="submit"
+              value="Cambiar contraseña"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
