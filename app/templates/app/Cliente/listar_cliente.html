@@ -23,86 +23,57 @@
 {% endblock %}
 
 {% block contenido %}
-
-           
-           
-            <main class="mt-5 pt-3" >
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <h4>Historial cliente</h4>
-                    </div>
-                  </div>
-                  <div class="row">
-                 <div class="col-md-6 mb-3">
-
-                   
-                      {% if perms.app.add_cliente %}
-                        <a href="{% url 'agregar_cliente' %}" class="btn btn-primary col-md-6"> Agregar Cliente</a>
-                      {% endif %}
-                        <br>
-                        <form class="d-flex col-md-6"">
-                            <input class="form-control me-2 light-table-filter " data-table="table_id" type="text" 
-                            placeholder="Buscar con JAVA">
-                            <hr>
-                        </form>
+  <div class="box box3">
+    <h2 style="color: black;">Historial Cliente</h2>
+    {% if perms.app.add_cliente %}
+      <a href="{% url 'agregar_cliente' %}" class="btn btn-primary">Agregar Cliente</a>
+    {% endif %}
+    <hr>
+    <form class="d-flex col-md-8"">
+      <input class="form-control me-2 light-table-filter " data-table="table_id" type="text" placeholder="Buscar con JAVA">
+    </form>
+    <br>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead >
+          <tr>
+            <th>Rut</th>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Correo</th>
+            <th>Telefono</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        {% for p in entity %}
+          <tbody>
+            <tr>
+              <td>{{ p.rut_cliente  }}</td>
+              <td>{{ p.nombre_cliente  }}</td>
+              <td>{{ p.apePaterno  }}</td>
+              <td>{{ p.apeMaterno  }}</td>
+              <td>{{ p.email  }}</td>
+              <td>{{ p.fono   }}</td>
+              {% if perms.app.change_cliente %}
+                <td>
+                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a>
+                </td>
+              {% endif %}
                 
-                   
-                 </div>
-                    
-                  </div>
-                  
-                  <div class="row">
-                    <div class="col-md-12 mb-12">
-                      <div class="card">
-                        <div class="card-header">
-                          <span><i class="bi bi-table me-2"></i></span> Tabla clientes
-                        </div>
-                        <div class="card-body">
-                          <div class="table-responsive">
-                            <table 
-                            id="example"
-                            class="table table-striped data-table"
-                            style="width: 100%" "
-                            >
-                              <tr>
-                                  <th>Rut</th>
-                                  <th>Nombre</th>
-                                  <th>Apellido Paterno</th>
-                                  <th>Apellido Materno</th>
-                                  <th>Correo</th>
-                                  <th>Telefono</th>
-                                  <th>Opciones</th>
-                              </tr>
-                      
-                              {% for p in entity %}
-                      
-                                  <tr>
-                                      <td>{{ p.rut_cliente  }}</td>
-                                      <td>{{ p.nombre_cliente  }}</td>
-                                      <td>{{ p.apePaterno  }}</td>
-                                      <td>{{ p.apeMaterno  }}</td>
-                                      <td>{{ p.email  }}</td>
-                                      <td>{{ p.fono   }}</td>
-                                      {% if perms.app.change_cliente %}
-                                        <td><a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a></td>
-                                      {% endif %}
-                                      {% if perms.app.delete_cliente %}
-                                        <td><a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a></td>
-                                      {% endif %}
-                                  </tr>
-                      
-                              {% endfor %}
-                          </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </main>
-
-            <div>
-                {% include 'app/paginator.html' %}
-            </div>
+              <td><a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn btn-secondary btn-sm">Historial</a></td>
+              {% if perms.app.delete_cliente %}
+                <td>
+                  <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+              {% endif %}
+      </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+    </div>
+    <div>
+      {% include 'app/paginator.html' %}
+    </div>
+  </div>                
 {% endblock %}

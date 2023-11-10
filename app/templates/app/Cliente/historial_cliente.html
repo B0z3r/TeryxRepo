@@ -1,0 +1,45 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+{% load crispy_forms_tags %}
+    <div class="box box3">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <h1>Detalles del Cliente</h1>
+                    <hr>
+                    <div class="col-12 col-md-6 offset-md-3">
+                        <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
+                        <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
+                        <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
+                        <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
+                        <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
+                        <p><strong>Teléfono:</strong> {{ cliente.fono }}</p>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div class="table table-hover">
+                    <thead >
+                        <tr>
+                          <th>Tipo de Servicio</th>
+                          <th>Fecha</th>
+                          <th>Producto o Servicio</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                </div>
+            </div>
+            <hr>
+            
+            <hr>
+            <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm">ATRAS</a>
+        </div>
+        
+    </div>
+    
+       
+{% endblock %}

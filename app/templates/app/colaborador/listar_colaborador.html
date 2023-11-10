@@ -1,5 +1,6 @@
 {% extends 'app/base.html' %}
 
+
 {% block js %}
     <script>
         function eliminarColaborador(id){
@@ -24,44 +25,44 @@
 {% endblock %}
 
 {% block contenido %}
-
-            <h2>Historial de Colaboradores</h2>
+    <div class="box box3">
+        <h2 style="color: black;">Historial de Colaboradores</h2>       
+            <a href="{% url 'inicio_admin' %}" class="btn btn-secondary list_boton">INICIO</a>
             {% if perms.app.add_colaborador %}
-                <a href="{% url 'regcolaborador' %}" class="btn btn-primary"> Agregar Colaborador</a>
+            <a href="{% url 'regcolaborador' %}" class="btn btn-primary"> Agregar Colaborador</a>
             {% endif %}
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre Usuario</th>
-                    <th>Nombre Completo</th>
-                    <th>Correo Electrónico</th>
-                    <th>Contraseña</th>
-                    <th>Opciones</th>
-                </tr>
-                       
-                {% for p in entity %}
-        
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>{{ p.id  }}</td>
+                        <th>Nombre Usuario</th>
+                        <th>Nombre Completo</th>
+                        <th>Correo Electrónico</th>
+                        <th>Opciones</th>
+                    </tr> 
+                </thead>
+                {% for p in entity %}
+                <tbody>
+                    <tr>
                         <td>{{ p.username }}</td>
                         <td>{{ p.first_name }} {{ p.last_name }}</td>
                         <td>{{ p.email  }}</td>
-                        <!--
-                            <td>{{ p.password }}</td>
-                        -->
                         <td>{{ p.categoria  }}</td>
                         {% if perms.app.change_colaborador %}
-                            <td><a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info btn-sm">Modificar</a></td>
+                            <td>
+                                <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+                            </td>
                         {% endif %}
                         {% if perms.app.delete_colaborador %}
-                            <td><a href="#" onclick="eliminarColaborador({{p.id}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                            <td>
+                                <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
                         {% endif %}                     
                     </tr>
-        
+                </tbody>
                 {% endfor %}
             </table>
-
             <div>
                 {% include 'app/paginator.html' %}
             </div>
+    </div>
 {% endblock %}

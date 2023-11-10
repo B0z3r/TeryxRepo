@@ -24,41 +24,46 @@
 {% endblock %}
 
 {% block contenido %}
-
-            <h2>Historial de Ventas</h2>
+    <div class="box box3">
+        <h2 style="color: black;">Historial de Ventas</h2>
             {% if perms.app.add_venta %}
                 <a href="{% url 'agregar_venta' %}" class="btn btn-primary"> Crear Venta</a>
             {% endif %}
-            <table>
-                <tr>
-                    <th>Nº</th>
-                    <th>Fecha Venta</th>
-                    <th>Descripción</th>
-                    <th>Tipo de Pago</th>
-                    <th>total</th>
-                    <th>Opciones</th>
-                </tr>
-                       
-                {% for p in entity %}
-        
-                    <tr>
-                        <td>{{ p.id_venta  }}</td>
-                        <td>{{ p.fecha  }}</td>
-                        <td>{{ p.descripcion  }}</td>
-                        <td>{{ p.tipopago  }}</td>
-                        <td>{{ p.total  }}</td>
-                        {% if perms.app.change_venta %}
-                            <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn btn-info btn-sm">Modificar</a></td>
-                        {% endif %}
-                        {% if perms.app.delete_venta %}
-                            <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn btn-danger btn-sm">Eliminar</a></td>
-                        {% endif %}
-                    </tr>
-        
-                {% endfor %}
-            </table>
-
-            <div>
-                {% include 'app/paginator.html' %}
+            <div class="table table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Nombre Cliente</th>
+                            <th>Fecha Venta</th>
+                            <th>Tipo de Servicio</th>
+                            <th>Tipo de Pago</th>
+                            <th>total</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    {% for p in entity %}
+                        <tbody>
+                            <tr>
+                                <td>{{ p.id_venta }}</td>
+                                <td>{{ p.cliente.nombre }}</td>
+                                <td>{{ p.fecha }}</td>
+                                <td>{{ p.descripcion }}</td>
+                                <td>{{ p.tipopago }}</td>
+                                <td>{{ p.total }}</td>
+                                {% if perms.app.change_venta %}
+                                    <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                {% endif %}
+                                {% if perms.app.delete_venta %}
+                                    <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+                <div>
+                    {% include 'app/paginator.html' %}
+                </div>
             </div>
+    </div>
 {% endblock %}

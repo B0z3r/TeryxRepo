@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta, Detalle_venta
+from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -17,15 +17,34 @@ class ClienteForm(forms.ModelForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    
-    username = forms.CharField(label='Nombre Usuario', max_length=20)
-    rut = forms.IntegerField(label='Rut', )
-    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput)
-    first_name = forms.CharField(label='Nombre Completo', max_length=100)
-    fono = forms.IntegerField(label='Teléfono')
-    email = forms.EmailField(label='Correo Electrónico', max_length=100)
-    tipo_perfil = forms.ChoiceField(label='Tipo de Perfil', choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],widget=forms.Select)
+    username = forms.CharField(
+        label='Nombre Usuario',
+        max_length=20,
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    password1 = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'required': False})
+    )
+    password2 = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'required': False})
+    )
+    first_name = forms.CharField(
+        label='Nombre Completo',
+        max_length=100,
+        widget=forms.TextInput(attrs={'required': False})
+    )
+    email = forms.EmailField(
+        label='Correo Electrónico',
+        max_length=100,
+        widget=forms.EmailInput(attrs={'required': False})
+    )
+    tipo_perfil = forms.ChoiceField(
+        label='Tipo de Perfil',
+        choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],
+        widget=forms.Select(attrs={'required': False})
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -38,7 +57,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "rut", "password1", "password2","first_name", "fono", "email","tipo_perfil"]
+        fields = ["username", "password1", "password2", "first_name", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
     
@@ -67,18 +86,11 @@ class VentaForm(forms.ModelForm):
     
     class Meta:
         model = Venta
-        fields = '__all__' 
+        fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
 
         widgets = {
             "fecha": forms.SelectDateWidget(),
         }
-
-class HistorialForm(forms.ModelForm):
-    
-    class Meta:
-        model = Detalle_venta
-        fields = ["id_detalle","tipo_servicio", "venta_id_venta", "producto_id_producto", "cliente_rut_cliente", "persona_rut_colaborador", "taller_id_taller"] 
-
 
 class tventa(forms.ModelForm):
     
@@ -89,21 +101,19 @@ class tventa(forms.ModelForm):
             "fecha": forms.SelectDateWidget(),
         }
 
-
 class tcliente(forms.ModelForm):
     
     class Meta:
         model = Cliente
         fields = ["rut_cliente","nombre_cliente","apePaterno","apeMaterno",]
 
-
 class ttaller(forms.ModelForm):
     
     class Meta:
         model = Taller
-        fields = ["id_taller","estado", "modelo_bicicleta","nombre_trabajo", "fecha_ingreso","fecha_termino",]   
+        fields = ["id_taller","estado", "modelo_bicicleta","tipo_arreglo", "fecha_ingreso","fecha_termino",]   
         widgets = {
-             "fecha_ingreso": forms.SelectDateWidget(),
+            "fecha_ingreso": forms.SelectDateWidget(),
             "fecha_termino": forms.SelectDateWidget()
  
         }
