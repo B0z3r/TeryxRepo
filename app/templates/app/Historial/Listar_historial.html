@@ -24,7 +24,8 @@
 {% endblock %}
 
 {% block contenido %}
-
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
             <h2>Historiales</h2>
             {% if perms.app.add_historial %}
                 <a href="{% url 'agregar_historial' %}" class="btn btn-primary"> Crear Historial</a>
@@ -65,4 +66,7 @@
             <div>
                 {% include 'app/paginator.html' %}
             </div>
+        </div>
+        </main>
+
 {% endblock %}

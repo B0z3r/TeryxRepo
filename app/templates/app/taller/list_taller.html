@@ -23,7 +23,8 @@
 {% endblock %}
 
 {% block contenido %}
-
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
     <h2>Historial de Taller</h2>
     {% if perms.app.add_taller %}
       <a href="{% url 'crear_venta' %}" class="btn btn-primary"> Agregar Agendamiento</a>
@@ -67,4 +68,7 @@
     </table>
 
     <div>{% include 'app/paginator.html' %}</div>
+
+    </div>
+    </main>
 {% endblock %}

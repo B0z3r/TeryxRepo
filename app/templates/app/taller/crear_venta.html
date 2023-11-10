@@ -6,7 +6,8 @@
 
 
 {% block contenido %}
-<div class="box box3"> 
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
     <div class="col-12 col-md-6 offset-md-3">
         <div class="card">
             <div class="card-body">
@@ -31,10 +32,14 @@
         </div>
     </div>
 </div>
-
+</div>
+</main>
 
 
             <div>
                 {% include 'app/paginator.html' %}
             </div>
+
+           
+
 {% endblock %}

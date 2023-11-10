@@ -24,7 +24,8 @@
 {% endblock %}
 
 {% block contenido %}
-
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
             <h2>Historial de Productos</h2>
             {% if perms.app.add_producto %}
                 <a href="{% url 'agregar_producto' %}" class="btn btn-primary"> Agregar Producto</a>
@@ -65,4 +66,7 @@
             <div>
                 {% include 'app/paginator.html' %}
             </div>
+
+            </div>
+            </main>
 {% endblock %}
