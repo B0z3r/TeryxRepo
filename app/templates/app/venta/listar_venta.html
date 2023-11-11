@@ -24,13 +24,27 @@
 {% endblock %}
 
 {% block contenido %}
-    <div class="box box3">
-        <h2 style="color: black;">Historial de Ventas</h2>
-            {% if perms.app.add_venta %}
-                <a href="{% url 'agregar_venta' %}" class="btn btn-primary"> Crear Venta</a>
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
+<div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
+    <div class="col-md-12 mb-3" style="padding-top: 30px;">
+      <div class="card" style="border-radius: 10px;" >
+        <div class="card-header">
+          <span><i class="bi bi-table me-2"></i></span> Historial ventas
+          {% if perms.app.add_venta %}
+                <a href="{% url 'agregar_venta' %}" class="btn btn-primary" style="float: inline-end;"> Crear Venta</a>
             {% endif %}
-            <div class="table table-responsive">
-                <table class="table table-hover">
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" >
+            <table
+              id="example"
+              class="table table-striped data-table"
+              style="width: 100% ; "
+              
+            >
+         
+           
                     <thead>
                         <tr>
                             <th>Nº</th>
@@ -66,4 +80,14 @@
                 </div>
             </div>
     </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
 {% endblock %}

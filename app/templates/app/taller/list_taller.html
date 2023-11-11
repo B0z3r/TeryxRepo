@@ -23,14 +23,28 @@
 {% endblock %}
 
 {% block contenido %}
-<main class="mt-5 pt-3">
-  <div class="container-fluid">
-    <h2>Historial de Taller</h2>
-    {% if perms.app.add_taller %}
-      <a href="{% url 'crear_venta' %}" class="btn btn-primary"> Agregar Agendamiento</a>
-    {% endif %}
 
-    <table>
+    <main class="mt-5 pt-3">
+      <div class="container-fluid"  >
+          <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;" >
+              <div class="col-md-12 mb-3" style="padding-top: 30px;">
+                <div class="card" style="border-radius: 10px;" >
+                  <div class="card-header">
+                    <span><i class="bi bi-table me-2"></i></span> Historial taller
+                    {% if perms.app.add_taller %}
+                    <a href="{% url 'crear_venta' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Agendamiento</a>
+                  {% endif %}
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive" >
+                      
+                      <table
+                        id="example"
+                        class="table table-striped data-table"
+                        style="width: 100% ; "
+                      >
+    
+  
       <tr>
         <th>Nº Orden</th>
         <th>Estado</th>
@@ -70,5 +84,18 @@
     <div>{% include 'app/paginator.html' %}</div>
 
     </div>
+    
+  </div>
+  
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
     </main>
 {% endblock %}
