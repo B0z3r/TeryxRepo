@@ -29,6 +29,7 @@ urlpatterns = [
     path('modificar-proveedor/<id>/', modificar_proveedor, name="modificar_proveedor"),
     path('eliminar-proveedor/<id>/', eliminar_proveedor, name="eliminar_proveedor"),
     path('agregar-taller/', agregar_taller, name="agregar_taller"),
+    path('listar-taller/', list_taller, name="list_taller"),
     path('modificar-taller/<id>/', modificar_taller, name="modificar_taller"),
     path('eliminar-taller/<id>/', eliminar_taller, name="eliminar_taller"),
     path('agregar-venta/', agregar_venta, name="agregar_venta"),

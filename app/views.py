@@ -69,7 +69,6 @@ def listar_colaborador(request):
 
     return render(request, 'app/colaborador/listar_colaborador.html', data)
 
-
 def listar_micuenta(request):
     persona = User.objects.all()
     page = request.GET.get('page',1)
@@ -87,9 +86,6 @@ def listar_micuenta(request):
 
     return render(request, 'app/Micuenta/micuenta.html', data)
     
-
-    
-
 @permission_required('app.change_colaborador')
 def modificar_colaborador(request, id):
     persona = get_object_or_404(User, pk=id)
@@ -108,7 +104,6 @@ def modificar_colaborador(request, id):
     return render(request, 'app/colaborador/modificar_colaborador.html', data)
 
 
-
 @permission_required('app.change_colaborador')
 def modificar_cuenta(request, id):
     persona = get_object_or_404(User, pk=id)
@@ -125,8 +120,6 @@ def modificar_cuenta(request, id):
            
         data["form"] = formulario
         return render(request, 'app/Micuenta/micuenta.html', data)
-
-
 
 @permission_required('app.delete_colaborador')
 def eliminar_colaborador(request, id):
@@ -320,7 +313,7 @@ def agregar_taller(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Agendamiento Creado Correctamente!")
-            return redirect(to="listar_taller")
+            return redirect(to="list_taller")
         else:
             data["form"] = formulario
 

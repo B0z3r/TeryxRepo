@@ -91,11 +91,20 @@ opc_estado_pago = [
     [1, "Pagado"],
 ]
 
+opciones_arreglo = [
+    [('Ajustes básicos','Ajustes básicos')],
+    [('Cambio de neumáticos','Cambio de neumáticos')],
+    [('Frenos','Frenos')],
+    [('Cambio de Cadena, Pedales y Bielas','Cambio de Cadena, Pedales y Bielas')],
+    [('Ajuste de Suspensión','Ajuste de Suspensión')]
+]
+
 class Taller(models.Model):
     id_taller = models.AutoField('Nº en Taller', primary_key=True)
     fecha_ingreso = models.DateField(' Fecha de Inicio', default=datetime.now)
     fecha_termino = models.DateField('Fecha de Término', default=datetime.now)
-    tipo_arreglo = models.CharField('Tipo De Arreglo', max_length=50)
+    tipo_arreglo = models.CharField('Tipo De Arreglo', max_length=50, 
+                                    choices=[('Ajustes básicos','Ajustes básicos'),('Cambio de neumáticos','Cambio de neumáticos'),('Frenos','Frenos'),('Cambio de Cadena, Pedales y Bielas','Cambio de Cadena, Pedales y Bielas'),('Ajuste de Suspensión','Ajuste de Suspensión')])
     valor = models.IntegerField('Valor')
     descripcion = models.CharField('Descripción', max_length=100)
     estado = models.IntegerField('Estado', choices=opc_estado, default=0)
@@ -103,7 +112,7 @@ class Taller(models.Model):
     estado_pago = models.IntegerField('Estado de Pago', choices=opc_estado_pago, default=0, null=True, blank=True)
 
     def __str__(self):
-        return self.nombre_trabajo
+        return self.tipo_arreglo
     
 
 class Venta(models.Model):
