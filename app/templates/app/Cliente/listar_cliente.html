@@ -26,14 +26,26 @@
  
 <main class="mt-5 pt-3">
   <div class="container-fluid">
-
-    <h2 style="color: black;">Historial Cliente</h2>
-    {% if perms.app.add_cliente %}
-      <a href="{% url 'agregar_cliente' %}" class="btn btn-primary">Agregar Cliente</a>
-    {% endif %}
-    <hr>
-    <form class="d-flex col-md-8"">
-      <input class="form-control me-2 light-table-filter " data-table="table_id" type="text" placeholder="Buscar con JAVA">
+    <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
+      <div class="col-md-12 mb-3" style="padding-top: 30px;">
+        <div class="card" style="border-radius: 10px;" >
+          <div class="card-header">
+            <span><i class="bi bi-table me-2"></i></span> Historial clientes
+            {% if perms.app.add_cliente %}
+            <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Cliente</a>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="table-responsive" >
+              <table
+                id="example"
+                class="table table-striped data-table"
+                style="width: 100% ; "
+                
+              >
+      
+    <form class="d-flex col-md-6 mb-3">
+      <input class="form-control  light-table-filter " data-table="table_id" type="text" placeholder="Buscar">
     </form>
     <br>
     <div class="table-responsive">
@@ -41,35 +53,34 @@
         <thead >
           <tr>
             <th>Rut</th>
-            <th>Nombre</th>
-            <th>Apellido Paterno</th>
-            <th>Apellido Materno</th>
+            <th>Nombre completo</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th>Opciones</th>
+            <th style="text-align: center;">Opciones</th>
           </tr>
         </thead>
         {% for p in entity %}
           <tbody>
             <tr>
               <td>{{ p.rut_cliente  }}</td>
-              <td>{{ p.nombre_cliente  }}</td>
-              <td>{{ p.apePaterno  }}</td>
-              <td>{{ p.apeMaterno  }}</td>
-              <td>{{ p.email  }}</td>
+              <td>{{ p.nombre_cliente  }} {{ p.apePaterno  }} {{ p.apeMaterno  }}</td>
+               <td>{{ p.email  }}</td>
               <td>{{ p.fono   }}</td>
               {% if perms.app.change_cliente %}
-                <td>
-                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a>
-                </td>
-              {% endif %}
-                
-              <td><a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn btn-secondary btn-sm">Historial</a></td>
               {% if perms.app.delete_cliente %}
                 <td>
+                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a>
+                  <a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn btn-secondary btn-sm">Historial</a>
+             
+               
                   <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a>
+               
                 </td>
               {% endif %}
+              {% endif %}
+                
+             
+            
       </tr>
           </tbody>
         {% endfor %}
@@ -81,6 +92,12 @@
 
 
   </div>  
+</div>  
+</div>  
+</div>  
+</div>  
+</div>  
+</div>  
 </div>  
 </main>              
 {% endblock %}

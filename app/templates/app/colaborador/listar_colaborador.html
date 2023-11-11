@@ -26,19 +26,35 @@
 
 {% block contenido %}
 <main class="mt-5 pt-3">
-    <div class="container-fluid">
-        <h2 style="color: black;">Historial de Colaboradores</h2>       
-            <a href="{% url 'inicio_admin' %}" class="btn btn-secondary list_boton">INICIO</a>
-            {% if perms.app.add_colaborador %}
-            <a href="{% url 'regcolaborador' %}" class="btn btn-primary"> Agregar Colaborador</a>
-            {% endif %}
+    <div class="container-fluid"  >
+        <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
+            <div class="col-md-12 mb-3" style="padding-top: 30px;">
+              <div class="card" style="border-radius: 10px;" >
+                <div class="card-header">
+                  <span><i class="bi bi-table me-2"></i></span> Historial colaboradores
+                  {% if perms.app.add_colaborador %}
+                  <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Colaborador</a>
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive" >
+                    <table
+                      id="example"
+                      class="table table-striped data-table"
+                      style="width: 100% ; "
+                      
+                    >
+            
+           
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Nombre Usuario</th>
                         <th>Nombre Completo</th>
                         <th>Correo Electrónico</th>
-                        <th>Opciones</th>
+                        <th>Categoria</th>
+                        <th style="text-align: center;">Opciones</th>
+
                     </tr> 
                 </thead>
                 {% for p in entity %}
@@ -49,15 +65,16 @@
                         <td>{{ p.email  }}</td>
                         <td>{{ p.categoria  }}</td>
                         {% if perms.app.change_colaborador %}
-                            <td>
-                                <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info btn-sm">Modificar</a>
-                            </td>
-                        {% endif %}
                         {% if perms.app.delete_colaborador %}
                             <td>
-                                <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                               
+                                <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info btn-sm">Modificar</a>
+                                <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn btn-danger btn-sm">Eliminar </a>
                             </td>
-                        {% endif %}                     
+                        {% endif %}
+                        {% endif %}  
+                      
+                            
                     </tr>
                 </tbody>
                 {% endfor %}
@@ -67,5 +84,9 @@
             </div>
     </div>
     </div>
+</div>
+</div>
+</div>
+</div>
    </main>
 {% endblock %}

@@ -2,14 +2,14 @@
 
 {%  block contenido %}
 {% load crispy_forms_tags %}
-<main class="mt-5 pt-3">
+<main class="mt-5 pt-3" >
     <div class="container-fluid">
-        <div class="row"  style="margin: 20px">
-            <div class="col-md-6 mb-3">
-                <div class="card">
+        <div class="row"  style="background-color: rgb(244, 243, 243);  border-radius: 10px; margin: 10px;"  >
+            <div class="col-md-6 mb-3" >
+                <div class="card" style="background-color: rgb(255, 255, 255); margin: 20px; padding: 20px;"  >
                     <h2> Registro Colaborador</h2>
                     <hr>
-                    <form action="" method="post">
+                    <form  action="" method="post">
                         {% csrf_token %}    
                         {{ form | crispy }}
                         <hr>
