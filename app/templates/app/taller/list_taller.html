@@ -72,10 +72,10 @@
           <td>{{ datos.tipopago }}</td>
           <td>${{ datos.total | intcomma }}</td>
           {% if perms.app.change_venta %}
-          <td><a href="{% url 'modificar_taller' datos.id_taller %}" class="btn btn-info btn-sm">Modificar</a></td>
+          <td><a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-md"></a></td>
           {% endif %}
           {% if perms.app.delete_venta %}
-              <td><a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+              <td><a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a></td>
           {% endif %}
         </tr>
       {% endfor %}

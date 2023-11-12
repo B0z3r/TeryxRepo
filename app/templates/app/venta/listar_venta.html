@@ -66,10 +66,10 @@
                                 <td>{{ p.tipopago }}</td>
                                 <td>{{ p.total }}</td>
                                 {% if perms.app.change_venta %}
-                                    <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                    <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a></td>
                                 {% endif %}
                                 {% if perms.app.delete_venta %}
-                                    <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                    <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a></td>
                                 {% endif %}
                             </tr>
                         </tbody>

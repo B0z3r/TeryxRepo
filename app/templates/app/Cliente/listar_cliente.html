@@ -20,6 +20,32 @@
             })
         }
     </script>
+
+<script>
+  $(document).ready(function() {
+      $('#table_id').DataTable({
+          "language": {
+              "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          }
+      });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+      $('#table_id').DataTable({
+          "language": {
+              "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json",
+              "search": "Buscar:",
+              "lengthMenu": "Mostrar _MENU_ registros por página",
+              "zeroRecords": "No se encontraron resultados",
+              // Otras opciones...
+          }
+      });
+  });
+</script>
+
+
 {% endblock %}
 
 {% block contenido %}
@@ -39,7 +65,7 @@
             <div class="table-responsive" >
               <table
                 id="example"
-                class="table table-striped data-table"
+                class="table table-striped-columns  table-hover data-table"
                 style="width: 100% ; "
                 
               >
@@ -55,7 +81,7 @@
             <th>Nombre completo</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th style="text-align: center;">Opciones</th>
+            <th >Opciones</th>
           </tr>
         </thead>
         {% for p in entity %}
@@ -68,11 +94,9 @@
               {% if perms.app.change_cliente %}
               {% if perms.app.delete_cliente %}
                 <td>
-                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn btn-info btn-sm">Modificar</a>
-                  <a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn btn-secondary btn-sm">Historial</a>
-             
-               
-                  <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn btn-danger btn-sm">Eliminar</a>
+                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn bi-pencil-square  btn-info btn-md"></a>
+                  <a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
+                  <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn bi-trash btn-danger btn-md"></a>
                
                 </td>
               {% endif %}
@@ -98,5 +122,9 @@
 </div>  
 </div>  
 </div>  
-</main>              
+</main>       
+
+
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"></script>
+
 {% endblock %}
