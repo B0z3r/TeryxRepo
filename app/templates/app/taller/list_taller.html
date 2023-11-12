@@ -46,6 +46,10 @@
                 style="width: 100% ; "
                 
               >
+
+            
+
+              <thead>
                   <tr>
                     <th>Nº Orden</th>
                     <th>Estado</th>
@@ -59,6 +63,9 @@
                     <th>Total</th>
                     <th>Opciones</th>
                   </tr>
+
+                </thead>
+                <tbody>
                   {% for datos in datos_combinados %}
                     <tr>
                       <td>{{ datos.id_taller }}</td>
@@ -83,6 +90,7 @@
                        
                     </tr>
                   {% endfor %}
+                </tbody>
                 </table>
 
                 <div>{% include 'app/paginator.html' %}</div>
