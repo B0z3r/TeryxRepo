@@ -55,7 +55,7 @@
     <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
       <div class="col-md-12 mb-3" style="padding-top: 30px;">
         <div class="card" style="border-radius: 10px;" >
-          <div class="card-header">
+          <div class="card-header" style="background-color:rgb(52, 52, 52) ; color: white;">
             <span><i class="bi bi-table me-2"></i></span> Historial clientes
             {% if perms.app.add_cliente %}
             <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Cliente</a>
@@ -65,14 +65,11 @@
             <div class="table-responsive" >
               <table
                 id="example"
-                class="table table-striped-columns  table-hover data-table"
+                class="table table-striped-columns table-hover "
                 style="width: 100% ; "
                 
               >
-      
-    <form class="d-flex col-md-6 mb-3">
-      <input class="form-control  light-table-filter " data-table="table_id" type="text" placeholder="Buscar">
-    </form>
+  
    
   
         <thead >

@@ -28,6 +28,18 @@
       $('.btnAdd').on('click', function () {
           $('#mymodalclient').modal('show');
       });
+
+      $('.btnMod').on('click', function () {
+          $('#exampleModal').modal('show');
+      });
+
+      $('.close').on('click', function() {
+      $('#mymodalclient').modal('hide');
+    });
+
+    $('.close').on('click', function() {
+      $('#exampleModal').modal('hide');
+    });
   });
 </script>
 
@@ -42,14 +54,14 @@
           <div class="card" style="border-radius: 10px">
             <div class="card-header " style="background-color:rgb(52, 52, 52) ; color: white;">
 
-              {% block buttons_list %}
+            
               <span ><i class="bi bi-table me-2"></i></span > Historial taller
               {% if perms.app.add_taller %}
               <!-- Button trigger modal -->
 
               <button href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: inline-end">Agregar Producto</button>
               {% endif %}
-              {% endblock %}
+              
               <!-- Button trigger modal -->
 
             </div>
@@ -81,8 +93,8 @@
                         <td>{{ p.categoria }}</td>
                         {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
                           <td>
-                            <a href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info bi-pencil-square btn-md"></a>
-                            <a href="#" onclick="eliminarProducto({{ p.id_producto }})" class="btn bi-trash btn-danger btn-md"></a>
+                            <button href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info btnMod bi-pencil-square btn-md"></button>
+                            <button href="#" onclick="eliminarProducto({{ p.id_producto }})" class="btn bi-trash btn-danger btn-md"></button>
                           </td>
                         {% endif %} {% endif %}
                       </tr>
@@ -102,7 +114,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="mymodalclient">Agregar producto</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -122,12 +134,37 @@
                   </div>
               </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
+         
         </div>
       </div>
     </div>
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modificar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form action=""  method="post">
+    
+                    {% csrf_token %}
+                    {{form | crispy}}
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'listar_producto' %}" value="Cancelar" class="btn btn-secondary">Cancelar</a>
+                &nbsp;
+                <input type="submit" value="Editar" class="btn btn-primary">
+            </div>
+          </div>
+        </div>
+      </div>
   </main>
 {% endblock %}

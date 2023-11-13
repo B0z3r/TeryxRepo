@@ -21,6 +21,9 @@ def login(request):
 def micuenta(request):
     return render(request, 'app/Micuenta/micuenta.html')
 
+def gestionar_productos(request):
+    return render(request, 'app/productos/gestionar_productos.html')
+
 
 def inicio_admin(request):
     clientes = Cliente.objects.all()
@@ -501,4 +504,68 @@ class ProfilePasswordChangeView(PasswordChangeView):
         return super().form_invalid(form)
     
 
-    
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
+from .models import Producto
+from .forms import ProductoForm
+from django.http import Http404
+
+
+
+
+@permission_required(['app.add_producto', 'app.view_producto', 'app.change_producto', 'app.delete_producto'])
+def gestionar_productos(request, id=None):
+    # Obtener todos los productos
+    productos = Producto.objects.all()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(productos, 5)
+        productos = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {'entity': productos, 'paginator': paginator}
+
+    # Agregar producto
+    if request.user.has_perm('app.add_producto'):
+        data['form'] = ProductoForm()
+
+        if request.method == 'POST':
+            formulario = ProductoForm(data=request.POST)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Producto Registrado Correctamente!")
+                return redirect(to="gestionar_productos")
+            else:
+                data["form"] = formulario
+
+    # Modificar producto
+    if id and request.user.has_perm('app.change_producto'):
+        producto = get_object_or_404(Producto, pk=id)
+        data['form'] = ProductoForm(instance=producto)
+
+        if request.method == 'POST':
+            formulario = ProductoForm(data=request.POST, instance=producto)
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Producto Modificado Correctamente!")
+                return redirect(to="gestionar_productos")
+            else:
+                data["form"] = formulario
+
+    # Eliminar producto
+    if id and request.user.has_perm('app.delete_producto'):
+        producto = get_object_or_404(Producto, pk=id)
+        producto.delete()
+        messages.success(request, "Producto Eliminado Correctamente!")
+        return redirect(to="gestionar_productos")
+
+    return render(request, 'app/Productos/gestionar_productos.html', data)
+
+
+
+
