@@ -17,6 +17,19 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
 
+    def clean_dni(self):
+        rut_cliente = self.cleaned_data.get('rut_cliente')
+
+        # Verifica si el DNI tiene solo dígitos numéricos
+        if not rut_cliente.isdigit():
+            raise ValidationError('El DNI debe contener solo dígitos numéricos.')
+
+        # Verifica si el DNI tiene la longitud correcta (7 u 8 dígitos)
+        if len(rut_cliente) not in (7, 8):
+            raise ValidationError('El DNI debe tener 7 u 8 dígitos.')
+
+        return rut_cliente
+
 class CustomUserCreationForm(UserCreationForm):
     alphanumeric_regex = re.compile(r'^[a-zA-Z]+$')
 
