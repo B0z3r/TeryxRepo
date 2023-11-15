@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.core.validators import MinLengthValidator
 
 # Create your models here.
 
@@ -22,7 +23,7 @@ opciones_consulta = [
     ]
 
 class Persona(models.Model):
-    nomUsuario = models.CharField('Nombre De Usuario', max_length=20, unique=True)
+    nomUsuario = models.CharField('Nombre De Usuario', max_length=20, unique=True, validators=[MinLengthValidator(5)])
     rut_colaborador = models.IntegerField('Rut Colaborador', primary_key=True, unique=True)
     nombre_completo = models.CharField('Nombre Completo', max_length=50, unique=True)
     fono = models.IntegerField('Teléfono', unique=True)
@@ -77,8 +78,11 @@ class Detalle_Factura(models.Model):
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
     proveedor_rut = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
     
-    def __int__(self):
-        return self.cantidad
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.cantidad} productos"
     
 opc_estado = [
         [0,"En proceso"],

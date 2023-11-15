@@ -2,6 +2,8 @@ from django import forms
 from .models import Persona, Cliente, Producto, Proveedor, Taller, Venta
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+import re
 
 class ColaboradorForm(forms.ModelForm):
     
@@ -15,11 +17,13 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
 
-
 class CustomUserCreationForm(UserCreationForm):
+    alphanumeric_regex = re.compile(r'^[a-zA-Z]+$')
+
     username = forms.CharField(
         label='Nombre Usuario',
         max_length=20,
+        min_length=5,
         widget=forms.TextInput(attrs={'required': False})
     )
     password1 = forms.CharField(
@@ -45,6 +49,12 @@ class CustomUserCreationForm(UserCreationForm):
         choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],
         widget=forms.Select(attrs={'required': False})
     )
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not self.alphanumeric_regex.match(username):
+            raise ValidationError('El nombre de usuario debe contener solo letras mayúsculas y minúsculas.')
+        return username
 
     def clean(self):
         cleaned_data = super().clean()
