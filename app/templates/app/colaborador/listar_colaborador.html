@@ -1,92 +1,98 @@
-{% extends 'app/base.html' %}
+{% extends 'app/base.html' %} {% block js %}
+<script>
+  function eliminarColaborador(id) {
+    Swal.fire({
+      title: "¿Estas Seguro?",
+      text: "Que deseas Eliminar este Colaborador",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Eliminar",
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545",
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-colaborador/" + id + "/";
+      }
+    });
+  }
+</script>
 
+{% endblock %} {% block contenido %}
 
-{% block js %}
-    <script>
-        function eliminarColaborador(id){
-            Swal.fire({
-                "title": "¿Estas Seguro?",
-                "text": "Que deseas Eliminar este Colaborador",
-                "icon": "warning", 
-                "showCancelButton": true,
-                "cancelButtonText": "Cancelar",
-                "confirmButtonText": "Eliminar",
-                "reverseButtons": true,
-                "confirmButtonColor": "#dc3545"
-            })
-            .then(function(result){
-                if(result.isConfirmed){
-                    window.location.href = "/eliminar-colaborador/"+id+"/"
-                }
-            })
-        }
-    </script>
-
-{% endblock %}
-
-{% block contenido %}
 <main class="mt-5 pt-3">
-    <div class="container-fluid"  >
-        <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
-            <div class="col-md-12 mb-3" style="padding-top: 30px;">
-              <div class="card" style="border-radius: 10px;" >
-                <div class="card-header">
-                  <span><i class="bi bi-table me-2"></i></span> Historial colaboradores
-                  {% if perms.app.add_colaborador %}
-                  <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Colaborador</a>
-                  {% endif %}
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive" >
-                    <table
-                      id="example"
-                      class="table table-striped data-table"
-                      style="width: 100% ; "
-                      
-                    >
-            
-           
-            
+  <div class="container-fluid">
+    <div
+      class="row"
+      style="
+        background-color: rgb(237, 239, 241);
+        padding-bottom: 420px;
+        margin: 10px;
+        border-radius: 10px;
+      "
+    >
+      <div class="col-md-12 mb-3" style="padding-top: 30px">
+        <div class="card" style="border-radius: 10px">
+          <div class="card-header" style="background-color: rgb(50, 49, 49); color: white;">
+            <span><i class="bi bi-table me-2"></i></span> Historial
+            colaboradores {% if perms.app.add_colaborador %}
+            <a
+              href="{% url 'regcolaborador' %}"
+              class="btn btn-primary"
+              style="float: inline-end"
+            >
+              Agregar Colaborador</a
+            >
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table
+                id="example"
+                class="table table-striped-columns table-hover data-table"
+                style="width: 100%"
+              >
                 <thead>
-                    <tr>
-                        <th>Nombre Usuario</th>
-                        <th>Nombre Completo</th>
-                        <th>Correo Electrónico</th>
-                        <th>Categoria</th>
-                        <th>Opciones</th>
-
-                    </tr> 
+                  <tr>
+                    <th>Nombre Usuario</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo Electrónico</th>
+                    <th>Opciones</th>
+                  </tr>
                 </thead>
-                {% for p in entity %}
+
                 <tbody>
-                    <tr>
-                        <td>{{ p.username }}</td>
-                        <td>{{ p.first_name }} {{ p.last_name }}</td>
-                        <td>{{ p.email  }}</td>
-                        <td>{{ p.categoria  }}</td>
-                        {% if perms.app.change_colaborador %}
-                        {% if perms.app.delete_colaborador %}
-                            <td>
-                               
-                                <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info bi-pencil-square btn-md"></a>
-                                <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn  bi-trash btn-danger btn-md"> </a>
-                            </td>
-                        {% endif %}
-                        {% endif %}  
-                      
-                            
-                    </tr>
+                  {% for p in entity %}
+                  <tr>
+                    <td>{{ p.username }}</td>
+                    <td>{{ p.first_name }} {{ p.last_name }}</td>
+                    <td>{{ p.email }}</td>
+
+                    {% if perms.app.change_colaborador %} 
+                    {% if perms.app.delete_colaborador %}
+                    <td>
+                      <a
+                        href="{% url 'modificar_colaborador' p.id %}"
+                        class="btn btn-info bi-pencil-square btn-md"
+                      ></a>
+                      <a
+                        href="#"
+                        onclick="eliminarColaborador({{p.id}})"
+                        class="btn bi-trash btn-danger btn-md"
+                      >
+                      </a>
+                    </td>
+                    {% endif %} {% endif %}
+                  </tr>
+                  {% endfor %}
                 </tbody>
-                {% endfor %}
-            </table>
-            <div>
-                {% include 'app/paginator.html' %}
+              </table>
+              <div>{% include 'app/paginator.html' %}</div>
             </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-   </main>
+  </div>
+</main>
 {% endblock %}
