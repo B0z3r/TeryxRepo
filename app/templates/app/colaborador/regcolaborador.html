@@ -2,11 +2,11 @@
 
 {%  block contenido %}
 {% load crispy_forms_tags %}
-<main class="mt-5 pt-3" >
+<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
     <div class="container-fluid">
-        <div class="row"  style="background-color: rgb(244, 243, 243);  border-radius: 10px; margin: 10px;"  >
-            <div class="col-md-6 mb-3" >
-                <div class="card" style="background-color: rgb(255, 255, 255); margin: 20px; padding: 20px;"  >
+        <div class="card-body" style="background-color: rgb(243, 242, 234); margin: 10px;  border-radius: 10px;">
+            <div class="row" >
+                <div class="col-12 col-md-6 offset-md-3" style="background-color: rgb(255, 255, 255); border-radius: 10px; ">
                     <h2> Registro Colaborador</h2>
                     <hr>
                     <form  action="" method="post">
@@ -14,12 +14,9 @@
                         {{ form | crispy }}
                         <hr>
                         <div class="d-flex justify-content-center">
-                            <a href="{% url 'inicio_admin' %}" class="btn btn-secondary">Volver Inicio</a>
+                            <a href="{% url 'inicio_admin' %}" class="btn btn-danger">Cancelar</a>
                             &nbsp;
                             <button type="submit" value="btnEnviar" class="btn btn-primary">Registrar</button>
-                            &nbsp;
-                            
-                            <a href="{% url 'listar_colaborador' %}" class="btn btn-info">Listado de Colaboradores</a>
                         </div>
                     </form>
                     {{mensaje}}
@@ -27,6 +24,5 @@
             </div>
         </div>
         </div>
-     
 </main>
 {%  endblock %}
