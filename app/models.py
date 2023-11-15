@@ -71,6 +71,7 @@ class Producto(models.Model):
         return self.nombre_producto
 
 class Detalle_Factura(models.Model):
+    id_det_factura = models.IntegerField('Nº factura', primary_key=True)
     cantidad = models.IntegerField('Cantidad De Productos')
     precio = models.IntegerField('Precio Unitario')
     total = models.IntegerField('Total')
