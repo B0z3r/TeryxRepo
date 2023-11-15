@@ -113,14 +113,6 @@
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    <li>
-                        <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
-                          <h7 style="padding-left: 18px;">Contenido</h7>
-                        </div>
-                    </li>
-                    <li class="my-2">
-                        <hr class="dropdown-divider bg-light" />
-                    </li>
                     {% if perms.app.add_regcolaborador %}
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
@@ -362,21 +354,15 @@
                         <hr class="dropdown-divider bg-light" />
                     </li>
                 </ul>
-               
-                <footer style="color: white; text-align: center; padding-top: 30px; font-size: x-small; position: end;">
+                <footer style="color: white; text-align: center; padding-top: 30px; font-size: x-small; position: end; bottom: 0; " >
                     <p>&copy; 2023 Teryx | Mirabike. Todos los derechos reservados.</p>
                 </footer>
-            
             </nav>
         </div>
     </div>
-    
-
     {% block contenido %}
     {% endblock %}
     </div>
-
-
     <!-- Scripts -->
     <script src="{% static '/app/js/menu.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

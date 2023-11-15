@@ -14,11 +14,7 @@
                         <form action="" method="post">
     
                             {% csrf_token %}
-                            <div class="form-group">
-                                {{ venta_form|crispy }}
-                                {{ cliente_form|crispy }}
-                                {{ taller_form|crispy }}
-                            </div>
+                            {{form | crispy}}
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'list_taller' %}" value="Cancelar" class="btn btn-secondary">Cancelar</a>
                                 &nbsp;

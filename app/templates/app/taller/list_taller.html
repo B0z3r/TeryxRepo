@@ -1,31 +1,27 @@
 {% extends 'app/base.html' %}
 
 {% block js %}
-  {% load humanize %}
-  <script>
-    (function () {
-      function eliminarTaller(id) {
-        Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¿Deseas eliminar este Agendamiento?",
-          icon: "warning",
+{% load humanize %}
+<script>
+  function eliminarTaller(id){
+      Swal.fire({
+          title: "¿Estás Seguro?",
+          text: "¿Qué deseas Eliminar este Agendamiento?",
+          icon: "warning", 
           showCancelButton: true,
           cancelButtonText: "Cancelar",
           confirmButtonText: "Eliminar",
           reverseButtons: true,
-          confirmButtonColor: "#dc3545",
-        }).then(function (result) {
-          if (result.isConfirmed) {
-            window.location.href = "/eliminar-taller/" + id + "/";
+          confirmButtonColor: "#dc3545"
+      })
+      .then(function(result){
+          if(result.isConfirmed){
+              window.location.href = "/eliminar-taller/" + id + "/";
           }
-        });
-      }
-
-      // Puedes agregar más funciones aquí si es necesario.
-    })();
-  </script>
+      });
+  }
+</script>
 {% endblock %}
-
 {% block contenido %}
   <main class="mt-5 pt-3">
     <div class="container-fluid">
@@ -35,64 +31,52 @@
             <div class="card-header">
               <span><i class="bi bi-table me-2"></i></span> Historial taller
               {% if perms.app.add_taller %}
-                <a href="{% url 'crear_venta' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Agendamiento</a>
+                <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Agendamiento</a>
               {% endif %}
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table
-                id="example"
-                class="table table-striped-columns  table-hover data-table"
-                style="width: 100% ; "
-                
-              >
-
-            
-
-              <thead>
-                  <tr>
-                    <th>Nº Orden</th>
-                    <th>Estado</th>
-                    <th>Modelo de Bicicleta</th>
-                    <th>Rut cliente</th>
-                    <th>Nombre del Cliente</th>
-                    <th>Nombre del Trabajo</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha de Término</th>
-                    <th>Tipo de Pago</th>
-                    <th>Total</th>
-                    <th>Opciones</th>
-                  </tr>
-
-                </thead>
-                <tbody>
-                  {% for datos in datos_combinados %}
-                    <tr>
-                      <td>{{ datos.id_taller }}</td>
-                      <td>{{ datos.estado }}</td>
-                      <td>{{ datos.modelo_bicicleta }}</td>
-                      <td>{{ datos.rut_cliente }}</td>
-                      <td>{{ datos.nombre_cliente }} {{ datos.apePaterno }} {{ datos.apeMaterno }}</td>
-                      <td>{{ datos.nombre_trabajo }}</td>
-                      <td>{{ datos.fecha_ingreso }}</td>
-                      <td>{{ datos.fecha_termino }}</td>
-                      <td>{{ datos.tipopago }}</td>
-                      <td>${{ datos.total | intcomma }}</td>
-                      {% if perms.app.change_venta %}
-                      {% if perms.app.delete_venta %}
+                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100% ;">
+                  <thead>
+                      <tr>
+                        <th>Nº Orden</th>
+                        <th>Estado</th>
+                        <th>Modelo de Bicicleta</th>
+                        <th>Rut cliente</th>
+                        <th>Nombre del Cliente</th>
+                        <th>Tipo de Arreglo</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Término</th>
+                        <th>Tipo de Pago</th>
+                        <th>Total</th>
+                        <th>Opciones</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      {% for datos in datos_combinados %}
+                        <tr>
+                          <td>{{ datos.id_taller }}</td>
+                          <td>{{ datos.estado }}</td>
+                          <td>{{ datos.modelo_bicicleta }}</td>
+                          <td>{{ datos.rut_cliente }}</td>
+                          <td>{{ datos.nombre_cliente }} {{ datos.apePaterno }} {{ datos.apeMaterno }}</td>
+                          <td>{{ datos.tipo_arreglo }}</td>
+                          <td>{{ datos.fecha_ingreso }}</td>
+                          <td>{{ datos.fecha_termino }}</td>
+                          <td>{{ datos.tipopago }}</td>
+                          <td>${{ datos.total | intcomma }}</td>
+                          {% if perms.app.change_venta %}
+                          {% if perms.app.delete_venta %}
                         <td>
-                          <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-md">ff</a>
-                          <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md">ff</a>
+                          <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-md"></a>
+                          <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a>
                         </td>
-                      {% endif %}
-                      {% endif %}
-                      
-                       
-                    </tr>
-                  {% endfor %}
-                </tbody>
+                          {% endif %}
+                          {% endif %} 
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                 </table>
-
                 <div>{% include 'app/paginator.html' %}</div>
               </div>
             </div>

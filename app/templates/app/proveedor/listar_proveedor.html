@@ -40,7 +40,6 @@
                                 <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
                                             <th>Rut</th>
                                             <th>Nombre</th>
                                             <th>Correo</th>
@@ -54,7 +53,6 @@
                                         {% for p in entity %}
                                         <tbody>
                                             <tr>
-                                                <td>{{ p.id_proveedor }}</td>
                                                 <td>{{ p.rut_proveedor }}</td>
                                                 <td>{{ p.nombre_proveedor }}</td>
                                                 <td>{{ p.email }}</td>
@@ -62,10 +60,10 @@
                                                 <td>{{ p.categoria }}</td>
                                                 <td>{{ p.pagina_web }}</td>
                                                 {% if perms.app.change_proveedor %}
-                                                    <td><a href="{% url 'modificar_proveedor' p.id_proveedor %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                                    <td><a href="{% url 'modificar_proveedor' p.rut_proveedor %}" class="btn btn-info btn-sm">Modificar</a></td>
                                                 {% endif %}
                                                 {% if perms.app.delete_proveedor %}
-                                                    <td><a href="#" onclick="eliminarProveedor({{ p.id_proveedor }})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                                    <td><a href="#" onclick="eliminarProveedor({{ p.rut_proveedor }})" class="btn btn-danger btn-sm">Eliminar</a></td>
                                                 {% endif %}
                                             </tr>
                                         </tbody>

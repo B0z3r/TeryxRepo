@@ -88,9 +88,10 @@ class VentaForm(forms.ModelForm):
         model = Venta
         fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
 
-        widgets = {
-            "fecha": forms.SelectDateWidget(),
-        }
+        fecha = forms.DateField(
+        widget=forms.SelectDateWidget(),
+        input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
+    )
 
 class tventa(forms.ModelForm):
     

@@ -400,32 +400,31 @@ def crear_venta(request):
     return render(request, 'app/taller/crear_venta.html', {'taller_form': taller_form})
 
 def list_taller(request):
-    ventas = Venta.objects.all()
-    talleres = Taller.objects.all()
-    clientes = Cliente.objects.all()
+    ventas = Venta.objects.values('total','tipopago')
+    talleres_data = Taller.objects.values('id_taller','fecha_ingreso','fecha_termino','tipo_arreglo','modelo_bicicleta', 'estado')
+    clientes = Cliente.objects.values('rut_cliente','nombre_cliente','apePaterno','apeMaterno')
 
     datos_combinados = []
 
-    for venta, taller, cliente in zip(ventas, talleres, clientes):
+    for venta, taller_data, cliente in zip(ventas, talleres_data, clientes):
+        taller_instance = Taller.objects.get(id_taller=taller_data['id_taller'])
         datos_combinados.append({
-            'id_taller': taller.id_taller,
-            'total': venta.total,
-            'tipopago': venta.tipopago,
-            'fecha_ingreso': taller.fecha_ingreso,
-            'fecha_termino': taller.fecha_termino,
-            'tipo_arreglo': taller.tipo_arreglo,
-            'estado': taller.get_estado_display(),
-            'modelo_bicicleta': taller.modelo_bicicleta,
-            'nombre_cliente': cliente.nombre_cliente,
-            'apePaterno': cliente.apePaterno,
-            'apeMaterno': cliente.apeMaterno,
-            'id_venta': venta.id_venta,
-            'rut_cliente': cliente.rut_cliente,
+            'id_taller': taller_instance.id_taller,
+            'total': venta['total'],
+            'tipopago': venta['tipopago'],
+            'fecha_ingreso': taller_instance.fecha_ingreso,
+            'fecha_termino': taller_instance.fecha_termino,
+            'tipo_arreglo': taller_instance.tipo_arreglo,
+            'estado': taller_instance.get_estado_display(),
+            'modelo_bicicleta': taller_instance.modelo_bicicleta,
+            'nombre_cliente': cliente['nombre_cliente'],
+            'apePaterno': cliente['apePaterno'],
+            'apeMaterno': cliente['apeMaterno'],
+            'rut_cliente': cliente['rut_cliente'],
         })
 
     page = request.GET.get('page', 1)
-
-    paginator = Paginator(datos_combinados, 5)
+    paginator = Paginator(datos_combinados, 10)
     try:
         datos_combinados = paginator.page(page)
     except PageNotAnInteger:
@@ -437,10 +436,9 @@ def list_taller(request):
 
 @permission_required('app.change_taller')
 def modificar_taller(request, id):
-    taller = get_object_or_404(Taller, pk=id)
-    cliente = get_object_or_404(Cliente, pk=id)
     venta = get_object_or_404(Venta, pk=id)
-
+    taller = venta.taller  # Supongamos que hay una relación ForeignKey en el modelo Venta a Taller
+    cliente = venta.cliente  # Supongamos que hay una relación ForeignKey en el modelo Venta a Cliente
 
     if request.method == 'POST':
         taller_form = ttaller(request.POST, instance=taller)
@@ -451,21 +449,18 @@ def modificar_taller(request, id):
             cliente = cliente_form.save()
             taller = taller_form.save()
             venta = venta_form.save()
-            taller.cliente = cliente
-            taller.venta = venta
-            taller.save()
             return redirect('list_taller') 
 
     else:
-        venta_form = tventa()
-        cliente_form = tcliente()
-        taller_form = ttaller()
+        venta_form = tventa(instance=venta)
+        cliente_form = tcliente(instance=cliente)
+        taller_form = ttaller(instance=taller)
 
-        return render(request, 'app/taller/modificar_taller.html',{
-        'venta_form': venta_form,
-        'cliente_form': cliente_form,
-        'taller_form': taller_form,
-    })
+        return render(request, 'app/taller/modificar_taller.html', {
+            'venta_form': venta_form,
+            'cliente_form': cliente_form,
+            'taller_form': taller_form,
+        })
 
 def test_view(request):
     return render(request, 'app/test.html')
