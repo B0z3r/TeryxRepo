@@ -49,9 +49,11 @@
                             <th>Opciones</th>
                         </tr>
                     </thead>
-                    {% for p in entity %}
+                    
                         <tbody>
+                            {% for p in entity %}
                             <tr>
+
                                 <td>{{ p.id_venta }}</td>
                                 <td>{{ p.cliente.nombre }}</td>
                                 <td>{{ p.fecha }}</td>
@@ -65,8 +67,9 @@
                                     <td><a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a></td>
                                 {% endif %}
                             </tr>
+                            {% endfor %}
                         </tbody>
-                    {% endfor %}
+                   
                 </table>
                 <div>
                     {% include 'app/paginator.html' %}
