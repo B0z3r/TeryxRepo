@@ -28,7 +28,7 @@
       <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
         <div class="col-md-12 mb-3" style="padding-top: 30px;">
           <div class="card" style="border-radius: 10px;">
-            <div class="card-header">
+            <div class="card-header"  style="background-color: rgb(50, 49, 49); color: white;">
               <span><i class="bi bi-table me-2"></i></span> Historial taller
               {% if perms.app.add_taller %}
                 <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Agendamiento</a>
@@ -68,7 +68,7 @@
                           {% if perms.app.change_venta %}
                           {% if perms.app.delete_venta %}
                         <td>
-                          <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-md"></a>
+                          <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-info btn-md"></a>
                           <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a>
                         </td>
                           {% endif %}

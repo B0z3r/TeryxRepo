@@ -1,134 +1,170 @@
-{% extends 'app/base.html' %}
-
-{% block js %}
-{% load crispy_forms_tags %}
-  <script>
-    function eliminarProducto(id) {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "¿Qué deseas eliminar de este producto?",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Eliminar",
-        reverseButtons: true,
-        confirmButtonColor: "#dc3545",
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          window.location.href = "/eliminar-producto/" + id + "/";
-        }
-      });
-    }
-  </script>
+{% extends 'app/base.html' %} {% block js %} {% load crispy_forms_tags %}
+<script>
+  function eliminarProducto(id) {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Qué deseas eliminar de este producto?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Eliminar",
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545",
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-producto/" + id + "/";
+      }
+    });
+  }
+</script>
 
 <script>
-  $(function (){
-    
-
-      $('.btnAdd').on('click', function () {
-          $('#mymodalclient').modal('show');
-      });
+  $(function () {
+    $(".btnAdd").on("click", function () {
+      $("#mymodalclient").modal("show");
+    });
   });
 </script>
 
+{% endblock %} {% block contenido %}
 
-{% endblock %}
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div
+      class="row"
+      style="
+        background-color: rgb(237, 239, 241);
+        padding-bottom: 420px;
+        margin: 10px;
+        border-radius: 10px;
+      "
+    >
+      <div class="col-md-12 mb-3" style="padding-top: 30px">
+        <div class="card" style="border-radius: 10px">
+          <div
+            class="card-header"
+            style="background-color: rgb(52, 52, 52); color: white"
+          >
+            {% block buttons_list %}
+            <span><i class="bi bi-table me-2"></i></span> Historial producto
+            {% if perms.app.add_taller %}
+            <!-- Button trigger modal -->
 
-{% block contenido %}
-  <main class="mt-5 pt-3">
-    <div class="container-fluid">
-      <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
-        <div class="col-md-12 mb-3" style="padding-top: 30px">
-          <div class="card" style="border-radius: 10px">
-            <div class="card-header " style="background-color:rgb(52, 52, 52) ; color: white;">
-
-              {% block buttons_list %}
-              <span ><i class="bi bi-table me-2"></i></span > Historial taller
-              {% if perms.app.add_taller %}
-              <!-- Button trigger modal -->
-
-              <button href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: inline-end">Agregar Producto</button>
-              {% endif %}
-              {% endblock %}
-              <!-- Button trigger modal -->
-
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%">
-                  <thead>
-                    <tr>
-                      <th>Nº</th>
-                      <th>Nombre Producto</th>
-                      <th>Marca</th>
-                      <th>Descripción</th>
-                      <th>Precio Unitario</th>
-                      <th>Stock</th>
-                      <th>Categoria</th>
-                      <th>Opciones</th>
-                    </tr>
-                  </thead>
-
-                  {% for p in entity %}
-                    <tbody>
-                      <tr>
-                        <td>{{ p.id_producto }}</td>
-                        <td>{{ p.nombre_producto }}</td>
-                        <td>{{ p.marca }}</td>
-                        <td>{{ p.descripcion }}</td>
-                        <td>{{ p.precio_unitario }}</td>
-                        <td>{{ p.stock }}</td>
-                        <td>{{ p.categoria }}</td>
-                        {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
-                          <td>
-                            <a href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info bi-pencil-square btn-md"></a>
-                            <a href="#" onclick="eliminarProducto({{ p.id_producto }})" class="btn bi-trash btn-danger btn-md"></a>
-                          </td>
-                        {% endif %} {% endif %}
-                      </tr>
-                    </tbody>
-                  {% endfor %}
-                </table>
-              </div>
-              <div>{% include 'app/paginator.html' %}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="modal fade" id="mymodalclient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+            <button
+              href="{% url 'agregar_producto' %}"
+              class="btn btn-primary btn-flat btnAdd"
+              style="float: inline-end"
+            >
+              Agregar Producto
             </button>
+            {% endif %} {% endblock %}
+            <!-- Button trigger modal -->
           </div>
-          <div class="modal-body">
-            <form action="{% url 'agregar_producto' %}" method="post">
-                              
-                  {% csrf_token %}
-                  {{form | crispy}}
-                  <br>
-                  <hr>
-                  <br>
-                  <div class="d-flex justify-content-center">
-                      <a href="{% url 'listar_producto' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
-                      &nbsp;
-                      <input type="submit" value="Guardar" class="btn btn-primary">
-                  </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table
+                id="example"
+                class="table table-striped-columns table-hover data-table"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Nombre Producto</th>
+                    <th>Marca</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>Stock</th>
+                    <th>Categoria</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+
+                
+                <tbody>
+                  {% for p in entity %}
+                  <tr>
+                    <td>{{ p.id_producto }}</td>
+                    <td>{{ p.nombre_producto }}</td>
+                    <td>{{ p.marca }}</td>
+                    <td>{{ p.descripcion }}</td>
+                    <td>{{ p.precio_unitario }}</td>
+                    <td>{{ p.stock }}</td>
+                    <td>{{ p.categoria }}</td>
+                    {% if perms.app.change_producto %}
+                     {% if perms.app.delete_producto %}
+                    <td>
+                      <a
+                        href="{% url 'modificar_producto' p.id_producto %}"
+                        class="btn btn-info bi-pencil-square btn-md"
+                      ></a>
+                      <a
+                        href="#"
+                        onclick="eliminarProducto({{ p.id_producto }})"
+                        class="btn bi-trash btn-danger btn-md"
+                      ></a>
+                    </td>
+                    {% endif %} {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                
+              </table>
+            </div>
+            <div>{% include 'app/paginator.html' %}</div>
           </div>
         </div>
       </div>
     </div>
-    
-  </main>
+  </div>
+
+  <div
+    class="modal fade"
+    id="mymodalclient"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'agregar_producto' %}" method="post">
+            {% csrf_token %} {{form | crispy}}
+            <br />
+            <hr />
+            <br />
+            <div class="d-flex justify-content-center">
+              <a
+                href="{% url 'listar_producto' %}"
+                value="Cancelar"
+                class="btn btn-danger"
+                >Cancelar</a
+              >
+              &nbsp;
+              <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

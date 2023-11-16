@@ -1,47 +1,47 @@
 {% extends 'app/base.html' %}
 
 {% block js %}
-    <script>
-        function eliminarCliente(id){
-            Swal.fire({
-                "title": "¿Estas Seguro?",
-                "text": "Que deseas Eliminar este Cliente",
-                "icon": "warning", 
-                "showCancelButton": true,
-                "cancelButtonText": "Cancelar",
-                "confirmButtonText": "Eliminar",
-                "reverseButtons": true,
-                "confirmButtonColor": "#dc3545"
-            })
-            .then(function(result){
-                if(result.isConfirmed){
-                    window.location.href = "/eliminar-cliente/"+id+"/"
-                }
-            })
+<script>
+  function eliminarCliente(id) {
+    Swal.fire({
+      "title": "¿Estas Seguro?",
+      "text": "Que deseas Eliminar este Cliente",
+      "icon": "warning",
+      "showCancelButton": true,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Eliminar",
+      "reverseButtons": true,
+      "confirmButtonColor": "#dc3545"
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminar-cliente/" + id + "/"
         }
-    </script>
+      })
+  }
+</script>
 
 <script>
-  $(document).ready(function() {
-      $('#table_id').DataTable({
-          "language": {
-              "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-          }
-      });
+  $(document).ready(function () {
+    $('#table_id').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+      }
+    });
   });
 </script>
 
 <script>
-  $(document).ready(function() {
-      $('#table_id').DataTable({
-          "language": {
-              "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json",
-              "search": "Buscar:",
-              "lengthMenu": "Mostrar _MENU_ registros por página",
-              "zeroRecords": "No se encontraron resultados",
-              // Otras opciones...
-          }
-      });
+  $(document).ready(function () {
+    $('#table_id').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json",
+        "search": "Buscar:",
+        "lengthMenu": "Mostrar _MENU_ registros por página",
+        "zeroRecords": "No se encontraron resultados",
+        // Otras opciones...
+      }
+    });
   });
 </script>
 
@@ -49,12 +49,18 @@
 {% endblock %}
 
 {% block contenido %}
- 
+
+
 <main class="mt-5 pt-3">
   <div class="container-fluid">
-    <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
-      <div class="col-md-12 mb-3" style="padding-top: 30px;">
-        <div class="card" style="border-radius: 10px;" >
+    <div class="row" style="
+                    background-color: rgb(237, 239, 241);
+                    padding-bottom: 420px;
+                    margin: 10px;
+                    border-radius: 10px;
+                  ">
+      <div class="col-md-12 mb-3" style="padding-top: 30px">
+        <div class="card" style="border-radius: 10px">
           <div class="card-header" style="background-color:rgb(52, 52, 52) ; color: white;">
             <span><i class="bi bi-table me-2"></i></span> Historial clientes
             {% if perms.app.add_cliente %}
@@ -62,64 +68,62 @@
             {% endif %}
           </div>
           <div class="card-body">
-            <div class="table-responsive" >
-              <table
-                id="example"
-                class="table table-striped-columns table-hover "
-                style="width: 100% ; "
+            <div class="table-responsive">
+              <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%">
+
+                <thead>
+                  <tr>
+                    <th>Rut</th>
+                    <th>Nombre completo</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
                 
-              >
-  
-   
-  
-        <thead >
-          <tr>
-            <th>Rut</th>
-            <th>Nombre completo</th>
-            <th>Correo</th>
-            <th>Telefono</th>
-            <th >Opciones</th>
-          </tr>
-        </thead>
-        {% for p in entity %}
-          <tbody>
-            <tr>
-              <td>{{ p.rut_cliente  }}</td>
-              <td>{{ p.nombre_cliente  }} {{ p.apePaterno  }} {{ p.apeMaterno  }}</td>
-               <td>{{ p.email  }}</td>
-              <td>{{ p.fono   }}</td>
-              {% if perms.app.change_cliente %}
-              {% if perms.app.delete_cliente %}
-                <td>
-                  <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn bi-pencil-square  btn-info btn-md"></a>
-                  <a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
-                  <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn bi-trash btn-danger btn-md"></a>
-               
-                </td>
-              {% endif %}
-              {% endif %}
-                
-             
-            
-      </tr>
-          </tbody>
-        {% endfor %}
-      </table>
-    </div>
-    <div>
-      {% include 'app/paginator.html' %}
-    </div>
+                <tbody>
+                  {% for p in entity %}
+                  <tr>
+                    <td>{{ p.rut_cliente }}</td>
+                    <td>{{ p.nombre_cliente }} {{ p.apePaterno }} {{ p.apeMaterno }}</td>
+                    <td>{{ p.email }}</td>
+                    <td>{{ p.fono }}</td>
+                    {% if perms.app.change_cliente %}
+                    {% if perms.app.delete_cliente %}
+                    <td>
+                      <a href="{% url 'modificar_cliente' p.rut_cliente %}"
+                        class="btn bi-pencil-square  btn-info btn-md"></a>
+                      <a href="{% url 'historial_cliente' p.rut_cliente %}"
+                        class="btn bi-file-earmark-text btn-secondary btn-md"></a>
+                      <a href="#" onclick="eliminarCliente({{p.rut_cliente}})"
+                        class="btn bi-trash btn-danger btn-md"></a>
+
+                    </td>
+                    {% endif %}
+                    {% endif %}
 
 
-  </div>  
-</div>  
-</div>  
-</div>  
-</div>  
-</div>  
-</div>  
-</div>  
-</main>       
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                
+              </table>
+            </div>
+            <div>
+              {% include 'app/paginator.html' %}
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+</main>
 
 
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"></script>
