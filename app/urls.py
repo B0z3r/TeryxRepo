@@ -45,8 +45,4 @@ urlpatterns = [
     path('cambio-pass/', views.cambio_pass, name='cambio_pass'),
     path('gestionar-productos/', gestionar_productos, name='gestionar_productos'),
     path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',)
-
-
- 
-
 ]

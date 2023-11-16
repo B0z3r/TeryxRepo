@@ -60,6 +60,7 @@
                   </tr>
                 </thead>
 
+<<<<<<< HEAD
                 
                 <tbody>
                     {% for p in entity %}
@@ -97,6 +98,62 @@
               
               </table>
               <div>{% include 'app/paginator.html' %}</div>
+=======
+{% block contenido %}
+    <main class="mt-5 pt-3">
+        <div class="container-fluid">
+            <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
+                <div class="col-md-12 mb-3" style="padding-top: 30px;">
+                    <div class="card" style="border-radius: 10px;">
+                        <div class="card-header">
+                            <span><i class="bi bi-table me-2"></i></span> Historial taller
+                            {% if perms.app.add_taller %}
+                                <a href="{% url 'agregar_proveedor' %}" class="btn btn-primary" style="float: right;">Agregar Proveedor</a>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Rut</th>
+                                            <th>Nombre</th>
+                                            <th>Correo</th>
+                                            <th>Telefono</th>
+                                            <th>Categoría</th>
+                                            <th>Web</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                        {% for p in entity %}
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ p.rut_proveedor }}</td>
+                                                <td>{{ p.nombre_proveedor }}</td>
+                                                <td>{{ p.email }}</td>
+                                                <td>{{ p.fono }}</td>
+                                                <td>{{ p.get_categoria_display }}</td>
+                                                <td>{{ p.pagina_web }}</td>
+                                                {% if perms.app.change_proveedor %}
+                                                    <td><a href="{% url 'modificar_proveedor' p.rut_proveedor %}" class="btn btn-info btn-sm">Modificar</a></td>
+                                                {% endif %}
+                                                {% if perms.app.delete_proveedor %}
+                                                    <td><a href="#" onclick="eliminarProveedor({{ p.rut_proveedor }})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                                {% endif %}
+                                            </tr>
+                                        </tbody>
+                                        {% endfor %}
+                                    
+                                </table>
+                                <div>
+                                    {% include 'app/paginator.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+>>>>>>> a299ea6ea53980dc1f3bb5323a82c38c498e900e
             </div>
           </div>
         </div>

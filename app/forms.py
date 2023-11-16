@@ -221,7 +221,7 @@ class TallerForm(forms.ModelForm):
 
         widgets = {
             "fecha_ingreso": forms.SelectDateWidget(),
-            "fecha_termino": forms.SelectDateWidget()
+            "fecha_termino": forms.SelectDateWidget(),
         }
 
 class VentaForm(forms.ModelForm):

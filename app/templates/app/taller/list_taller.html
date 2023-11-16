@@ -31,7 +31,7 @@
             <div class="card-header"  style="background-color: rgb(50, 49, 49); color: white;">
               <span><i class="bi bi-table me-2"></i></span> Historial taller
               {% if perms.app.add_taller %}
-                <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: inline-end;"> Agregar Agendamiento</a>
+                <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
               {% endif %}
             </div>
             <div class="card-body">
@@ -53,17 +53,18 @@
                       </tr>
                    </thead>
                    <tbody>
+                    
                       {% for datos in datos_combinados %}
                         <tr>
                           <td>{{ datos.id_taller }}</td>
-                          <td>{{ datos.estado }}</td>
+                          <td>{{ datos.get_estado_display}}</td>
                           <td>{{ datos.modelo_bicicleta }}</td>
                           <td>{{ datos.rut_cliente }}</td>
                           <td>{{ datos.nombre_cliente }} {{ datos.apePaterno }} {{ datos.apeMaterno }}</td>
                           <td>{{ datos.tipo_arreglo }}</td>
                           <td>{{ datos.fecha_ingreso }}</td>
                           <td>{{ datos.fecha_termino }}</td>
-                          <td>{{ datos.tipopago }}</td>
+                          <td>{{ datos.get_estado_pago_display}}</td>
                           <td>${{ datos.total | intcomma }}</td>
                           {% if perms.app.change_venta %}
                           {% if perms.app.delete_venta %}
