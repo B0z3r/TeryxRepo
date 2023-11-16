@@ -26,57 +26,19 @@
   });
 </script>
 
-{% endblock %} {% block contenido %}
+{% endblock %} 
+
+{% block contenido %}
 
 <main class="mt-5 pt-3">
   <div class="container-fluid">
-    <div
-      class="row"
-      style="
-        background-color: rgb(237, 239, 241);
-        padding-bottom: 420px;
-        margin: 10px;
-        border-radius: 10px;
-      "
-    >
+    <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px;margin: 10px;border-radius: 10px;">
       <div class="col-md-12 mb-3" style="padding-top: 30px">
         <div class="card" style="border-radius: 10px">
-          <div
-            class="card-header"
-            style="background-color: rgb(52, 52, 52); color: white"
-          >
-            {% block buttons_list %}
+          <div class="card-header"style="background-color: rgb(52, 52, 52); color: white">
             <span><i class="bi bi-table me-2"></i></span> Historial producto
-            {% if perms.app.add_taller %}
-            <!-- Button trigger modal -->
-
-<<<<<<< HEAD
-            <button
-              href="{% url 'agregar_producto' %}"
-              class="btn btn-primary btn-flat btnAdd"
-              style="float: inline-end"
-            >
-              Agregar Producto
-=======
-{% block contenido %}
-  <main class="mt-5 pt-3">
-    <div class="container-fluid">
-      <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
-        <div class="col-md-12 mb-3" style="padding-top: 30px">
-          <div class="card" style="border-radius: 10px">
-            <div class="card-header " style="background-color:rgb(52, 52, 52) ; color: white;">
-
-              {% block buttons_list %}
-              <span ><i class="bi bi-table me-2"></i></span > Historial taller
-              {% if perms.app.add_taller %}
-              <!-- Button trigger modal -->
-
-              <button href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: right">Agregar Producto</button>
-              {% endif %}
-              {% endblock %}
-              <!-- Button trigger modal -->
-
-            </div>
+              <a href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: right">Agregar Producto</a>
+          </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%">
@@ -120,8 +82,10 @@
         </div>
       </div>
     </div>
+  </main>
 
-
+  {% endblock %}
+<!--
     <div class="modal fade" id="mymodalclient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -129,10 +93,8 @@
             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
->>>>>>> a299ea6ea53980dc1f3bb5323a82c38c498e900e
             </button>
-            {% endif %} {% endblock %}
-            <!-- Button trigger modal -->
+        
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -241,4 +203,5 @@
     </div>
   </div>
 </main>
-{% endblock %}
+
+-->
