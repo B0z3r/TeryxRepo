@@ -12,8 +12,43 @@ class ColaboradorForm(forms.ModelForm):
         fields = '__all__'
 
 class ClienteForm(forms.ModelForm):
-    
-    class Meta:
+      rut_cliente = forms.CharField(
+        label='Rut Cliente',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el RUT del cliente'}),
+        required=False,
+    )
+
+      nombre_cliente = forms.CharField(
+    label='Nombre cliente',
+    widget=forms.TextInput(attrs={'placeholder': 'Ingresa nombre del cliente'}),
+    required=False,
+)
+
+      apePaterno = forms.CharField(
+        label='Apellido Paterno',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Apellido Paterno'}),
+        required=False,
+    )
+
+      apeMaterno = forms.CharField(
+        label='Apellido Materno',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Apellido Materno'}),
+        required=False,
+    )
+
+      email = forms.EmailField(
+        label='Correo Electrónico',
+        widget=forms.EmailInput(attrs={'placeholder': 'Ingresa el Correo Electrónico'}),
+        required=False,
+    )
+
+      fono = forms.IntegerField(
+        label='Teléfono',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Teléfono'}),
+        required=False,
+    )
+
+      class Meta:
         model = Cliente
         fields = '__all__'
 
@@ -24,32 +59,44 @@ class CustomUserCreationForm(UserCreationForm):
         label='Nombre Usuario',
         max_length=20,
         min_length=5,
-        widget=forms.TextInput(attrs={'required': False})
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa tu nombre de usuario'}),
+        required=False, 
+       
     )
     password1 = forms.CharField(
         label='Contraseña',
-        widget=forms.PasswordInput(attrs={'required': False})
+        widget=forms.PasswordInput(attrs={'placeholder': 'Ingresa tu contraseña', 'required': False}),
+        min_length=8,
+        max_length=20,
+        required=False,
+      
     )
     password2 = forms.CharField(
         label='Confirmar Contraseña',
-        widget=forms.PasswordInput(attrs={'required': False})
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirma tu contraseña', 'required': False}),
+        min_length=8,
+        max_length=20,
+        required=False,
+     
     )
     first_name = forms.CharField(
         label='Nombre Completo',
         max_length=100,
-        widget=forms.TextInput(attrs={'required': False})
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa tu nombre completo', 'required': False}),
+        required=False,
     )
     email = forms.EmailField(
         label='Correo Electrónico',
         max_length=100,
-        widget=forms.EmailInput(attrs={'required': False})
+        widget=forms.EmailInput(attrs={'placeholder': 'Ingresa tu correo electrónico', 'required': False}),
+        required=False,
     )
     tipo_perfil = forms.ChoiceField(
         label='Tipo de Perfil',
         choices=[(0, 'Administrador'), (1, 'Vendedor'), (2, 'Mecánico')],
-        widget=forms.Select(attrs={'required': False})
+        widget=forms.Select(attrs={'required': False}),
+        required=False,
     )
-
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if not self.alphanumeric_regex.match(username):
@@ -71,13 +118,98 @@ class CustomUserCreationForm(UserCreationForm):
 
 class ProductoForm(forms.ModelForm):
     
+    opc_consl_cat = [
+         ('', 'Selecciona una opción....'),
+        [0,"Indumentaria"],
+        [1,"Accesorio"],
+        [2,"Repuestos"]
+    ]
+    nombre_producto = forms.CharField(
+        label='Nombre Producto',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el nombre del producto', 'required': False}),
+        required=False,
+    )
+    marca = forms.CharField(
+        label='Marca',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa la marca del producto', 'required': False}),
+        required=False,
+    )
+    descripcion = forms.CharField(
+        label='Descripción',
+        widget=forms.Textarea(attrs={'placeholder': 'Ingresa la descripción del producto', 'cols': 30, 'rows': 3, 'required': False}),
+        required=False,
+    )
+    precio_unitario = forms.DecimalField(
+        label='Precio Unitario',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el precio unitario', 'required': False}),
+        required=False,
+    )
+    stock = forms.IntegerField(
+    label='Stock',
+    widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el stock del producto', 'required': False, 'class': 'no-spinner'}),
+    required=False,
+)
+    categoria = forms.ChoiceField(
+        label='Categoría',
+        choices=opc_consl_cat,
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
+        required=False,
+    )
+   
+
+
+
     class Meta:
         model = Producto
         fields = '__all__' 
 
 class ProveedorForm(forms.ModelForm):
-    
-    class Meta:
+     
+     opc_consl_cat = [
+         ('', 'Selecciona una opción....'),
+        [0,"Indumentaria"],
+        [1,"Accesorio"],
+        [2,"Repuestos"]
+    ]
+     
+     nombre_proveedor = forms.CharField(
+        label='Nombre Proveedor',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el nombre del proveedor', 'required': False}),
+        required=False,
+    )
+
+     rut_proveedor = forms.IntegerField(
+        label='RUT Proveedor',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el RUT del proveedor', 'required': False}),
+        required=False,
+    )
+
+     email = forms.EmailField(
+        label='Correo Electrónico',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el correo electrónico del proveedor', 'required': False}),
+        required=False,
+    )
+
+     fono = forms.IntegerField(
+        label='Teléfono',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el teléfono del proveedor', 'required': False}),
+        required=False,
+    )
+
+     categoria = forms.ChoiceField(
+        label='Categoría',
+        choices=opc_consl_cat,
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
+        required=False,
+    )
+
+     pagina_web = forms.URLField(
+        label='Página Web',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa la página web del proveedor', 'required': False}),
+        required=False,
+    )
+
+     class Meta:
         model = Proveedor
         fields = '__all__' 
 
@@ -95,6 +227,9 @@ class TallerForm(forms.ModelForm):
 class VentaForm(forms.ModelForm):
     
     class Meta:
+
+
+        
         model = Venta
         fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
 
