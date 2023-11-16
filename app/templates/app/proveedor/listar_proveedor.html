@@ -60,45 +60,6 @@
                   </tr>
                 </thead>
 
-<<<<<<< HEAD
-                
-                <tbody>
-                    {% for p in entity %}
-                  <tr>
-                    <td>{{ p.rut_proveedor }}</td>
-                    <td>{{ p.nombre_proveedor }}</td>
-                    <td>{{ p.email }}</td>
-                    <td>{{ p.fono }}</td>
-                    <td>{{ p.categoria }}</td>
-                    <td>{{ p.pagina_web }}</td>
-                    {% if perms.app.change_proveedor %}
-                    {% if perms.app.delete_proveedor %}
-                    <td>
-                      <a
-                        href="{% url 'modificar_proveedor' p.rut_proveedor %}"
-                        class="btn btn-info bi-pencil-square btn-md"
-                        ></a
-                        
-
-                       
-                      >
-
-                      <a
-                      href="#"
-                      onclick="eliminarProveedor({{ p.rut_proveedor }})"
-                      class="btn bi-trash btn-danger btn-md"
-                      ></a>
-                    </td>
-                    {% endif %} 
-                    {% endif %} 
-                  
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              
-              </table>
-              <div>{% include 'app/paginator.html' %}</div>
-=======
 {% block contenido %}
     <main class="mt-5 pt-3">
         <div class="container-fluid">
@@ -153,7 +114,6 @@
                         </div>
                     </div>
                 </div>
->>>>>>> a299ea6ea53980dc1f3bb5323a82c38c498e900e
             </div>
           </div>
         </div>
