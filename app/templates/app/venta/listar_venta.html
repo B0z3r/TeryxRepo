@@ -41,6 +41,7 @@
                     <thead>
                         <tr>
                             <th>Nº</th>
+                            <th>Rut Cliente</th>
                             <th>Nombre Cliente</th>
                             <th>Fecha Venta</th>
                             <th>Tipo de Servicio</th>
@@ -55,11 +56,15 @@
                             <tr>
 
                                 <td>{{ p.id_venta }}</td>
+                                <td>{{ p.cliente.rut_cliente }}</td>
                                 <td>{{ p.cliente.nombre }}</td>
                                 <td>{{ p.fecha }}</td>
                                 <td>{{ p.descripcion }}</td>
                                 <td>{{ p.tipopago }}</td>
                                 <td>{{ p.total }}</td>
+                                {% for detalle in venta.detalleventa_set.all %}
+                                    <td>{% if detalle.producto %}{{ detalle.producto.nombre }}{% else %}{{ detalle.taller.tipo_arreglo }}{% endif %}</td>
+                                {% endfor %}
                                 {% if perms.app.change_venta %}
                                     <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a></td>
                                 {% endif %}

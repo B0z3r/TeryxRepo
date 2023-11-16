@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.core.validators import MinLengthValidator
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -80,16 +81,18 @@ class Producto(models.Model):
     
 
 class Detalle_Factura(models.Model):
-    id_det_factura = models.IntegerField('Nº factura', primary_key=True)
+    id_det_factura = models.AutoField('Nº factura', primary_key=True)
     cantidad = models.IntegerField('Cantidad De Productos')
+    detalle = models.CharField('Detalle')
     precio = models.IntegerField('Precio Unitario')
     total = models.IntegerField('Total')
     fecha = models.DateField('Fecha', default=datetime.now)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
     proveedor_rut = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
+    detalle = models.CharField('Detalle', max_length=300)
     
     def __str__(self):
-        return f"Detalle de factura {self.id_det_factura}"
+        return self.detalle
     
 opc_estado = [
         [0,"En proceso"],
@@ -136,3 +139,13 @@ class Venta(models.Model):
 
     def __str__(self):
         return self.tipo_servicio
+
+class DetalleVenta(models.Model):
+    id_det_venta = models.AutoField('Nº Venta', primary_key=True)
+    venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True)
+    taller = models.ForeignKey(Taller, on_delete=models.CASCADE, null=True, blank=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __init__(self):
+        return self.id_det_venta

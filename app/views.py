@@ -1,12 +1,10 @@
-from typing import Any
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import  tventa,ttaller,tcliente,ClienteForm,CustomUserCreationForm, ProductoForm, ProveedorForm, TallerForm, VentaForm
 from .models import Cliente, Producto, Proveedor, Taller, Venta
 from django.contrib  import messages
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.http import Http404
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
