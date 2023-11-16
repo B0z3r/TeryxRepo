@@ -4,12 +4,11 @@
 
 {% block contenido %}
 {% load crispy_forms_tags %}
-<main class="mt-5 pt-3">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-6 offset-md-3">
+<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);" >
+  <div class="container-fluid" >
+      <div class="card-body" style="background-color: rgb(243, 242, 234); margin: 10px;  border-radius: 10px;">
+          <div class="row" >
+              <div class="col-12 col-md-6 offset-md-3" style="background-color: rgb(255, 255, 255); border-radius: 10px; ">
                         <h2>Registrar Producto</h2>
                         <hr>
                         <form action="" method="post">
@@ -25,14 +24,12 @@
                                 <input type="submit" value="Guardar" class="btn btn-primary">
                             </div>
                         </form>
-                        {{mensaje}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+                    {{mensaje}}
+              </div>
+          </div>
+      </div>
+  </div>
+</main>>
 
 <!-- Modal -->
 <div class="modal fade" id="mymodalclient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

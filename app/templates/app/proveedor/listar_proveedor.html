@@ -32,7 +32,7 @@
                         <div class="card-header">
                             <span><i class="bi bi-table me-2"></i></span> Historial taller
                             {% if perms.app.add_taller %}
-                                <a href="{% url 'agregar_proveedor' %}" class="btn btn-primary">Agregar Proveedor</a>
+                                <a href="{% url 'agregar_proveedor' %}" class="btn btn-primary" style="float: right;">Agregar Proveedor</a>
                             {% endif %}
                         </div>
                         <div class="card-body">
@@ -57,7 +57,7 @@
                                                 <td>{{ p.nombre_proveedor }}</td>
                                                 <td>{{ p.email }}</td>
                                                 <td>{{ p.fono }}</td>
-                                                <td>{{ p.categoria }}</td>
+                                                <td>{{ p.get_categoria_display }}</td>
                                                 <td>{{ p.pagina_web }}</td>
                                                 {% if perms.app.change_proveedor %}
                                                     <td><a href="{% url 'modificar_proveedor' p.rut_proveedor %}" class="btn btn-info btn-sm">Modificar</a></td>

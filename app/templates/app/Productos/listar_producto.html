@@ -47,7 +47,7 @@
               {% if perms.app.add_taller %}
               <!-- Button trigger modal -->
 
-              <button href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: inline-end">Agregar Producto</button>
+              <button href="{% url 'agregar_producto' %}" class="btn btn-primary btn-flat btnAdd" style="float: right">Agregar Producto</button>
               {% endif %}
               {% endblock %}
               <!-- Button trigger modal -->
@@ -78,7 +78,7 @@
                         <td>{{ p.descripcion }}</td>
                         <td>{{ p.precio_unitario }}</td>
                         <td>{{ p.stock }}</td>
-                        <td>{{ p.categoria }}</td>
+                        <td>{{ p.get_categoria_display }}</td>
                         {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
                           <td>
                             <a href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info bi-pencil-square btn-md"></a>
