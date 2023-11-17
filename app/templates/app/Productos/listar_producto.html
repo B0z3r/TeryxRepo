@@ -47,6 +47,8 @@
                       <th>Nº</th>
                       <th>Nombre Producto</th>
                       <th>Marca</th>
+                      <th>Nombre Proveedor</th>
+                      <th>Fecha Registro</th>
                       <th>Descripción</th>
                       <th>Precio Unitario</th>
                       <th>Stock</th>
@@ -61,6 +63,8 @@
                         <td>{{ p.id_producto }}</td>
                         <td>{{ p.nombre_producto }}</td>
                         <td>{{ p.marca }}</td>
+                        <td>{{ p.proveedor.nombre_proveedor }}</td>
+                        <td>{{ p.fecha_registro }}</td>
                         <td>{{ p.descripcion }}</td>
                         <td>{{ p.precio_unitario }}</td>
                         <td>{{ p.stock }}</td>

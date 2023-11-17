@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
+from django.db import IntegrityError
 
 
 # Create your views here.
@@ -28,11 +29,19 @@ def inicio_admin(request):
     total_clientes = clientes.count()
     proveedores = Proveedor.objects.all()
     total_proveedores = proveedores.count()
+    productos = Producto.objects.all()
+    total_productos = productos.count()
+    talleres = Taller.objects.all()
+    total_talleres = talleres.count()
     data = {
         'clientes': clientes,
         'total_clientes': total_clientes,
         'proveedores': proveedores,
-        'total_proveedores': total_proveedores
+        'total_proveedores': total_proveedores,
+        'productos': productos,
+        'total_productos': total_productos,
+        'talleres': talleres,
+        'total_talleres': total_talleres
     }
     return render(request, 'app/inicio_admin.html', data)
 
@@ -188,7 +197,6 @@ def eliminar_cliente(request, id):
 
 def historial_cliente(request, id):
     cliente = get_object_or_404(Cliente, rut_cliente=id)
-    
     ventas = cliente.venta_set.all()
     return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'ventas': ventas})
 
@@ -200,6 +208,9 @@ def agregar_producto(request):
     if request.method == 'POST':
         formulario = ProductoForm(data=request.POST)
         if formulario.is_valid():
+            proveedor_id = formulario.cleaned_data['nombre_proveedor'].rut_proveedor
+            # Asigna el proveedor al campo proveedor_id del modelo
+            formulario.instance.proveedor_id = proveedor_id
             formulario.save()
             messages.success(request, "Producto Registrado Correctamente!")
             return redirect(to="listar_producto")
@@ -211,6 +222,7 @@ def agregar_producto(request):
 @permission_required('app.view_producto')
 def listar_producto(request):
     productos = Producto.objects.all()
+    #productos = Producto.objects.select_related('proveedor').all()
     page = request.GET.get('page',1)
 
     try:
@@ -270,7 +282,7 @@ def listar_proveedor(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(proveedor, 5)
+        paginator = Paginator(proveedor, 10)
         proveedor = paginator.page(page)
     except:
         raise Http404
@@ -311,14 +323,82 @@ def agregar_taller(request):
     }
     if request.method == 'POST':
         formulario = TallerForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Agendamiento Creado Correctamente!")
-            return redirect(to="list_taller")
-        else:
-            data["form"] = formulario
+        try:
+            if formulario.is_valid():
+                formulario.save()
+                messages.success(request, "Agendamiento Creado Correctamente!")
+                return redirect(to="list_taller")
+            else:
+                data["form"] = formulario
+                print("Formulario no válido. Detalles:", formulario.errors)
+        except IntegrityError as e:
+            messages.error(request, f"Error al crear el taller: {str(e)}")
 
-    return render(request, 'app/taller/agregar_taller.html', data) 
+    return render(request, 'app/taller/agregar_taller.html', data)
+
+def list_taller(request):
+    ventas = Venta.objects.values('total','tipopago')
+    talleres_data = Taller.objects.all()
+    clientes = Cliente.objects.values('rut_cliente','nombre_cliente','apePaterno','apeMaterno')
+
+    datos_combinados = []
+
+    for venta, talleres_data, cliente in zip(ventas, talleres_data, clientes):
+        print(f"Venta: {venta}, Taller: {talleres_data}, Cliente: {cliente}")
+        taller_instance = talleres_data
+        datos_combinados.append({
+            'id_taller': taller_instance.id_taller,
+            'total': venta['total'],
+            'tipopago': venta['tipopago'],
+            'fecha_ingreso': taller_instance.fecha_ingreso,
+            'fecha_termino': taller_instance.fecha_termino,
+            'tipo_arreglo': taller_instance.tipo_arreglo,
+            'estado': taller_instance.get_estado_display(),
+            'modelo_bicicleta': taller_instance.modelo_bicicleta,
+            'nombre_cliente': cliente['nombre_cliente'],
+            'apePaterno': cliente['apePaterno'],
+            'apeMaterno': cliente['apeMaterno'],
+            'rut_cliente': cliente['rut_cliente'],
+        })
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(datos_combinados, 10)
+    try:
+        datos_combinados = paginator.page(page)
+    except PageNotAnInteger:
+        datos_combinados = paginator.page(1)
+    except EmptyPage:
+        datos_combinados = paginator.page(paginator.num_pages)
+
+    return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})
+
+@permission_required('app.change_taller')
+def modificar_taller(request, id):
+    venta = get_object_or_404(Venta, pk=id)
+    taller = venta.taller  # Supongamos que hay una relación ForeignKey en el modelo Venta a Taller
+    cliente = venta.cliente  # Supongamos que hay una relación ForeignKey en el modelo Venta a Cliente
+
+    if request.method == 'POST':
+        taller_form = ttaller(request.POST, instance=taller)
+        cliente_form = tcliente(request.POST, instance=cliente)
+        venta_form = tventa(request.POST, instance=venta)
+
+        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
+            cliente = cliente_form.save()
+            taller = taller_form.save()
+            venta = venta_form.save()
+            return redirect('list_taller') 
+
+    else:
+        venta_form = tventa(instance=venta)
+        cliente_form = tcliente(instance=cliente)
+        taller_form = ttaller(instance=taller)
+
+        return render(request, 'app/taller/modificar_taller.html', {
+            'venta_form': venta_form,
+            'cliente_form': cliente_form,
+            'taller_form': taller_form,
+        })
 
 @permission_required('app.delete_taller')
 def eliminar_taller(request, id):
@@ -397,68 +477,6 @@ def crear_venta(request):
 
     return render(request, 'app/taller/crear_venta.html', {'taller_form': taller_form})
 
-def list_taller(request):
-    ventas = Venta.objects.values('total','tipopago')
-    talleres_data = Taller.objects.values('id_taller','fecha_ingreso','fecha_termino','tipo_arreglo','modelo_bicicleta', 'estado')
-    clientes = Cliente.objects.values('rut_cliente','nombre_cliente','apePaterno','apeMaterno')
-
-    datos_combinados = []
-
-    for venta, taller_data, cliente in zip(ventas, talleres_data, clientes):
-        taller_instance = Taller.objects.get(id_taller=taller_data['id_taller'])
-        datos_combinados.append({
-            'id_taller': taller_instance.id_taller,
-            'total': venta['total'],
-            'tipopago': venta['tipopago'],
-            'fecha_ingreso': taller_instance.fecha_ingreso,
-            'fecha_termino': taller_instance.fecha_termino,
-            'tipo_arreglo': taller_instance.tipo_arreglo,
-            'estado': taller_instance.get_estado_display(),
-            'modelo_bicicleta': taller_instance.modelo_bicicleta,
-            'nombre_cliente': cliente['nombre_cliente'],
-            'apePaterno': cliente['apePaterno'],
-            'apeMaterno': cliente['apeMaterno'],
-            'rut_cliente': cliente['rut_cliente'],
-        })
-
-    page = request.GET.get('page', 1)
-    paginator = Paginator(datos_combinados, 10)
-    try:
-        datos_combinados = paginator.page(page)
-    except PageNotAnInteger:
-        datos_combinados = paginator.page(1)
-    except EmptyPage:
-        datos_combinados = paginator.page(paginator.num_pages)
-
-    return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})
-
-@permission_required('app.change_taller')
-def modificar_taller(request, id):
-    venta = get_object_or_404(Venta, pk=id)
-    taller = venta.taller  # Supongamos que hay una relación ForeignKey en el modelo Venta a Taller
-    cliente = venta.cliente  # Supongamos que hay una relación ForeignKey en el modelo Venta a Cliente
-
-    if request.method == 'POST':
-        taller_form = ttaller(request.POST, instance=taller)
-        cliente_form = tcliente(request.POST, instance=cliente)
-        venta_form = tventa(request.POST, instance=venta)
-
-        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
-            cliente = cliente_form.save()
-            taller = taller_form.save()
-            venta = venta_form.save()
-            return redirect('list_taller') 
-
-    else:
-        venta_form = tventa(instance=venta)
-        cliente_form = tcliente(instance=cliente)
-        taller_form = ttaller(instance=taller)
-
-        return render(request, 'app/taller/modificar_taller.html', {
-            'venta_form': venta_form,
-            'cliente_form': cliente_form,
-            'taller_form': taller_form,
-        })
 
 def test_view(request):
     return render(request, 'app/test.html')

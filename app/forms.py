@@ -19,10 +19,10 @@ class ClienteForm(forms.ModelForm):
     )
 
       nombre_cliente = forms.CharField(
-    label='Nombre cliente',
-    widget=forms.TextInput(attrs={'placeholder': 'Ingresa nombre del cliente'}),
-    required=False,
-)
+        label='Nombre cliente',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa nombre del cliente'}),
+        required=False,
+    )
 
       apePaterno = forms.CharField(
         label='Apellido Paterno',
@@ -117,9 +117,9 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ["username", "password1", "password2", "first_name", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
-    
+        
     opc_consl_cat = [
-         ('', 'Selecciona una opción....'),
+        ('', 'Selecciona una opción....'),
         [0,"Indumentaria"],
         [1,"Accesorio"],
         [2,"Repuestos"]
@@ -145,23 +145,31 @@ class ProductoForm(forms.ModelForm):
         required=False,
     )
     stock = forms.IntegerField(
-    label='Stock',
-    widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el stock del producto', 'required': False, 'class': 'no-spinner'}),
-    required=False,
-)
+        label='Stock',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el stock del producto', 'required': False, 'class': 'no-spinner'}),
+        required=False,
+    )
     categoria = forms.ChoiceField(
         label='Categoría',
         choices=opc_consl_cat,
         widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
         required=False,
     )
-   
 
+    nombre_proveedor = forms.ModelChoiceField(
+        queryset=Proveedor.objects.all(),  # Asegúrate de ajustar el queryset según tus cambios en el modelo
+        required=False,
+    )
 
-
+    fecha_registro = forms.DateField(
+        label='Fecha Registro',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+    )
+    
     class Meta:
         model = Producto
-        fields = '__all__' 
+        fields = ["nombre_producto","marca","descripcion","precio_unitario","stock","categoria","nombre_proveedor","fecha_registro"]
 
 class ProveedorForm(forms.ModelForm):
      
@@ -180,19 +188,19 @@ class ProveedorForm(forms.ModelForm):
 
      rut_proveedor = forms.IntegerField(
         label='RUT Proveedor',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el RUT del proveedor', 'required': False}),
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el RUT del proveedor', 'required': False}),
         required=False,
     )
 
      email = forms.EmailField(
         label='Correo Electrónico',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el correo electrónico del proveedor', 'required': False}),
+        widget=forms.EmailInput(attrs={'placeholder': 'Ingresa el correo electrónico del proveedor', 'required': False}),
         required=False,
     )
 
      fono = forms.IntegerField(
         label='Teléfono',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el teléfono del proveedor', 'required': False}),
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el teléfono del proveedor', 'required': False}),
         required=False,
     )
 
@@ -205,7 +213,7 @@ class ProveedorForm(forms.ModelForm):
 
      pagina_web = forms.URLField(
         label='Página Web',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa la página web del proveedor', 'required': False}),
+        widget=forms.URLInput(attrs={'placeholder': 'Ingresa la página web del proveedor', 'required': False}),
         required=False,
     )
 
@@ -214,22 +222,91 @@ class ProveedorForm(forms.ModelForm):
         fields = '__all__' 
 
 class TallerForm(forms.ModelForm):
+
+    opc_tipo_arreglo = [
+    [0,"Ajustes básicos"],
+    [1,"Cambio de neumáticos"],
+    [2,"Cambio Frenos"],
+    [3,"Reparación de Cadena, Pedales y Bielas"],
+    [4,"Ajuste de Suspensión"],
+    ]
+
+    opc_estado = [
+        [0,"En proceso"],
+        [1,"Términado"],
+        [2,"Atrasado"],
+    ]
+
+    opc_estado_pago = [
+    [0, "Pendiente"],
+    [1, "Pagado"],
+    ]
+
+    fecha_ingreso = forms.DateField(
+        label='Fecha Ingreso',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+    )
+
+    fecha_termino = forms.DateField(
+        label='Fecha Término',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        required=False,
+    )
+
+    tipo_arreglo = forms.ChoiceField(
+        label='Tipo de Arreglo',
+        choices=opc_tipo_arreglo,
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
+        required=False,
+    )
+
+    valor = forms.IntegerField(
+        label='Valor del Arreglo',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el Valor del Arreglo', 'required': False}),
+        required=False,
+    )
+
+    descripcion = forms.CharField(
+        label='Descripción',
+        widget=forms.Textarea(attrs={'placeholder': 'Ingresa la Descipción del Arreglo', 'cols': 30, 'rows': 3, 'required': False}),
+        required=False,
+    )
+
+    estado = forms.ChoiceField(
+        label='Estado del Arreglo',
+        choices = opc_estado,
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una Opción....', 'required': False}),
+        required=False,
+    )
+
+    modelo_bicicleta = forms.CharField(
+        label='Modelo de la Bicicleta',
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Modelo de la Bicicleta', 'required': False}),
+        required=False,
+    )
+
+    estado_pago = forms.ChoiceField(
+        label='Estado de Pago',
+        choices=opc_estado_pago,
+        widget=forms.Select(attrs={'placeholder': 'Ingresa el Estado de pago', 'required': False}),
+        required=False,
+    )
+
+    abono = forms.IntegerField(
+        label='Abono',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresar el Abono', 'required': False}),
+        required=False,
+    )
     
     class Meta:
         model = Taller
         fields = '__all__' 
 
-        widgets = {
-            "fecha_ingreso": forms.SelectDateWidget(),
-            "fecha_termino": forms.SelectDateWidget(),
-        }
-
 class VentaForm(forms.ModelForm):
     
     class Meta:
 
-
-        
         model = Venta
         fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
 

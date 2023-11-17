@@ -72,6 +72,8 @@ class Producto(models.Model):
     precio_unitario = models.IntegerField('Precio Unitario')
     stock = models.IntegerField('Stock')
     categoria = models.IntegerField('Categoría', choices=opc_consl_cat)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
+    fecha_registro = models.DateField(' Fecha de Registro', default=datetime.now)
     
     def __str__(self):
         return self.nombre_producto
@@ -80,24 +82,18 @@ class Producto(models.Model):
         return dict(opc_consl_cat)[self.categoria]
     
 
-class Detalle_Factura(models.Model):
-    id_det_factura = models.AutoField('Nº factura', primary_key=True)
-    cantidad = models.IntegerField('Cantidad De Productos')
-    detalle = models.CharField('Detalle')
-    precio = models.IntegerField('Precio Unitario')
-    total = models.IntegerField('Total')
-    fecha = models.DateField('Fecha', default=datetime.now)
-    producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT)
-    proveedor_rut = models.ForeignKey(Proveedor, on_delete = models.PROTECT)
-    detalle = models.CharField('Detalle', max_length=300)
-    
-    def __str__(self):
-        return self.detalle
-    
+opc_tipo_arreglo = [
+    [0,"Ajustes básicos"],
+    [1,"Cambio de neumáticos"],
+    [2,"Cambio Frenos"],
+    [3,"Reparación de Cadena, Pedales y Bielas"],
+    [4,"Ajuste de Suspensión"],
+]
+
 opc_estado = [
         [0,"En proceso"],
         [1,"Términado"],
-        [2,"Atrasado"]
+        [2,"Atrasado"],
     ]
 
 opc_estado_pago = [
@@ -107,17 +103,18 @@ opc_estado_pago = [
 
 class Taller(models.Model):
     id_taller = models.AutoField('Nº en Taller', primary_key=True)
-    fecha_ingreso = models.DateField(' Fecha de Inicio', default=datetime.now)
+    fecha_ingreso = models.DateField('Fecha de Inicio', default=datetime.now)
     fecha_termino = models.DateField('Fecha de Término', default=datetime.now)
-    tipo_arreglo = models.CharField('Tipo De Arreglo', max_length=50,choices=[('Ajustes básicos','Ajustes básicos'),('Cambio de neumáticos','Cambio de neumáticos'),('Frenos','Frenos'),('Cambio de Cadena, Pedales y Bielas','Cambio de Cadena, Pedales y Bielas'),('Ajuste de Suspensión','Ajuste de Suspensión')])
+    tipo_arreglo = models.IntegerField('Tipo De Arreglo', choices=opc_tipo_arreglo)
     valor = models.IntegerField('Valor')
     descripcion = models.CharField('Descripción', max_length=100)
     estado = models.IntegerField('Estado', choices=opc_estado)
     modelo_bicicleta = models.CharField('Modelo De Bicicleta', max_length=30)
     estado_pago = models.IntegerField('Estado de Pago', choices=opc_estado_pago, null=True, blank=True)
+    abono = models.IntegerField('Abono')
 
     def __str__(self):
-        return self.tipo_arreglo
+        return self.descripcion
     
     def get_estado_display(self):
         return dict(opc_estado)[self.estado]
@@ -140,12 +137,3 @@ class Venta(models.Model):
     def __str__(self):
         return self.tipo_servicio
 
-class DetalleVenta(models.Model):
-    id_det_venta = models.AutoField('Nº Venta', primary_key=True)
-    venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True)
-    taller = models.ForeignKey(Taller, on_delete=models.CASCADE, null=True, blank=True)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    
-    def __init__(self):
-        return self.id_det_venta
