@@ -344,7 +344,6 @@ def list_taller(request):
     datos_combinados = []
 
     for venta, talleres_data, cliente in zip(ventas, talleres_data, clientes):
-        print(f"Venta: {venta}, Taller: {talleres_data}, Cliente: {cliente}")
         taller_instance = talleres_data
         datos_combinados.append({
             'id_taller': taller_instance.id_taller,
