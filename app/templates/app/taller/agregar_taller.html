@@ -1,6 +1,7 @@
 {% extends 'app/base.html' %}
 
 {% load static %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 {% block contenido %}
 {% load crispy_forms_tags %}
@@ -16,6 +17,8 @@
                             {% csrf_token %}
                             {{form | crispy}}
                             <br>
+                            <a href="{% url 'agregar_cliente' %}" class="bi bi-person-plus btn-primary btn-lg"></a>
+                            <br>
                             <hr>
                             <br>
                             <div class="d-flex justify-content-center">
@@ -24,6 +27,36 @@
                                 <input type="submit" value="Guardar" class="btn btn-primary">
                             </div>
                         </form>
+                        <!-- Agrega esto al final de tu formulario o en la sección body -->
+                        <script>
+                            $(document).ready(function () {
+                                // Función para actualizar el valor y la descripción según el tipo de arreglo seleccionado
+                                function actualizarCampos() {
+                                    var tipoArreglo = $("#id_tipo_arreglo").val();
+
+                                    // Mapea el tipo de arreglo a un valor y una descripción
+                                    var valoresYDescripciones = {
+                                        0: { valor: 15000, descripcion: "Ajustes básicos - Descripción predeterminada" },
+                                        1: { valor: 20000, descripcion: "Cambio de neumáticos - Descripción predeterminada" },
+                                        2: { valor: 25000, descripcion: "Cambio Frenos - Descripción predeterminada" },
+                                        3: { valor: 15000, descripcion: "Reparación de Cadena, Pedales y Bielas - Descripción predeterminada" },
+                                        4: { valor: 35000, descripcion: "Ajuste de Suspensión - Descripción predeterminada" },
+                                    };
+
+                                    // Actualiza los campos de Valor y Descripción
+                                    $("#id_valor").val(valoresYDescripciones[tipoArreglo].valor);
+                                    $("#id_descripcion").val(valoresYDescripciones[tipoArreglo].descripcion);
+                                }
+
+                                // Asocia la función al evento de cambio en el campo de "Tipo de Arreglo"
+                                $("#id_tipo_arreglo").change(function () {
+                                    actualizarCampos();
+                                });
+
+                                // Llama a la función al cargar la página para establecer los valores iniciales
+                                actualizarCampos();
+                            });
+                        </script>
                         {{mensaje}}
                     </div>
                 </div>
@@ -32,3 +65,4 @@
     </div>
  </main>
 {% endblock %}
+

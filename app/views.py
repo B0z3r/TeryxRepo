@@ -323,81 +323,53 @@ def agregar_taller(request):
     }
     if request.method == 'POST':
         formulario = TallerForm(data=request.POST)
-        try:
-            if formulario.is_valid():
-                formulario.save()
-                messages.success(request, "Agendamiento Creado Correctamente!")
-                return redirect(to="list_taller")
-            else:
-                data["form"] = formulario
-                print("Formulario no válido. Detalles:", formulario.errors)
-        except IntegrityError as e:
-            messages.error(request, f"Error al crear el taller: {str(e)}")
-
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Agendamiento Creado Correctamente!")
+            return redirect(to="list_taller")
+        else:
+            data["form"] = formulario
+            
     return render(request, 'app/taller/agregar_taller.html', data)
 
 def list_taller(request):
-    ventas = Venta.objects.values('total','tipopago')
-    talleres_data = Taller.objects.all()
-    clientes = Cliente.objects.values('rut_cliente','nombre_cliente','apePaterno','apeMaterno')
+    # Obtén datos de taller con datos de cliente relacionados
+    #"rut_cliente","nombre_cliente","apePaterno","apeMaterno","fono"
+    taller_con_cliente = Taller.objects.select_related('cliente_rut_cliente').all()
 
-    datos_combinados = []
-
-    for venta, talleres_data, cliente in zip(ventas, talleres_data, clientes):
-        taller_instance = talleres_data
-        datos_combinados.append({
-            'id_taller': taller_instance.id_taller,
-            'total': venta['total'],
-            'tipopago': venta['tipopago'],
-            'fecha_ingreso': taller_instance.fecha_ingreso,
-            'fecha_termino': taller_instance.fecha_termino,
-            'tipo_arreglo': taller_instance.tipo_arreglo,
-            'estado': taller_instance.get_estado_display(),
-            'modelo_bicicleta': taller_instance.modelo_bicicleta,
-            'nombre_cliente': cliente['nombre_cliente'],
-            'apePaterno': cliente['apePaterno'],
-            'apeMaterno': cliente['apeMaterno'],
-            'rut_cliente': cliente['rut_cliente'],
-        })
-
+    # Paginación
+    paginator = Paginator(taller_con_cliente, 10)
     page = request.GET.get('page', 1)
-    paginator = Paginator(datos_combinados, 10)
-    try:
-        datos_combinados = paginator.page(page)
-    except PageNotAnInteger:
-        datos_combinados = paginator.page(1)
-    except EmptyPage:
-        datos_combinados = paginator.page(paginator.num_pages)
 
-    return render(request, 'app/taller/list_taller.html', {'datos_combinados': datos_combinados})
+    try:
+        taller_paginated = paginator.page(page)
+    except PageNotAnInteger:
+        taller_paginated = paginator.page(1)
+    except EmptyPage:
+        taller_paginated = paginator.page(paginator.num_pages)
+
+    data = {
+        'entity': taller_paginated,
+        'paginator': paginator
+    }
+
+    return render(request, 'app/taller/list_taller.html', data)
+
 
 @permission_required('app.change_taller')
 def modificar_taller(request, id):
-    venta = get_object_or_404(Venta, pk=id)
-    taller = venta.taller  # Supongamos que hay una relación ForeignKey en el modelo Venta a Taller
-    cliente = venta.cliente  # Supongamos que hay una relación ForeignKey en el modelo Venta a Cliente
-
+    taller = get_object_or_404(Taller, pk=id)
+    data = {
+        'form': TallerForm(instance = taller)
+    }
     if request.method == 'POST':
-        taller_form = ttaller(request.POST, instance=taller)
-        cliente_form = tcliente(request.POST, instance=cliente)
-        venta_form = tventa(request.POST, instance=venta)
-
-        if venta_form.is_valid() and cliente_form.is_valid() and taller_form.is_valid():
-            cliente = cliente_form.save()
-            taller = taller_form.save()
-            venta = venta_form.save()
-            return redirect('list_taller') 
-
-    else:
-        venta_form = tventa(instance=venta)
-        cliente_form = tcliente(instance=cliente)
-        taller_form = ttaller(instance=taller)
-
-        return render(request, 'app/taller/modificar_taller.html', {
-            'venta_form': venta_form,
-            'cliente_form': cliente_form,
-            'taller_form': taller_form,
-        })
+        formulario = TallerForm(data=request.POST, instance=taller)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente!")
+            return redirect(to="listar_proveedor")
+        data["form"] = formulario
+    return render(request, 'app/taller/modificar_taller.html', data)
 
 @permission_required('app.delete_taller')
 def eliminar_taller(request, id):

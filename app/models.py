@@ -16,7 +16,6 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nombre_cliente
     
-
 opciones_consulta = [
         [0,"Administrador"],
         [1,"Vendedor"],
@@ -112,6 +111,7 @@ class Taller(models.Model):
     modelo_bicicleta = models.CharField('Modelo De Bicicleta', max_length=30)
     estado_pago = models.IntegerField('Estado de Pago', choices=opc_estado_pago, null=True, blank=True)
     abono = models.IntegerField('Abono')
+    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.descripcion
@@ -132,7 +132,6 @@ class Venta(models.Model):
     tipo_servicio = models.CharField('Tipo De Servicio', choices=[('PRODUCTOS','PRODUCTOS'), ('TALLER', 'TALLER')], max_length=30)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT, null=True, blank=True)
     taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT, null=True, blank=True)
-    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete = models.PROTECT)
 
     def __str__(self):
         return self.tipo_servicio

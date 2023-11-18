@@ -257,19 +257,19 @@ class TallerForm(forms.ModelForm):
     tipo_arreglo = forms.ChoiceField(
         label='Tipo de Arreglo',
         choices=opc_tipo_arreglo,
-        widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False, 'id': 'id_tipo_arreglo'}),
         required=False,
     )
 
     valor = forms.IntegerField(
         label='Valor del Arreglo',
-        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el Valor del Arreglo', 'required': False}),
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el Valor del Arreglo', 'required': False, 'id': 'id_valor'}),
         required=False,
     )
 
     descripcion = forms.CharField(
         label='Descripción',
-        widget=forms.Textarea(attrs={'placeholder': 'Ingresa la Descipción del Arreglo', 'cols': 30, 'rows': 3, 'required': False}),
+        widget=forms.Textarea(attrs={'placeholder': 'Ingresa la Descipción del Arreglo', 'cols': 30, 'rows': 3, 'required': False, 'id': 'id_descripcion'}),
         required=False,
     )
 
@@ -308,7 +308,7 @@ class VentaForm(forms.ModelForm):
     class Meta:
 
         model = Venta
-        fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller', 'cliente_rut_cliente'] 
+        fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller'] 
 
         fecha = forms.DateField(
         widget=forms.SelectDateWidget(),
