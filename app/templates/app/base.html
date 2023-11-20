@@ -18,31 +18,15 @@
          
     </head>
 </head>
-
 <script>
     $(document).ready( function () {
       $('#example').DataTable(
-{
- "language":{
-    "url":"//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
- }
- 
-}
-
-      );
-
-
-} );
-
-
+{ "language":{"url":"//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"}});});
 </script>
-
-
-
 
 <body >
 
-
+    
     <!-- top navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark  fixed-top" style="background-color:rgb(52, 52, 52) ;">
         <div class="container-fluid">
@@ -133,7 +117,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'regcolaborador' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-person-plus-fill"></i></span>
                                         <span>Registrar Colaborador</span>
                                     </a>
                                 </li>
@@ -142,7 +126,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_colaborador' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
                                         <span>Listado Colaboradores</span>
                                     </a>
                                 </li>
@@ -157,7 +141,7 @@
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts2">
-                            <span class="me-3"><i class="bi bi-people-fill"></i></span>
+                            <span class="me-3"><i class="bi bi-person-bounding-box"></i></span>
                             <span style="padding-left: 17px;">Clientes</span>
                             <span class="ms-auto">
                                 <span class="right-icon">
@@ -173,7 +157,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'agregar_cliente' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-person-plus-fill"></i></span>
                                         <span>Registrar Clientes</span>
                                     </a>
                                 </li>
@@ -182,7 +166,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_cliente' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
                                         <span>Historial De Clientes</span>
                                     </a>
                                 </li>
@@ -197,7 +181,7 @@
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts3">
-                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
+                            <span class="me-2"><i class="bi bi-bar-chart-line-fill"></i></span>
                             <span style="padding-left: 25px;">Ventas</span>
                             <span class="ms-auto">
                                 <span class="right-icon">
@@ -213,7 +197,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'agregar_venta' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-cart4"></i></span>
                                         <span>Crear Venta</span>
                                     </a>
                                 </li>
@@ -222,7 +206,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_venta' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-graph-up"></i></span>
                                         <span>Historial De Ventas</span>
                                     </a>
                                 </li>
@@ -237,7 +221,7 @@
                     <li>
                         <a class="nav-link px-3 sidebar-link active " data-bs-toggle="collapse"
                             data-bs-target="#layouts4">
-                            <span class="me-2"><i class="bi bi-people-fill"></i></span>
+                            <span class="me-2"><i class="bi bi-table"></i></span>
                             <span style="padding-left: 25px;">Taller</span>
                             <span class="ms-auto">
                                 <span class="right-icon">
@@ -253,7 +237,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'agregar_taller' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-calendar-plus-fill"></i></span>
                                         <span>Agendar Taller</span>
                                     </a>
                                 </li>
@@ -262,7 +246,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'list_taller' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-card-list"></i></span>
                                         <span>Historial De Taller</span>
                                     </a>
                                 </li>
@@ -277,7 +261,7 @@
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts5">
-                            <span class="me-2"><i class="bi bi-basket"></i></span>
+                            <span class="me-2"><i class="bi bi-stack"></i></span>
                             <span style="padding-left:25px;">Productos y Repuestos</span>
                             <span class="ms-auto">
                                 <span class="right-icon">
@@ -293,7 +277,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'agregar_producto' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-plus-square-fill"></i></span>
                                         <span>Nuevo Producto</span>
                                     </a>
                                 </li>
@@ -302,7 +286,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_producto' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-subtract"></i></span>
                                         <span>Stock De Productos</span>
                                     </a>
                                 </li>
@@ -311,7 +295,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_producto' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-receipt"></i></span>
                                         <span>Compra De Productos</span>
                                     </a>
                                 </li>
@@ -326,7 +310,7 @@
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts7">
-                            <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
+                            <span class="me-2"><i class="bi bi-truck"></i></span>
                             <span style="padding-left:25px;">Proveedores</span>
                             <span class="ms-auto">
                                 <span class="right-icon">
@@ -342,7 +326,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'agregar_proveedor' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-person-plus-fill"></i></span>
                                         <span>Agregar Proveedor</span>
                                     </a>
                                 </li>
@@ -351,7 +335,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'listar_proveedor' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                        <span class="me-2"><i class="bi bi-shop-window"></i></span>
                                         <span>Listado De Proveedores</span>
                                     </a>
                                 </li>
@@ -364,7 +348,7 @@
                     </li>
                 </ul>
                 <footer style="color: white; text-align: center; padding-top: 30px; font-size: x-small; bottom: 0; " >
-                    <p>&copy; 2023 Teryx | Mirabike. Todos los derechos reservados.</p>
+                    <p>&copy; 2023 Teryx | MiraBike. Todos los derechos reservados.</p>
                 </footer>
             </nav>
         </div>

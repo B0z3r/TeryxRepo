@@ -336,6 +336,8 @@ def list_taller(request):
     # Obtén datos de taller con datos de cliente relacionados
     #"rut_cliente","nombre_cliente","apePaterno","apeMaterno","fono"
     taller_con_cliente = Taller.objects.select_related('cliente_rut_cliente').all()
+    for taller in taller_con_cliente:
+        taller.total_neto = taller.valor - taller.abono
 
     # Paginación
     paginator = Paginator(taller_con_cliente, 10)

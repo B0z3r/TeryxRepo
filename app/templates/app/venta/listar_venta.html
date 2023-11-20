@@ -1,4 +1,5 @@
 {% extends 'app/base.html' %} {% block js %}
+{% load humanize %}
 <script>
     function eliminarVenta(id) {
         Swal.fire({
@@ -55,7 +56,7 @@
                                 <td>{{ p.fecha }}</td>
                                 <td>{{ p.descripcion }}</td>
                                 <td>{{ p.tipopago }}</td>
-                                <td>{{ p.total }}</td>
+                                <td>${{ p.total|intcomma}}</td>
                                 {% for detalle in venta.detalleventa_set.all %}
                                     <td>{% if detalle.producto %}{{ detalle.producto.nombre }}{% else %}{{ detalle.taller.tipo_arreglo }}{% endif %}</td>
                                 {% endfor %}

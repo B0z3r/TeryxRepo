@@ -70,11 +70,11 @@
                           <td>{{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}</td>
                           <td>{{ datos.cliente_rut_cliente.fono }}</td>
                           <td>{{ datos.get_tipo_arreglo_display }}</td>
-                          <td>{{ datos.valor }}</td>
+                          <td>${{ datos.valor | intcomma }}</td>
                           <td>{{ datos.descripcion }}</td>
                           <td>{{ datos.get_estado_pago_display}}</td>
-                          <td>{{ datos.abono }}</td>
-                          <td>${{ datos.total | intcomma }}</td>
+                          <td>${{ datos.abono | intcomma }}</td>
+                          <td>${{ datos.total_neto  | intcomma }}</td>
                           {% if perms.app.change_venta %}
                           {% if perms.app.delete_venta %}
                         <td>
