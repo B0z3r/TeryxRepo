@@ -2,29 +2,55 @@
 
 {%  block contenido %}
 {% load crispy_forms_tags %}
-<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
-    <div class="container-fluid">
-        <div class="card-body" style="background-color: rgb(243, 242, 234); margin: 10px;  border-radius: 10px;">
-            <div class="row" >
-                <div class="col-12 col-md-6 offset-md-3" style="background-color: rgb(255, 255, 255); border-radius: 10px; ">
-                    <h2> Registro Colaborador</h2>
+
+<script>
+    $(function (){
+      $('#staticBackdrop').modal('show');
+    });
+  
+    $('.close').on('click', function() {
+      $('#staticBackdrop').modal('hide');
+    });
+  </script>
+  
+<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);" >
+   
+
+  
+    
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header justify-content-center">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar colaborador</h1>
+            
+            </div>
+            <div class="modal-body">
+               
+                <form  action="" method="post">
+                    {% csrf_token %}  
+                    
+                    {{ form | crispy }}
+                   
                     <hr>
-                    <form  action="" method="post">
-                        {% csrf_token %}  
-                        
-                        {{ form | crispy }}
-                       
-                        <hr>
+                    <div class="modal-footer">
+             
                         <div class="d-flex justify-content-center">
-                            <a href="{% url 'inicio_admin' %}" class="btn btn-danger">Cancelar</a>
+                            <a href="{% url 'listar_colaborador' %}" class="btn btn-danger">Cancelar</a>
                             &nbsp;
                             <button type="submit" value="btnEnviar" class="btn btn-primary">Registrar</button>
                         </div>
-                    </form>
-                    {{mensaje}}
-                </div>
+                    </div>
+                </form>
+                {{mensaje}}
             </div>
+            
+        
+          </div>
         </div>
-        </div>
+      </div>
+      
+  
 </main>
+
 {%  endblock %}

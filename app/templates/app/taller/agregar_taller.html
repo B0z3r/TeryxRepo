@@ -5,64 +5,92 @@
 
 {% block contenido %}
 {% load crispy_forms_tags %}
-<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);" >
-    <div class="container-fluid" >
-            <div class="card-body" style="background-color: rgb(243, 242, 234); margin: 10px;  border-radius: 10px;">
-                <div class="row" >
-                    <div class="col-12 col-md-6 offset-md-3" style="background-color: rgb(255, 255, 255); border-radius: 10px; ">
-                        <h2>Crear Agendamiento</h2>
-                        <hr>
-                        <form action="" method="post">
-    
-                            {% csrf_token %}
-                            {{form | crispy}}
-                            <br>
-                            <a href="{% url 'agregar_cliente' %}" class="bi bi-person-plus btn-primary btn-lg"></a>
-                            <br>
-                            <hr>
-                            <br>
+
+
+<script>
+    $(function () {
+        $('#staticBackdrop').modal('show');
+    });
+
+    $('.close').on('click', function () {
+        $('#staticBackdrop').modal('hide');
+    });
+</script>
+
+<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
+
+
+
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar taller</h1>
+
+                </div>
+                <div class="modal-body">
+
+                    <form action="" method="post">
+
+                        {% csrf_token %}
+                        {{ form|crispy }}
+
+
+
+
+                        <div class="modal-footer">
+
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'list_taller' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
                                 <input type="submit" value="Guardar" class="btn btn-primary">
                             </div>
-                        </form>
-                        <!-- Agrega esto al final de tu formulario o en la sección body -->
-                        <script>
-                            $(document).ready(function () {
-                                // Función para actualizar el valor y la descripción según el tipo de arreglo seleccionado
-                                function actualizarCampos() {
-                                    var tipoArreglo = $("#id_tipo_arreglo").val();
+                        </div>
+                    </form>
+                    <!-- Agrega esto al final de tu formulario o en la sección body -->
+                    <script>
+                        $(document).ready(function () {
+                            // Función para actualizar el valor y la descripción según el tipo de arreglo seleccionado
+                            function actualizarCampos() {
+                                var tipoArreglo = $("#id_tipo_arreglo").val();
 
-                                    // Mapea el tipo de arreglo a un valor y una descripción
-                                    var valoresYDescripciones = {
-                                        0: { valor: 15000, descripcion: "Ajustes básicos - Descripción predeterminada" },
-                                        1: { valor: 20000, descripcion: "Cambio de neumáticos - Descripción predeterminada" },
-                                        2: { valor: 25000, descripcion: "Cambio Frenos - Descripción predeterminada" },
-                                        3: { valor: 15000, descripcion: "Reparación de Cadena, Pedales y Bielas - Descripción predeterminada" },
-                                        4: { valor: 35000, descripcion: "Ajuste de Suspensión - Descripción predeterminada" },
-                                    };
+                                // Mapea el tipo de arreglo a un valor y una descripción
+                                var valoresYDescripciones = {
+                                    0: { valor: 15000, descripcion: "Ajustes básicos - Descripción predeterminada" },
+                                    1: { valor: 20000, descripcion: "Cambio de neumáticos - Descripción predeterminada" },
+                                    2: { valor: 25000, descripcion: "Cambio Frenos - Descripción predeterminada" },
+                                    3: { valor: 15000, descripcion: "Reparación de Cadena, Pedales y Bielas - Descripción predeterminada" },
+                                    4: { valor: 35000, descripcion: "Ajuste de Suspensión - Descripción predeterminada" },
+                                };
 
-                                    // Actualiza los campos de Valor y Descripción
-                                    $("#id_valor").val(valoresYDescripciones[tipoArreglo].valor);
-                                    $("#id_descripcion").val(valoresYDescripciones[tipoArreglo].descripcion);
-                                }
+                                // Actualiza los campos de Valor y Descripción
+                                $("#id_valor").val(valoresYDescripciones[tipoArreglo].valor);
+                                $("#id_descripcion").val(valoresYDescripciones[tipoArreglo].descripcion);
+                            }
 
-                                // Asocia la función al evento de cambio en el campo de "Tipo de Arreglo"
-                                $("#id_tipo_arreglo").change(function () {
-                                    actualizarCampos();
-                                });
-
-                                // Llama a la función al cargar la página para establecer los valores iniciales
+                            // Asocia la función al evento de cambio en el campo de "Tipo de Arreglo"
+                            $("#id_tipo_arreglo").change(function () {
                                 actualizarCampos();
                             });
-                        </script>
-                        {{mensaje}}
-                    </div>
+
+                            // Llama a la función al cargar la página para establecer los valores iniciales
+                            actualizarCampos();
+                        });
+                    </script>
+                    {{mensaje}}
+
+
                 </div>
+
+
             </div>
         </div>
     </div>
- </main>
-{% endblock %}
-
+    </div>
+    </div>
+    </div>
+    </div>
+</main>
+    {% endblock %}

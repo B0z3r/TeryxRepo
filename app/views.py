@@ -56,6 +56,8 @@ def regcolaborador(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Colaborador Registrado Correctamente!")
+            return redirect(to="listar_colaborador")
+
         else:
             data["form"] = formulario
         
