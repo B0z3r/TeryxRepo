@@ -13,30 +13,57 @@
         <h4>Bievenido a teryx {{ user.username }}  </h4>
       </div>
     </div>
+
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <div class="card bg-primary text-white h-100" style="text-align: center;">
+      <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white h-100">
           <div class="card-body py-5"><p>Total de Clientes: {{ total_clientes }}</p></div>
+          <div class="card-footer d-flex">
+            
+            <a href="{% url 'listar_cliente'%}" style="color: white;  text-decoration: none;">Ver más detalles</a>
+            <span class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <div class="card bg-success text-white h-100" style="text-align: center;">
+      <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-dark h-100">
           <div class="card-body py-5"> <p>Total de Proveedores: {{ total_proveedores }}</p></div>
+          <div class="card-footer d-flex">
+            
+            <a href="{% url 'listar_proveedor'%}" style="color: white;  text-decoration: none;">Ver más detalles</a>
+            <span class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <div class="card bg-info text-white h-100" style="text-align: center;">
+      <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white h-100">
           <div class="card-body py-5"> <p>Total de Productos: {{ total_productos }}</p></div>
+          <div class="card-footer d-flex">
+            
+            <a href="{% url 'listar_producto'%}" style="color: white;  text-decoration: none;">Ver más detalles</a>
+            <span class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <div class="card bg-warning text-white h-100" style="text-align: center;">
-          <div class="card-body py-5" > <p>Total de Agendamientos: {{ total_talleres }}</p></div>
+      <div class="col-md-3 mb-3">
+        <div class="card bg-danger text-white h-100">
+          <div class="card-body py-5" > <p>Total Agendamientos: {{ total_talleres }}</p></div>
+          <div class="card-footer d-flex">
+            
+            <a href="{% url 'list_taller'%}" style="color: white;  text-decoration: none;">Ver más detalles</a>
+            <span class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
         </div>
       </div>
-      
     </div>
-    
   
   </div>
 </main>
