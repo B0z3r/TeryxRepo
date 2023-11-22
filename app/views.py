@@ -552,6 +552,35 @@ def gestionar_productos(request, id=None):
 
     return render(request, 'app/Productos/gestionar_productos.html', data)
 
+  # Esto modique para que se viera el listado de producto en agregar venta pero no se ve pelao
 
+@permission_required('app.add_venta')
+def agregar_venta_and_listar_producto(request):
+    data = {}
+    
+    if request.method == 'POST':
+        form = VentaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Venta Creada Correctamente!")
+            return redirect('listar_venta')
+        else:
+            data["form"] = form
+    else:
+        data['form'] = VentaForm()
 
+    productos = Producto.objects.all()
+    page = request.GET.get('page', 1)
 
+    try:
+        paginator = Paginator(productos, 5)
+        productos = paginator.page(page)
+    except:
+        raise Http404
+
+    data.update({
+        'entity': productos,
+        'paginator': paginator
+    })
+
+    return render(request, 'app/venta/agregar_venta.html', data)

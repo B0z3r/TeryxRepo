@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import re
+from django.utils.safestring import mark_safe
 
 class ColaboradorForm(forms.ModelForm):
     
@@ -117,16 +118,23 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ["username", "password1", "password2", "first_name", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
-        
+    
+    class CustomWidget(forms.TextInput):
+     def render(self, name, value, attrs=None, renderer=None):
+        input_html = super().render(name, value, attrs)
+        button_html = '<button type="button">Mi Botón</button>'
+        return mark_safe(f'{input_html} {button_html}')
+     
     opc_consl_cat = [
         ('', 'Selecciona una opción....'),
         [0,"Indumentaria"],
         [1,"Accesorio"],
         [2,"Repuestos"]
     ]
+  
     nombre_producto = forms.CharField(
         label='Nombre Producto',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el nombre del producto', 'required': False}),
+        widget=CustomWidget(attrs={'placeholder': 'Ingresa el nombre del producto', 'required': False}),
         required=False,
     )
     marca = forms.CharField(

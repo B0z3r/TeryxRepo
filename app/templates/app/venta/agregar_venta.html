@@ -1,14 +1,29 @@
 {% extends 'app/base.html' %}
 
 {% load static %}
+{% load humanize %}
 
 {% block contenido %}
 {% load crispy_forms_tags %}
 
 <script>
+  /*
+  esta primera funcion hace que puedas mostrar de una al momento
+  de abrir la pagina modal show
+*/
+
     $(function (){
       $('#staticBackdrop').modal('show');
     });
+/*
+ aqui lo que hago es que mediante el boton id openModalBtn se habra el modal del listado y lo muestre
+*/
+    $(document).ready(function(){
+    $('#openModalBtn').click(function(){
+        $('#staticBackdrop1').modal('show');
+    });
+});
+  
   
     $('.close').on('click', function() {
       $('#staticBackdrop').modal('hide');
@@ -31,10 +46,55 @@
                         <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                         &nbsp;
                         <input type="submit" value="Guardar" class="btn btn-primary">
+                        &nbsp;
+                        <button id="openModalBtn" class="btn btn-primary">Abrir Modal</button>
                       </div>
                   </div>
                 </form>
                 {{ mensaje }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Modal del listado este tiene como id staticbackdrop1 y se llama con el boton modal que esta dentro  del form  -->
+
+
+      <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="padding-top: 100px;">
+          <div class="modal-content">
+            <div class="modal-header justify-content-center">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel1">Listado productos</h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>Nº</th>
+                        <th>Nombre Producto</th>
+                        <th>Marca</th>
+                        
+                      </tr>
+                    </thead>
+  
+                    {% for p in entity %}
+                      <tbody>
+                        <tr>
+                          <td>{{ p.id_producto }}</td>
+                          <td>{{ p.nombre_producto }}</td>
+                          <td>{{ p.marca }}</td>
+                         
+                        
+                        </tr>
+                      </tbody>
+                    {% endfor %}
+                  </table>
+                </div>
+                <div>{% include 'app/paginator.html' %}</div>
+              </div>
             </div>
           </div>
         </div>

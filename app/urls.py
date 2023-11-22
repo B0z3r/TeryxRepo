@@ -44,5 +44,6 @@ urlpatterns = [
     path('modificar_cuenta/', views.modificar_cuenta, name='modificar_cuenta'),
     path('cambio-pass/', views.cambio_pass, name='cambio_pass'),
     path('gestionar-productos/', gestionar_productos, name='gestionar_productos'),
+    path('agregar_venta_y_listar_producto/', views.agregar_venta_and_listar_producto, name='agregar_venta_y_listar_producto'),
     path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',)
 ]
