@@ -36,7 +36,7 @@
                 aria-controls="offcanvasExample">
                 <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
             </button>
-            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#"> <img 
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="{% url 'inicio_admin' %}"> <img 
                     src="{% static 'app/img/logo.png' %}" alt="" style=" padding-left :20px; width:  160px; height: 29px;"></a>
 
             <!-- hamburguesa para abrir el nav -->
@@ -99,39 +99,12 @@
                     </li>
                     {% if perms.app.add_regcolaborador %}
                     <li>
-                        <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
-                            data-bs-target="#layouts1">
+                        <a href="{% url 'listar_colaborador' %}" class="nav-link px-3 active" style="padding-top:5px;">
                             <span class="me-3"><i class="bi bi-people-fill"></i></span>
-                            <span style="padding-left:17px ;">Colaboradores</span>
-                            <span class="ms-auto">
-                                <span class="right-icon">
-                                    <i class="bi bi-chevron-down"></i>
-                                </span>
-                            </span>
+                            <span style="padding-left: 17px;">Colaborador</span>
                         </a>
-                        <div class="collapse" id="layouts1">
-                            <!-- ul despliega menu -->
-                            <ul class="navbar-nav ps-3">
-                                <li class="my-2">
-                                    <hr class="dropdown-divider bg-light" />
-                                </li>
-                                <li>
-                                    <a href="{% url 'regcolaborador' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-person-plus-fill"></i></span>
-                                        <span>Registrar Colaborador</span>
-                                    </a>
-                                </li>
-                                <li class="my-2">
-                                    <hr class="dropdown-divider bg-light" />
-                                </li>
-                                <li>
-                                    <a href="{% url 'listar_colaborador' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
-                                        <span>Listado Colaboradores</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    </li>
+                       
                     </li>
                     {% endif %}
                     <li class="my-2">
