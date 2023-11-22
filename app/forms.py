@@ -306,7 +306,6 @@ class TallerForm(forms.ModelForm):
 class VentaForm(forms.ModelForm):
     
     class Meta:
-
         model = Venta
         fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller'] 
 

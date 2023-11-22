@@ -5,9 +5,6 @@
 {% block contenido %}
 {% load crispy_forms_tags %}
 
-
-
-
 <script>
     $(function (){
       $('#staticBackdrop').modal('show');
@@ -19,29 +16,17 @@
   </script>
   
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);" >
-   
-
-  
-    
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header justify-content-center">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Registrar venta</h1>
-            
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Venta</h1>
             </div>
             <div class="modal-body">
-
-                <form action="" method="post">
-                            
+                <form action="" method="post">  
                     {% csrf_token %}
                     {{ form|crispy }}
-                   
-                
-             
-               
                     <div class="modal-footer">
-             
                       <div class="d-flex justify-content-center">
                         <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                         &nbsp;
@@ -51,12 +36,8 @@
                 </form>
                 {{ mensaje }}
             </div>
-            
-          
           </div>
         </div>
       </div>
-      
-  
 </main>
 {% endblock %}

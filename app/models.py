@@ -114,7 +114,7 @@ class Taller(models.Model):
     cliente_rut_cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.descripcion
+        return str(self.id_taller)
     
     def get_estado_display(self):
         return dict(opc_estado)[self.estado]
