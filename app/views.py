@@ -385,7 +385,8 @@ def eliminar_taller(request, id):
 @permission_required('app.add_venta')
 def agregar_venta(request):
     data = {
-        'form': VentaForm()
+        'form': VentaForm(),
+        'productos': Producto.objects.all()
     }
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
