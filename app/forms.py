@@ -327,8 +327,6 @@ class VentaForm(forms.ModelForm):
         required=False,
         widget=forms.Select(attrs={'placeholder': 'Selecciona un producto', 'required': False}),
     )
-        
-        
 
 class tventa(forms.ModelForm):
     

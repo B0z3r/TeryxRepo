@@ -10,6 +10,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.db import IntegrityError
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -398,7 +399,7 @@ def agregar_venta(request):
 
             formulario.save()
             messages.success(request, "Venta Creada Correctamente!")
-            return redirect(to="listar_venta")
+            return JsonResponse({'success': True})
         else:
             data["form"] = formulario
 

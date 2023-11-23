@@ -1,4 +1,6 @@
 {% extends 'app/base.html' %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 {% load static %}
 {% load humanize %}
@@ -29,47 +31,62 @@
     });
 </script>
 
-<!-- Script para manejar la selección y agregado de productos -->
+<!-- Script para manejar la selección y agregado de productos con AJAX -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-      // Manejar clic en un enlace de producto
-      document.querySelectorAll('.seleccionar-producto').forEach(function (link) {
-          link.addEventListener('click', function (event) {
-              event.preventDefault();
-              var productoId = this.getAttribute('data-id');
-              var productoNombre = this.getAttribute('data-nombre');
+    document.addEventListener('DOMContentLoaded', function () {
+    var formularioVenta = document.getElementById('formularioVenta');
 
-              // Actualizar el campo oculto con el producto seleccionado
-              document.getElementById('productoSeleccionado').value = productoId;
+    // Agregar la siguiente línea para obtener la referencia al campo oculto
+    var productoSeleccionadoInput = document.getElementById('productoSeleccionado');
 
-              // Mostrar el producto seleccionado en el campo
-              document.getElementById('producto_id_producto').value = productoNombre;
-          });
-      });
+    formularioVenta.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-      // Manejar clic en el botón de agregar producto en la modal
-      document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
-          btn.addEventListener('click', function (event) {
-              event.preventDefault();
+        var formData = new FormData(formularioVenta);
 
-              // Obtener el ID del producto seleccionado
-              var productoId = document.getElementById('productoSeleccionado').value;
+        fetch(formularioVenta.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Acciones después de una venta exitosa
+                alert('Venta creada correctamente.');
+                window.location.href = "{% url 'listar_venta' %}";
+            } else {
+                // Manejar errores o mostrar mensajes al usuario si es necesario
+                alert('Hubo un error al crear la venta.');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud AJAX:', error);
+        });
+    });
 
-              // Verificar si se seleccionó un producto
-              if (productoId) {
-                  // Mostrar el producto seleccionado en el campo
-                  document.getElementById('producto_id_producto').value = productoId;
+    // Manejar clic en el botón de agregar producto en la modal
+    document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
 
-                  // Cerrar la ventana modal
-                  var modal = new bootstrap.Modal(document.getElementById('modalProductos'));
-                  modal.hide();
-              } else {
-                  // Agregar un mensaje de error o lógica adicional si lo deseas
-                  console.error("Error: No se ha seleccionado ningún producto.");
-              }
-          });
-      });
-  });
+            // Obtener el ID del producto seleccionado
+            var productoId = this.parentElement.querySelector('.seleccionar-producto').getAttribute('data-id');
+
+            // Verificar si se seleccionó un producto
+            if (productoId) {
+                // Mostrar el producto seleccionado en el campo
+                productoSeleccionadoInput.value = productoId;
+
+                // Cerrar la ventana modal
+                var modal = new bootstrap.Modal(document.getElementById('modalProductos'));
+                modal.hide();
+            } else {
+                // Agregar un mensaje de error o lógica adicional si lo deseas
+                console.error("Error: No se ha seleccionado ningún producto.");
+            }
+        });
+    });
+});
 </script>
 
 
@@ -88,20 +105,22 @@
                         Seleccionar Producto
                     </button>
                     <!-- Resto del formulario -->
-                    <form action="" method="post">
+                    <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
+                        <!-- Otros campos ... -->
+                    
                         <!-- Campo oculto para almacenar el producto seleccionado -->
                         <input type="hidden" id="productoSeleccionado" name="productoSeleccionado" value="">
-
+                    
                         <!-- Lista para mostrar productos seleccionados -->
-                        <ul id="productosSeleccionados"></ul>
-
+                        <ul id="listaProductos"></ul>
+                    
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
-                                <input type="submit" value="Guardar" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
                     </form>
@@ -126,9 +145,7 @@
                         {% for producto in productos %}
                             <li>
                                 <a href="#" class="seleccionar-producto" data-id="{{ producto.id }}"
-                                    data-nombre="{{ producto.nombre_producto }}">
-                                    {{ producto.nombre_producto }}
-                                </a>
+                                    data-nombre="{{ producto.nombre_producto }}">{{ producto.nombre_producto }}</a>
                                 <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;">Agregar</button>
                             </li>
                         {% endfor %}
