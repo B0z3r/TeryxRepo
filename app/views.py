@@ -391,13 +391,18 @@ def agregar_venta(request):
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
         if formulario.is_valid():
+            # Antes de guardar el formulario, obtenemos el ID del producto seleccionado
+            producto_id_seleccionado = request.POST.get('productoSeleccionado')
+            if producto_id_seleccionado:
+                formulario.instance.producto_id_producto_id = producto_id_seleccionado
+
             formulario.save()
             messages.success(request, "Venta Creada Correctamente!")
             return redirect(to="listar_venta")
         else:
             data["form"] = formulario
 
-    return render(request, 'app/venta/agregar_venta.html', data) 
+    return render(request, 'app/venta/agregar_venta.html', data)
 
 @permission_required('app.view_venta')
 def listar_venta(request):
