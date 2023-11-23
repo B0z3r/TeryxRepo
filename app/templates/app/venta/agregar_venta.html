@@ -1,7 +1,6 @@
 {% extends 'app/base.html' %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-
 {% load static %}
 {% load humanize %}
 
@@ -9,17 +8,10 @@
 {% load crispy_forms_tags %}
 
 <script>
-    /*
-    esta primera función hace que puedas mostrar de una vez al momento
-    de abrir la página modal show
-    */
-
     $(function () {
         $('#staticBackdrop').modal('show');
     });
-    /*
-     aquí lo que hago es que mediante el botón id openModalBtn se abrirá el modal del listado y lo muestre
-    */
+
     $(document).ready(function () {
         $('#openModalBtn').click(function () {
             $('#staticBackdrop1').modal('show');
@@ -31,91 +23,120 @@
     });
 </script>
 
-<!-- Script para manejar la selección y agregado de productos con AJAX -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    var formularioVenta = document.getElementById('formularioVenta');
+        var formularioVenta = document.getElementById('formularioVenta');
+        var listaProductos = document.getElementById('listaProductos');
+        var totalInput = document.getElementById('id_total');
 
-    // Agregar la siguiente línea para obtener la referencia al campo oculto
-    var productoSeleccionadoInput = document.getElementById('productoSeleccionado');
-
-    formularioVenta.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        var formData = new FormData(formularioVenta);
-
-        fetch(formularioVenta.action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Acciones después de una venta exitosa
-                alert('Venta creada correctamente.');
-                window.location.href = "{% url 'listar_venta' %}";
-            } else {
-                // Manejar errores o mostrar mensajes al usuario si es necesario
-                alert('Hubo un error al crear la venta.');
-            }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud AJAX:', error);
-        });
-    });
-
-    // Manejar clic en el botón de agregar producto en la modal
-    document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
-        btn.addEventListener('click', function (event) {
+        formularioVenta.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Obtener el ID del producto seleccionado
-            var productoId = this.parentElement.querySelector('.seleccionar-producto').getAttribute('data-id');
+            var formData = new FormData(formularioVenta);
 
-            // Verificar si se seleccionó un producto
-            if (productoId) {
-                // Mostrar el producto seleccionado en el campo
-                productoSeleccionadoInput.value = productoId;
-
-                // Cerrar la ventana modal
-                var modal = new bootstrap.Modal(document.getElementById('modalProductos'));
-                modal.hide();
-            } else {
-                // Agregar un mensaje de error o lógica adicional si lo deseas
-                console.error("Error: No se ha seleccionado ningún producto.");
-            }
+            fetch(formularioVenta.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Venta creada correctamente.');
+                    window.location.href = "{% url 'listar_venta' %}";
+                } else {
+                    alert('Hubo un error al crear la venta.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud AJAX:', error);
+            });
         });
-    });
-});
-</script>
 
+        document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                var productoId = this.dataset.id;
+                var productoNombre = this.dataset.nombre;
+                var productoPrecio = parseFloat(this.dataset.precio);
+
+                if (productoId) {
+                    var cantidadInput = document.createElement('input');
+                    cantidadInput.type = 'number';
+                    cantidadInput.value = 1;
+                    cantidadInput.min = 1;
+                    cantidadInput.addEventListener('input', function () {
+                        // Actualizar el subtotal cuando cambia la cantidad
+                        var subtotal = productoPrecio * parseFloat(this.value);
+                        subtotalSpan.textContent = 'Subtotal: ' + subtotal.toFixed(2);
+                        actualizarTotal();
+                    });
+
+                    var eliminarButton = document.createElement('button');
+                    eliminarButton.textContent = 'Eliminar';
+                    eliminarButton.addEventListener('click', function () {
+                        // Eliminar el producto de la lista y actualizar el total
+                        listaProductos.removeChild(listItem);
+                        actualizarTotal();
+                    });
+
+                    var listItem = document.createElement('li');
+                    listItem.textContent = productoNombre;
+                    listItem.appendChild(cantidadInput);
+                    listItem.appendChild(eliminarButton);
+                    
+                    var subtotalSpan = document.createElement('span');
+                    subtotalSpan.textContent = 'Subtotal: ' + productoPrecio.toFixed(2);
+                    listItem.appendChild(subtotalSpan);
+
+                    listaProductos.appendChild(listItem);
+
+                    var productoField = document.getElementById('id_producto_id_producto');
+                    productoField.value = productoId;
+
+                    // Actualizar el total
+                    actualizarTotal();
+
+                    var modal = new bootstrap.Modal(document.getElementById('modalProductos'));
+                    modal.hide();
+                } else {
+                    console.error("Error: No se ha seleccionado ningún producto.");
+                }
+            });
+        });
+
+        function actualizarTotal() {
+            var subtotales = Array.from(listaProductos.querySelectorAll('li')).map(function (item) {
+                var cantidad = parseFloat(item.querySelector('input').value);
+                var precio = parseFloat(item.querySelector('span').textContent.split(': ')[1]);
+                return cantidad * precio;
+            });
+
+            var total = subtotales.reduce(function (acc, subtotal) {
+                return acc + subtotal;
+            }, 0);
+
+            totalInput.value = total.toFixed(2);
+        }
+    });
+</script>
 
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Venta</h1>
                 </div>
                 <div class="modal-body">
-                    <!-- Agregar este botón o enlace para abrir la ventana modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#modalProductos">
                         Seleccionar Producto
                     </button>
-                    <!-- Resto del formulario -->
                     <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <!-- Otros campos ... -->
-                    
-                        <!-- Campo oculto para almacenar el producto seleccionado -->
-                        <input type="hidden" id="productoSeleccionado" name="productoSeleccionado" value="">
-                    
-                        <!-- Lista para mostrar productos seleccionados -->
-                        <ul id="listaProductos"></ul>
-                    
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
@@ -124,32 +145,56 @@
                             </div>
                         </div>
                     </form>
+                    <!-- Lista para mostrar productos seleccionados -->
+                    <ul id="listaProductos"></ul>
+
+                    <!-- Campo oculto para almacenar el total -->
+                    <input type="hidden" id="id_total" name="total" value="0.00">
+
                     {{ mensaje }}
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de listado de productos -->
-    <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalProductosLabel">Listado de Productos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <!-- Aquí muestra el listado de productos -->
-                    <ul>
-                        {% for producto in productos %}
-                            <li>
-                                <a href="#" class="seleccionar-producto" data-id="{{ producto.id }}"
-                                    data-nombre="{{ producto.nombre_producto }}">{{ producto.nombre_producto }}</a>
-                                <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;">Agregar</button>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <div class="modal-body" style="overflow: scroll;">
+                    <table class="table table-hover" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                                <tr>
+                                    <td>{{ producto.id_producto }}</td>
+                                    <td>{{ producto.nombre_producto }}</td>
+                                    <td>{{ producto.stock }}</td>
+                                    <td>{{ producto.precio_unitario }}</td>
+                                    <td>{{ producto.total }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
+                                                data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
+                                                data-precio="{{ producto.precio_unitario }}">
+                                            Agregar
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

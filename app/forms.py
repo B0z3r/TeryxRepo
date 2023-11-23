@@ -322,11 +322,7 @@ class VentaForm(forms.ModelForm):
         input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
         
-    producto_id_producto = forms.ModelChoiceField(
-        queryset=Producto.objects.all(),
-        required=False,
-        widget=forms.Select(attrs={'placeholder': 'Selecciona un producto', 'required': False}),
-    )
+   
 
 class tventa(forms.ModelForm):
     

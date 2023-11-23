@@ -389,13 +389,20 @@ def agregar_venta(request):
         'form': VentaForm(),
         'productos': Producto.objects.all()
     }
+
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
-        if formulario.is_valid():
-            # Antes de guardar el formulario, obtenemos el ID del producto seleccionado
-            producto_id_seleccionado = request.POST.get('productoSeleccionado')
+        
+        if formulario.is_valid():         
+            # Obtener el ID del producto seleccionado desde el formulario
+            producto_id_seleccionado = request.POST.get('producto_id_producto')
+
             if producto_id_seleccionado:
-                formulario.instance.producto_id_producto_id = producto_id_seleccionado
+                # Obtener el objeto Producto
+                producto_seleccionado = get_object_or_404(Producto, pk=producto_id_seleccionado)
+
+                # Guardar el producto en el campo correspondiente de la venta
+                formulario.instance.producto_id_producto = producto_seleccionado
 
             formulario.save()
             messages.success(request, "Venta Creada Correctamente!")
