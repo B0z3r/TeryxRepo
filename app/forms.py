@@ -119,12 +119,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class ProductoForm(forms.ModelForm):
     
-    class CustomWidget(forms.TextInput):
-     def render(self, name, value, attrs=None, renderer=None):
-        input_html = super().render(name, value, attrs)
-        button_html = '<button type="button">Mi Botón</button>'
-        return mark_safe(f'{input_html} {button_html}')
-     
+         
     opc_consl_cat = [
         ('', 'Selecciona una opción....'),
         [0,"Indumentaria"],
@@ -134,7 +129,7 @@ class ProductoForm(forms.ModelForm):
   
     nombre_producto = forms.CharField(
         label='Nombre Producto',
-        widget=CustomWidget(attrs={'placeholder': 'Ingresa el nombre del producto', 'required': False}),
+        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el nombre del producto', 'required': False}),
         required=False,
     )
     marca = forms.CharField(

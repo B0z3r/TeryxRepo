@@ -66,11 +66,19 @@
                     cantidadInput.value = 1;
                     cantidadInput.min = 1;
                     cantidadInput.addEventListener('input', function () {
-                        // Actualizar el subtotal cuando cambia la cantidad
-                        var subtotal = productoPrecio * parseFloat(this.value);
-                        subtotalSpan.textContent = 'Subtotal: ' + subtotal.toFixed(2);
-                        actualizarTotal();
-                    });
+                    // Obtener el subtotal anterior
+                    var subtotalAnterior = parseFloat(subtotalSpan.textContent.split(': ')[1]);
+
+                    // Calcular el nuevo subtotal cuando cambia la cantidad
+                    var nuevoSubtotal = productoPrecio * parseFloat(this.value);
+
+                    // Actualizar el contenido de subtotalSpan
+                    subtotalSpan.textContent = 'Subtotal: ' + nuevoSubtotal.toFixed(2);
+
+                    // Actualizar el total restando el subtotal anterior y sumando el nuevo subtotal
+                    var total = parseFloat(totalInput.value) - subtotalAnterior + nuevoSubtotal;
+                    totalInput.value = total.toFixed(2);
+                });
 
                     var eliminarButton = document.createElement('button');
                     eliminarButton.textContent = 'Eliminar';
@@ -121,7 +129,7 @@
     });
 </script>
 
-<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
+<main>
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -130,10 +138,7 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Venta</h1>
                 </div>
                 <div class="modal-body">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modalProductos">
-                        Seleccionar Producto
-                    </button>
+                    
                     <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -145,6 +150,12 @@
                             </div>
                         </div>
                     </form>
+                    <hr>
+                    <hr>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalProductos">
+                        Seleccionar Producto
+                    </button>
                     <!-- Lista para mostrar productos seleccionados -->
                     <ul id="listaProductos"></ul>
 
@@ -172,7 +183,6 @@
                                 <th>Nombre Producto</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
-                                <th>Subtotal</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -183,7 +193,6 @@
                                     <td>{{ producto.nombre_producto }}</td>
                                     <td>{{ producto.stock }}</td>
                                     <td>{{ producto.precio_unitario }}</td>
-                                    <td>{{ producto.total }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
                                                 data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
@@ -195,6 +204,9 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

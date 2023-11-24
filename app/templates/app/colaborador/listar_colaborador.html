@@ -1,4 +1,5 @@
 {% extends 'app/base.html' %} {% block js %}
+<script src="https://printjs.crabbly.com/print.min.js"></script>
 <script>
   function eliminarColaborador(id) {
     Swal.fire({
@@ -34,24 +35,16 @@
       <div class="col-md-12 mb-3" style="padding-top: 30px">
         <div class="card" style="border-radius: 10px">
           <div class="card-header" style="background-color: rgb(50, 49, 49); color: white;">
-            <span><i class="bi bi-table me-2"></i></span> Historial
-            colaboradores {% if perms.app.add_colaborador %}
-            <a
-              href="{% url 'regcolaborador' %}"
-              class="btn btn-primary"
-              style="float: right"
-            >
-              Agregar Colaborador</a
-            >
+            <span><i class="bi bi-table me-2"></i></span> Historial Colaboradores 
+            <button onclick="imprimirTabla()">Imprimir</button>
+            {% if perms.app.add_colaborador %}
+            <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: right">Agregar Colaborador</a>
             {% endif %}
           </div>
+          
           <div class="card-body">
             <div class="table-responsive">
-              <table
-                id="example"
-                class="table table-striped-columns table-hover data-table"
-                style="width: 100%"
-              >
+              <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100%">
                 <thead>
                   <tr>
                     <th>Nombre Usuario</th>

@@ -1,0 +1,21 @@
+#listaProductos {
+    list-style: none;
+    padding: 0;
+}
+
+#listaProductos li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#listaProductos li:last-child {
+    border-bottom: none;
+}
+
+#listaProductos li button {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
