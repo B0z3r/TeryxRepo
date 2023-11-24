@@ -225,6 +225,7 @@ class ProveedorForm(forms.ModelForm):
         model = Proveedor
         fields = '__all__' 
 
+
 class TallerForm(forms.ModelForm):
 
     opc_tipo_arreglo = [
@@ -336,7 +337,9 @@ class VentaForm(forms.ModelForm):
         label='Fecha',
         widget=forms.SelectDateWidget(),
         input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
+        required=False,
     )
+    
         
     total = forms.IntegerField(
         label='Total',
@@ -353,6 +356,7 @@ class VentaForm(forms.ModelForm):
             ('CREDITO', 'CREDITO')
         ],
     )
+
 
    
 class tventa(forms.ModelForm):

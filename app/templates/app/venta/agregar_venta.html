@@ -18,9 +18,12 @@
         });
     });
 
+
     $('.close').on('click', function () {
         $('#staticBackdrop').modal('hide');
     });
+
+    
 </script>
 
 <script>
@@ -55,6 +58,21 @@
             });
         });
 
+        function agregarProducto(productoId, productoNombre, productoPrecio, cantidad) {
+            // Verificar si el producto ya está en la lista y actualizar la cantidad
+            var productoExistente = Array.from(listaProductos.querySelectorAll('li')).find(function (item) {
+                return item.dataset.id === productoId;
+            });
+
+            if (productoExistente) {
+                var cantidadInput = productoExistente.querySelector('input');
+                cantidadInput.value = parseFloat(cantidadInput.value) + cantidad;
+                actualizarSubtotal(productoExistente);
+            } else {
+                agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio, cantidad);
+            }
+        }
+
         document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
             btn.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -63,31 +81,20 @@
                 var productoNombre = this.dataset.nombre;
                 var productoPrecio = parseFloat(this.dataset.precio);
 
-                if (productoId) {
-                    agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio);
+                // Preguntar al usuario la cantidad de productos
+                var cantidadProductos = prompt('Ingrese la cantidad de productos', '1');
+                cantidadProductos = parseFloat(cantidadProductos);
+
+                if (!isNaN(cantidadProductos) && cantidadProductos > 0) {
+                    // Si el usuario ingresó una cantidad válida
+                    agregarProducto(productoId, productoNombre, productoPrecio, cantidadProductos);
                 } else {
-                    console.error("Error: No se ha seleccionado ningún producto.");
+                    console.error("Error: Cantidad de productos inválida.");
                 }
             });
         });
 
-        document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
-            btn.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                var tallerId = this.dataset.id;
-                var tallerNombre = this.dataset.nombre;
-                var tallerPrecio = parseFloat(this.dataset.precio);
-
-                if (tallerId) {
-                    agregarItem(listaTalleres, idTallerInput, tallerId, tallerNombre, tallerPrecio);
-                } else {
-                    console.error("Error: No se ha seleccionado ningún taller.");
-                }
-            });
-        });
-
-        function agregarItem(lista, idInput, itemId, itemName, itemPrecio) {
+        function agregarItem(lista, idInput, itemId, itemName, itemPrecio, cantidad) {
             var eliminarButton = document.createElement('button');
             eliminarButton.textContent = 'Eliminar';
             eliminarButton.addEventListener('click', function () {
@@ -96,8 +103,20 @@
                 actualizarTotal();
             });
 
+            var cantidadInput = document.createElement('input');
+            cantidadInput.type = 'number';
+            cantidadInput.value = cantidad;
+            cantidadInput.min = '1';
+            cantidadInput.addEventListener('input', function () {
+                // Actualizar el subtotal al cambiar la cantidad
+                actualizarSubtotal(listItem);
+                actualizarTotal();
+            });
+
             var listItem = document.createElement('li');
+            listItem.dataset.id = itemId;
             listItem.textContent = itemName;
+            listItem.appendChild(cantidadInput);
             listItem.appendChild(eliminarButton);
 
             lista.appendChild(listItem);
@@ -106,23 +125,24 @@
             idInput.value = itemId;
 
             // Actualizar el total
+            actualizarSubtotal(listItem);
             actualizarTotal();
+        }
 
-            var modal = new bootstrap.Modal(document.getElementById(lista.id === 'listaProductos' ? 'modalProductos' : 'modalTalleres'));
-            modal.hide();
+        function actualizarSubtotal(item) {
+            var cantidad = parseFloat(item.querySelector('input').value);
+            var precio = parseFloat(item.textContent.split(': ')[1]);
+            var subtotal = cantidad * precio;
+            item.textContent = item.textContent.split(' - Subtotal:')[0] + ' - Subtotal: $' + subtotal.toFixed(2);
         }
 
         function actualizarTotal() {
             var subtotalesProductos = Array.from(listaProductos.querySelectorAll('li')).map(function (item) {
-                var cantidad = parseFloat(item.querySelector('input').value);
-                var precio = parseFloat(item.querySelector('span').textContent.split(': ')[1]);
-                return cantidad * precio;
+                return parseFloat(item.textContent.split('Subtotal: $')[1]);
             });
 
             var subtotalesTalleres = Array.from(listaTalleres.querySelectorAll('li')).map(function (item) {
-                var cantidad = 1;  // Puedes personalizar la cantidad de talleres si es necesario
-                var precio = parseFloat(item.querySelector('span').textContent.split(': ')[1]);
-                return cantidad * precio;
+                return parseFloat(item.textContent.split('Subtotal: $')[1]);
             });
 
             var totalProductos = subtotalesProductos.reduce(function (acc, subtotal) {
@@ -145,7 +165,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Venta</h1>
+                    <h1 class="modal-title fs-8" id="staticBackdropLabel">Crear Venta</h1>
                 </div>
                 <div class="modal-body">
                     <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
@@ -160,10 +180,10 @@
                         </div>
                     </form>
                     <hr>
-                    <hr>
                     <!-- Botón para abrir el modal de productos y Taller -->
                     <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Taller</button>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
+                    <hr>
                     <!-- Lista para mostrar productos seleccionados -->
                     <ul id="listaProductos"></ul>
 
@@ -189,7 +209,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalProductosLabel">Listado de Productos</h5>
+                    <h3 class="modal-title" id="modalProductosLabel">Listado de Productos</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="overflow: scroll;">
@@ -200,7 +220,7 @@
                                 <th>Nombre Producto</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
-                                <th>Opciones</th>
+                                <th>Opción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -209,7 +229,7 @@
                                     <td>{{ producto.id_producto }}</td>
                                     <td>{{ producto.nombre_producto }}</td>
                                     <td>{{ producto.stock }}</td>
-                                    <td>{{ producto.precio_unitario }}</td>
+                                    <td>${{ producto.precio_unitario | intcomma }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
                                                 data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
@@ -234,7 +254,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTalleresLabel">Listado de Talleres</h5>
+                    <h3 class="modal-title" id="modalTalleresLabel">Listados de Agendamientos</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="overflow: scroll;">
@@ -242,9 +262,10 @@
                         <thead>
                             <tr>
                                 <th>Nº</th>
-                                <th>Nombre Taller</th>
+                                <th>Tipo de Arreglo</th>
                                 <th>Precio</th>
-                                <th>Opciones</th>
+                                <th>Abono</th>
+                                <th>Opción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -252,7 +273,8 @@
                                 <tr>
                                     <td>{{ taller.id_taller }}</td>
                                     <td>{{ taller.tipo_arreglo }}</td>
-                                    <td>{{ taller.valor }}</td>
+                                    <td>${{ taller.valor | intcomma }}</td>
+                                    <td>{{ taller.abono }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-taller" style="float: inline-end;"
                                                 data-id="{{ taller.id_taller }}" data-nombre="{{ taller.nombre_taller }}"

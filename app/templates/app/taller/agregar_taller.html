@@ -1,5 +1,6 @@
 {% extends 'app/base.html' %}
 
+
 {% load static %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -16,32 +17,21 @@
         $('#staticBackdrop').modal('hide');
     });
 </script>
-
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
-
-
-
-
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar taller</h1>
-
                 </div>
                 <div class="modal-body">
-
                     <form action="" method="post">
-
                         {% csrf_token %}
                         {{ form|crispy }}
-
-
-
-
+                        
+                        <a href="{% url 'agregar_cliente' %}" class="bi bi-person-plus btn btn-primary"></a>
                         <div class="modal-footer">
-
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'list_taller' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
@@ -80,17 +70,9 @@
                         });
                     </script>
                     {{mensaje}}
-
-
                 </div>
-
-
             </div>
         </div>
-    </div>
-    </div>
-    </div>
-    </div>
     </div>
 </main>
     {% endblock %}
