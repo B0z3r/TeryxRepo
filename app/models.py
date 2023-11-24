@@ -126,10 +126,8 @@ class Taller(models.Model):
 class Venta(models.Model):
     id_venta = models.AutoField('Nº Venta', primary_key=True)
     fecha = models.DateField('Fecha', default=datetime.now)
-    descripcion = models.CharField('Descipción', max_length=50)
     total = models.IntegerField('Total')
     tipopago = models.CharField('Tipo De Pago', choices=[('EFECTIVO','EFECTIVO'), ('DEBITO', 'DEBITO'), ('CREDITO', 'CREDITO')], max_length=30)
-    tipo_servicio = models.CharField('Tipo De Servicio', choices=[('PRODUCTOS','PRODUCTOS'), ('TALLER', 'TALLER')], max_length=30)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT, null=True, blank=True)
     taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT, null=True, blank=True)
 

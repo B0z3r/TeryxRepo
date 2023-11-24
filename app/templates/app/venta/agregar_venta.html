@@ -27,7 +27,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         var formularioVenta = document.getElementById('formularioVenta');
         var listaProductos = document.getElementById('listaProductos');
+        var listaTalleres = document.getElementById('listaTalleres');
         var totalInput = document.getElementById('id_total');
+        var idProductoInput = document.getElementById('id_producto_id_producto');
+        var idTallerInput = document.getElementById('id_taller_id_taller');
 
         formularioVenta.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -61,69 +64,76 @@
                 var productoPrecio = parseFloat(this.dataset.precio);
 
                 if (productoId) {
-                    var cantidadInput = document.createElement('input');
-                    cantidadInput.type = 'number';
-                    cantidadInput.value = 1;
-                    cantidadInput.min = 1;
-                    cantidadInput.addEventListener('input', function () {
-                    // Obtener el subtotal anterior
-                    var subtotalAnterior = parseFloat(subtotalSpan.textContent.split(': ')[1]);
-
-                    // Calcular el nuevo subtotal cuando cambia la cantidad
-                    var nuevoSubtotal = productoPrecio * parseFloat(this.value);
-
-                    // Actualizar el contenido de subtotalSpan
-                    subtotalSpan.textContent = 'Subtotal: ' + nuevoSubtotal.toFixed(2);
-
-                    // Actualizar el total restando el subtotal anterior y sumando el nuevo subtotal
-                    var total = parseFloat(totalInput.value) - subtotalAnterior + nuevoSubtotal;
-                    totalInput.value = total.toFixed(2);
-                });
-
-                    var eliminarButton = document.createElement('button');
-                    eliminarButton.textContent = 'Eliminar';
-                    eliminarButton.addEventListener('click', function () {
-                        // Eliminar el producto de la lista y actualizar el total
-                        listaProductos.removeChild(listItem);
-                        actualizarTotal();
-                    });
-
-                    var listItem = document.createElement('li');
-                    listItem.textContent = productoNombre;
-                    listItem.appendChild(cantidadInput);
-                    listItem.appendChild(eliminarButton);
-                    
-                    var subtotalSpan = document.createElement('span');
-                    subtotalSpan.textContent = 'Subtotal: ' + productoPrecio.toFixed(2);
-                    listItem.appendChild(subtotalSpan);
-
-                    listaProductos.appendChild(listItem);
-
-                    var productoField = document.getElementById('id_producto_id_producto');
-                    productoField.value = productoId;
-
-                    // Actualizar el total
-                    actualizarTotal();
-
-                    var modal = new bootstrap.Modal(document.getElementById('modalProductos'));
-                    modal.hide();
+                    agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio);
                 } else {
                     console.error("Error: No se ha seleccionado ningún producto.");
                 }
             });
         });
 
+        document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                var tallerId = this.dataset.id;
+                var tallerNombre = this.dataset.nombre;
+                var tallerPrecio = parseFloat(this.dataset.precio);
+
+                if (tallerId) {
+                    agregarItem(listaTalleres, idTallerInput, tallerId, tallerNombre, tallerPrecio);
+                } else {
+                    console.error("Error: No se ha seleccionado ningún taller.");
+                }
+            });
+        });
+
+        function agregarItem(lista, idInput, itemId, itemName, itemPrecio) {
+            var eliminarButton = document.createElement('button');
+            eliminarButton.textContent = 'Eliminar';
+            eliminarButton.addEventListener('click', function () {
+                // Eliminar el producto o taller de la lista y actualizar el total
+                lista.removeChild(listItem);
+                actualizarTotal();
+            });
+
+            var listItem = document.createElement('li');
+            listItem.textContent = itemName;
+            listItem.appendChild(eliminarButton);
+
+            lista.appendChild(listItem);
+
+            // Asignar el id del producto o taller al input oculto
+            idInput.value = itemId;
+
+            // Actualizar el total
+            actualizarTotal();
+
+            var modal = new bootstrap.Modal(document.getElementById(lista.id === 'listaProductos' ? 'modalProductos' : 'modalTalleres'));
+            modal.hide();
+        }
+
         function actualizarTotal() {
-            var subtotales = Array.from(listaProductos.querySelectorAll('li')).map(function (item) {
+            var subtotalesProductos = Array.from(listaProductos.querySelectorAll('li')).map(function (item) {
                 var cantidad = parseFloat(item.querySelector('input').value);
                 var precio = parseFloat(item.querySelector('span').textContent.split(': ')[1]);
                 return cantidad * precio;
             });
 
-            var total = subtotales.reduce(function (acc, subtotal) {
+            var subtotalesTalleres = Array.from(listaTalleres.querySelectorAll('li')).map(function (item) {
+                var cantidad = 1;  // Puedes personalizar la cantidad de talleres si es necesario
+                var precio = parseFloat(item.querySelector('span').textContent.split(': ')[1]);
+                return cantidad * precio;
+            });
+
+            var totalProductos = subtotalesProductos.reduce(function (acc, subtotal) {
                 return acc + subtotal;
             }, 0);
 
+            var totalTalleres = subtotalesTalleres.reduce(function (acc, subtotal) {
+                return acc + subtotal;
+            }, 0);
+
+            var total = totalProductos + totalTalleres;
             totalInput.value = total.toFixed(2);
         }
     });
@@ -138,7 +148,6 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Venta</h1>
                 </div>
                 <div class="modal-body">
-                    
                     <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -146,21 +155,28 @@
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="submit" class="btn btn-success">PAGAR</button>
                             </div>
                         </div>
                     </form>
                     <hr>
                     <hr>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modalProductos">
-                        Seleccionar Producto
-                    </button>
+                    <!-- Botón para abrir el modal de productos y Taller -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Taller</button>
                     <!-- Lista para mostrar productos seleccionados -->
                     <ul id="listaProductos"></ul>
 
+                    
+                    <!-- Lista para mostrar talleres seleccionados -->
+                    <ul id="listaTalleres"></ul>
+
                     <!-- Campo oculto para almacenar el total -->
                     <input type="hidden" id="id_total" name="total" value="0.00">
+
+                    <!-- Campos ocultos para almacenar los IDs de producto y taller -->
+                    <input type="hidden" id="id_producto_id_producto" name="producto_id_producto">
+                    <input type="hidden" id="id_taller_id_taller" name="taller_id_taller">
 
                     {{ mensaje }}
                 </div>
@@ -168,6 +184,7 @@
         </div>
     </div>
 
+    <!-- Modal de productos -->
     <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -197,6 +214,49 @@
                                         <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
                                                 data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
                                                 data-precio="{{ producto.precio_unitario }}">
+                                            Agregar
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de talleres -->
+    <div class="modal fade" id="modalTalleres" tabindex="-1" aria-labelledby="modalTalleresLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTalleresLabel">Listado de Talleres</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="overflow: scroll;">
+                    <table class="table table-hover" id="myTableTalleres">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre Taller</th>
+                                <th>Precio</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for taller in talleres %}
+                                <tr>
+                                    <td>{{ taller.id_taller }}</td>
+                                    <td>{{ taller.tipo_arreglo }}</td>
+                                    <td>{{ taller.valor }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-agregar-taller" style="float: inline-end;"
+                                                data-id="{{ taller.id_taller }}" data-nombre="{{ taller.nombre_taller }}"
+                                                data-precio="{{ taller.precio_taller }}">
                                             Agregar
                                         </button>
                                     </td>

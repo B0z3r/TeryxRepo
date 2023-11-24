@@ -387,13 +387,14 @@ def eliminar_taller(request, id):
 def agregar_venta(request):
     data = {
         'form': VentaForm(),
-        'productos': Producto.objects.all()
+        'productos': Producto.objects.all(),
+        'talleres': Taller.objects.all()  # Agrega la lista de talleres
     }
 
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
-        
-        if formulario.is_valid():         
+
+        if formulario.is_valid():
             # Obtener el ID del producto seleccionado desde el formulario
             producto_id_seleccionado = request.POST.get('producto_id_producto')
 
@@ -403,6 +404,13 @@ def agregar_venta(request):
 
                 # Guardar el producto en el campo correspondiente de la venta
                 formulario.instance.producto_id_producto = producto_seleccionado
+
+            # Agregar la lógica para el taller
+            taller_id_seleccionado = request.POST.get('taller_id_taller')
+
+            if taller_id_seleccionado:
+                taller_seleccionado = get_object_or_404(Taller, pk=taller_id_seleccionado)
+                formulario.instance.taller_id_taller = taller_seleccionado
 
             formulario.save()
             messages.success(request, "Venta Creada Correctamente!")

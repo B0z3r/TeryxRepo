@@ -168,6 +168,7 @@ class ProductoForm(forms.ModelForm):
         label='Fecha Registro',
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=False,
+        input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
     
     class Meta:
@@ -249,12 +250,14 @@ class TallerForm(forms.ModelForm):
         label='Fecha Ingreso',
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=False,
+        input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
 
     fecha_termino = forms.DateField(
         label='Fecha Término',
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=False,
+        input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
 
     tipo_arreglo = forms.ChoiceField(
@@ -301,24 +304,57 @@ class TallerForm(forms.ModelForm):
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresar el Abono', 'required': False}),
         required=False,
     )
+
+    cliente_rut_cliente = forms.IntegerField(
+        label='Rut del Cliente',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresar Rut del Cliente', 'required': False}),
+        required=False,
+    )
     
     class Meta:
         model = Taller
         fields = '__all__' 
 
 class VentaForm(forms.ModelForm):
+
+    choices=[
+        ('EFECTIVO','EFECTIVO'), 
+        ('DEBITO', 'DEBITO'), 
+        ('CREDITO', 'CREDITO')
+     ]
     
     class Meta:
         model = Venta
-        fields = ['fecha', 'descripcion', 'total', 'tipopago', 'tipo_servicio', 'producto_id_producto', 'taller_id_taller'] 
+        fields = ['fecha', 'total', 'tipopago','producto_id_producto', 'taller_id_taller'] 
+
+        widgets = {
+            'producto_id_producto': forms.HiddenInput(),
+            'taller_id_taller': forms.HiddenInput(),
+        }
 
         fecha = forms.DateField(
+        label='Fecha',
         widget=forms.SelectDateWidget(),
         input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
         
-   
+    total = forms.IntegerField(
+        label='Total',
+        required=False,
+    )
 
+    tipopago = forms.ChoiceField(
+        label='Tipo de Pago',
+        widget=forms.Select(attrs={'placeholder': 'Selecciona una Opción....', 'required': False}),
+        required=False,
+        choices=[
+            ('EFECTIVO', 'EFECTIVO'), 
+            ('DEBITO', 'DEBITO'), 
+            ('CREDITO', 'CREDITO')
+        ],
+    )
+
+   
 class tventa(forms.ModelForm):
     
     class Meta:
