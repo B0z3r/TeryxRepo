@@ -26,7 +26,6 @@ class Persona(models.Model):
     nomUsuario = models.CharField('Nombre De Usuario', max_length=20, unique=True, validators=[MinLengthValidator(5)])
     rut_colaborador = models.IntegerField('Rut Colaborador', primary_key=True, unique=True)
     nombre_completo = models.CharField('Nombre Completo', max_length=50, unique=True)
-    fono = models.IntegerField('Teléfono', unique=True)
     email = models.EmailField('Correo Electrónico', unique=True)
     tipo_perfil = models.IntegerField('Tipo De Perfil', choices=opciones_consulta)
     
@@ -72,7 +71,7 @@ class Producto(models.Model):
     stock = models.IntegerField('Stock')
     categoria = models.IntegerField('Categoría', choices=opc_consl_cat)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
-    fecha_registro = models.DateField(' Fecha de Registro', default=datetime.now)
+    fecha_registro = models.DateField('Fecha de Registro', default=datetime.now)
     
     def __str__(self):
         return self.nombre_producto
