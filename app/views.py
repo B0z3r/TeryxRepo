@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
-from django.db import IntegrityError
 from django.http import JsonResponse
 
 
@@ -70,7 +69,7 @@ def listar_colaborador(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(persona, 5)
+        paginator = Paginator(persona, 10)
         personas = paginator.page(page)
     except:
         raise Http404
@@ -87,7 +86,7 @@ def listar_micuenta(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(persona, 5)
+        paginator = Paginator(persona, 10)
         personas = paginator.page(page)
     except:
         raise Http404
@@ -163,7 +162,7 @@ def listar_cliente(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(clientes, 5)
+        paginator = Paginator(clientes, 10)
         clientes = paginator.page(page)
     except:
         raise Http404
@@ -229,7 +228,7 @@ def listar_producto(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(productos, 5)
+        paginator = Paginator(productos, 10)
         productos = paginator.page(page)
     except:
         raise Http404
@@ -426,7 +425,7 @@ def listar_venta(request):
     page = request.GET.get('page',1)
 
     try:
-        paginator = Paginator(venta, 5)
+        paginator = Paginator(venta, 10)
         venta = paginator.page(page)
     except:
         raise Http404
@@ -482,14 +481,7 @@ def test_view(request):
 def cambio_pass(request):
     return render(request, 'app/Micuenta/cambio_pass.html')
 
-def cambio_pass(request):
-    return render(request, 'app/Micuenta/cambio_pass.html')
 
-
-
-
-
-#cambio contraseña
 class ProfilePasswordChangeView(PasswordChangeView):
     template_name = 'app/Micuenta/cambio_pass.html'
     success_url = reverse_lazy('micuenta')
@@ -511,18 +503,6 @@ class ProfilePasswordChangeView(PasswordChangeView):
         messages.error(self.request, 'Cambio contraseña inválida')
         return super().form_invalid(form)
     
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator
-from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
-from .models import Producto
-from .forms import ProductoForm
-from django.http import Http404
-
-
-
 
 @permission_required(['app.add_producto', 'app.view_producto', 'app.change_producto', 'app.delete_producto'])
 def gestionar_productos(request, id=None):
