@@ -16,20 +16,17 @@
 
     <div class="row">
       <div class="col-md-3 mb-3">
-        <div class="card bg-danger text-white " style="border-radius: 20px; background: #159957;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #155799, #159957);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #155799, #159957); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        ">
+        <div class="card text-white " style="border-radius: 20px; background: #216869">
           <div class="card-body py-5" style="align-content: center; text-align: center;">
 
             <p style="font-size: 20px;">Total Clientes</p>
 
-            <p class="bi bi-basket2 d-flex align-items-center justify-content-center" style="font-size: 40px; ">
+            <p class="bi bi-people-fill d-flex align-items-center justify-content-center" style="font-size: 40px; ">
               {{ total_clientes }}
             </p>
 
           </div>
-          <a class="card-footer d-flex justify-content-center" href="{% url 'list_taller'%}"
+          <a class="card-footer d-flex justify-content-center " href="{% url 'list_taller'%}"
             style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado
             Clientes</a>
 
@@ -38,16 +35,13 @@
 
 
       <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white" style="border-radius: 20px; background: #30E8BF;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #FF8235, #30E8BF);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #FF8235, #30E8BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        ">
+        <div class="card text-white" style="border-radius: 20px; background: #629460">
 
           <div class="card-body py-5" style="align-content: center; text-align: center;">
 
             <p style="font-size: 20px;">Total Proveedores</p>
 
-            <p class="bi bi-basket2 d-flex align-items-center justify-content-center" style="font-size: 40px; ">
+            <p class="bi bi-person-bounding-box d-flex align-items-center justify-content-center" style="font-size: 40px; ">
               {{ total_proveedores }}
             </p>
 
@@ -60,10 +54,7 @@
       </div>
 
       <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white " style="border-radius: 20px; background: #4568DC;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #B06AB3, #4568DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        ">
+        <div class="card  text-white " style="border-radius: 20px; background: #9D5C63">
 
           <div class="card-body py-5" style="align-content: center; text-align: center;">
             <p style="font-size: 20px;">Total productos</p>
@@ -81,16 +72,13 @@
 
 
       <div class="col-md-3 mb-3">
-        <div class="card bg-danger text-white " style="border-radius: 20px;background: #DBE6F6;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #C5796D, #DBE6F6);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #C5796D, #DBE6F6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        ">
+        <div class="card  text-white " style="border-radius: 20px;background:#ba542b">
           <div class="card-body py-5" style="align-content: center; text-align: center;">
 
             <p style="font-size: 20px;">Total Agendamiento</p>
 
-            <p class="bi bi-basket2 d-flex align-items-center justify-content-center" style="font-size: 40px; ">
-              {{ total_talleres }}
+            <p class="bi bi-list-task d-flex align-items-center justify-content-center" style="font-size: 40px;">
+            {{ total_talleres }}
             </p>
 
           </div>
