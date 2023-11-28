@@ -197,10 +197,14 @@ def eliminar_cliente(request, id):
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
 
-def historial_cliente(request, id):
-    cliente = get_object_or_404(Cliente, rut_cliente=id)
-    ventas = cliente.venta_set.all()
-    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'ventas': ventas})
+def historial_cliente(request, rut_cliente):
+    cliente = get_object_or_404(Cliente, rut_cliente=rut_cliente)
+    talleres = Taller.objects.filter(cliente_rut_cliente=rut_cliente)
+
+    print(f"Cliente: {cliente}")
+    print(f"Talleres: {talleres}")
+
+    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'talleres': talleres})
 
 @permission_required('app.add_producto')
 def agregar_producto(request):
@@ -323,6 +327,7 @@ def agregar_taller(request):
     data = {
         'form': TallerForm()
     }
+
     if request.method == 'POST':
         formulario = TallerForm(data=request.POST)
         if formulario.is_valid():
@@ -331,7 +336,7 @@ def agregar_taller(request):
             return redirect(to="list_taller")
         else:
             data["form"] = formulario
-            
+
     return render(request, 'app/taller/agregar_taller.html', data)
 
 def list_taller(request):

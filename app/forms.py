@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import re
-from django.utils.safestring import mark_safe
 
 class ColaboradorForm(forms.ModelForm):
     
@@ -228,6 +227,8 @@ class ProveedorForm(forms.ModelForm):
 
 class TallerForm(forms.ModelForm):
 
+    
+
     opc_tipo_arreglo = [
     [0,"Ajustes básicos"],
     [1,"Cambio de neumáticos"],
@@ -306,15 +307,16 @@ class TallerForm(forms.ModelForm):
         required=False,
     )
 
-    cliente_rut_cliente = forms.IntegerField(
-        label='Rut del Cliente',
-        widget=forms.NumberInput(attrs={'placeholder': 'Ingresar Rut del Cliente', 'required': False}),
+    cliente_rut_cliente = forms.ModelChoiceField(
+        label='Cliente',
+        queryset=Cliente.objects.all(),
+        widget=forms.Select(attrs={'placeholder': 'Selecciona un Cliente', 'required': False}),
         required=False,
     )
     
     class Meta:
         model = Taller
-        fields = '__all__' 
+        fields = '__all__'
 
 class VentaForm(forms.ModelForm):
 
