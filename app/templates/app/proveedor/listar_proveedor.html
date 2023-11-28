@@ -1,4 +1,8 @@
 {% extends 'app/base.html' %} {% block js %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 <script>
   function eliminarProveedor(id) {
     Swal.fire({
@@ -25,8 +29,8 @@
         <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
               <div class="col-md-12 mb-3" style="padding-top: 30px;">
                     <div class="card" style="border-radius: 10px;">
-                        <div class="card-header" style="background-color: black; color: white;">
-                            <span><i class="bi bi-table me-2"></i></span> Historial taller
+                        <div class="card-header" style="background-color:#3F3F37; color: white;">
+                            <span><i class="bi bi-table me-2"></i></span> Historial proveedor
                             {% if perms.app.add_taller %}
                                 <a href="{% url 'agregar_proveedor' %}" class="btn btn-primary" style="float: right;">Agregar Proveedor</a>
                             {% endif %}
@@ -46,8 +50,9 @@
                                         </tr>
                                     </thead>
                                     
-                                        {% for p in entity %}
+                                       
                                         <tbody>
+                                          {% for p in entity %}
                                             <tr>
                                                 <td>{{ p.rut_proveedor }}</td>
                                                 <td>{{ p.nombre_proveedor }}</td>
@@ -63,8 +68,9 @@
                                                 {% endif %}
                                                
                                             </tr>
+                                            {% endfor %}
                                         </tbody>
-                                        {% endfor %}
+                                        
                                     
                                 </table>
                                 <div>

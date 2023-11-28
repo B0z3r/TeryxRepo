@@ -1,55 +1,82 @@
 {% extends 'app/base.html' %}
 {% load static %}
 {% block contenido %}
-  <div class="box box3">
-    <h5 class="titulo" style="color: black; text-align: start">
-      Cambiar contraseña
-    </h5>
+<script>
+  $(function () {
+      $('#staticBackdrop').modal('show');
+  });
 
-    <div class="container my-4">
-      <div class="card mx-auto" style="width: 40rem">
-        <div class="card-body">
-          <form action="{% url 'Profile_password_change' %}" method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="old_password">Contraseña actual</label>
-              <input
-                class="form-control"
-                type="password"
-                name="old_password"
-                id="old_password"
-              />
-            </div>
+  $(document).ready(function () {
+      $('#openModalBtn').click(function () {
+          $('#staticBackdrop1').modal('show');
+      });
+  });
 
-            <div class="mb-3">
-            
-              <label for="new_password1">Nueva contraseña</label>
-              <input
-                class="form-control"
-                type="password"
-                name="new_password1"
-                id="new_password1"
-              />
-            </div>
 
-            <div class="mb-3">
-            
-              <label for="new_password2">Confirme contraseña</label>
-              <input
-                class="form-control"
-                type="password"
-                name="new_password2"
-                id="new_password2"
-              />
-            </div>
-            <input
-              class="btn btn-info"
-              type="submit"
-              value="Cambiar contraseña"
-            />
-          </form>
-        </div>
+  $('.close').on('click', function () {
+      $('#staticBackdrop').modal('hide');
+  });
+
+  
+</script>
+  
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 100px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Cambio de contraseña</h1>
+       
       </div>
+      <div class="modal-body">
+        <form action="{% url 'Profile_password_change' %}" method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="old_password">Contraseña actual</label>
+            <input
+              class="form-control"
+              type="password"
+              name="old_password"
+              id="old_password"
+            />
+          </div>
+
+          <div class="mb-3">
+           
+            <label for="new_password1">Nueva contraseña</label>
+            <input
+              class="form-control"
+              type="password"
+              name="new_password1"
+              id="new_password1"
+            />
+          </div>
+
+          <div class="mb-3">
+          
+            <label for="new_password2">Confirme contraseña</label>
+            <input
+              class="form-control"
+              type="password"
+              name="new_password2"
+              id="new_password2"
+            />
+          </div>
+          <div class="modal-footer">
+            <a href="{% url 'inicio_admin' %}" value="Cancelar" class="btn btn-danger" style="background-color: #E83C3E;">Cancelar</a>
+            <input
+            class="btn "
+            type="submit"
+            value="Confirmar"
+            style="background-color: #558564; color: white;"
+          />
+          </div>
+        
+        </form>
+      </div>
+      
     </div>
   </div>
+</div>
+
 {% endblock %}

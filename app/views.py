@@ -159,21 +159,12 @@ def agregar_cliente(request):
 @permission_required('app.view_cliente')
 def listar_cliente(request):
     clientes = Cliente.objects.all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(clientes, 10)
-        clientes = paginator.page(page)
-    except:
-        raise Http404
 
     data = {
         'entity': clientes,
-        'paginator': paginator
     }
 
     return render(request, 'app/Cliente/listar_cliente.html', data)
-
 @permission_required('app.change_cliente')
 def modificar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
@@ -224,22 +215,12 @@ def agregar_producto(request):
 @permission_required('app.view_producto')
 def listar_producto(request):
     productos = Producto.objects.all()
-    #productos = Producto.objects.select_related('proveedor').all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(productos, 10)
-        productos = paginator.page(page)
-    except:
-        raise Http404
 
     data = {
         'entity': productos,
-        'paginator': paginator
     }
 
     return render(request, 'app/Productos/listar_producto.html', data)
-
 @permission_required('app.change_producto')
 def modificar_producto(request, id):
     producto = get_object_or_404(Producto, pk=id)
@@ -281,21 +262,12 @@ def agregar_proveedor(request):
 @permission_required('app.view_proveedor')
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(proveedor, 10)
-        proveedor = paginator.page(page)
-    except:
-        raise Http404
 
     data = {
         'entity': proveedor,
-        'paginator': paginator
     }
 
     return render(request, 'app/proveedor/listar_proveedor.html', data)
-
 @permission_required('app.change_proveedor')
 def modificar_proveedor(request, id):
     proveedor = get_object_or_404(Proveedor, pk=id)
@@ -334,31 +306,17 @@ def agregar_taller(request):
             
     return render(request, 'app/taller/agregar_taller.html', data)
 
+@permission_required('app.view_taller')
 def list_taller(request):
-    # Obtén datos de taller con datos de cliente relacionados
-    #"rut_cliente","nombre_cliente","apePaterno","apeMaterno","fono"
     taller_con_cliente = Taller.objects.select_related('cliente_rut_cliente').all()
     for taller in taller_con_cliente:
         taller.total_neto = taller.valor - taller.abono
 
-    # Paginación
-    paginator = Paginator(taller_con_cliente, 10)
-    page = request.GET.get('page', 1)
-
-    try:
-        taller_paginated = paginator.page(page)
-    except PageNotAnInteger:
-        taller_paginated = paginator.page(1)
-    except EmptyPage:
-        taller_paginated = paginator.page(paginator.num_pages)
-
     data = {
-        'entity': taller_paginated,
-        'paginator': paginator
+        'entity': taller_con_cliente,
     }
 
     return render(request, 'app/taller/list_taller.html', data)
-
 
 @permission_required('app.change_taller')
 def modificar_taller(request, id):
@@ -422,21 +380,12 @@ def agregar_venta(request):
 @permission_required('app.view_venta')
 def listar_venta(request):
     venta = Venta.objects.all()
-    page = request.GET.get('page',1)
-
-    try:
-        paginator = Paginator(venta, 10)
-        venta = paginator.page(page)
-    except:
-        raise Http404
 
     data = {
         'entity': venta,
-        'paginator': paginator
     }
 
     return render(request, 'app/venta/listar_venta.html', data)
-
 @permission_required('app.change_venta')
 def modificar_venta(request, id):
     venta = get_object_or_404(Venta, pk=id)

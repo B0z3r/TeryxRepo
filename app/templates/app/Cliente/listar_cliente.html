@@ -1,6 +1,10 @@
 {% extends 'app/base.html' %}
 
 {% block js %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 <script>
   function eliminarCliente(id) {
     Swal.fire({
@@ -61,7 +65,7 @@
                   ">
       <div class="col-md-12 mb-3" style="padding-top: 30px">
         <div class="card" style="border-radius: 10px">
-          <div class="card-header" style="background-color:rgb(52, 52, 52) ; color: white;">
+          <div class="card-header" style="background-color:#3F3F37 ; color: white;">
             <span><i class="bi bi-table me-2"></i></span> Historial clientes
             {% if perms.app.add_cliente %}
             <a href="{% url 'agregar_cliente' %}" class="btn btn-primary" style="float: right;"> Agregar Cliente</a>
@@ -103,10 +107,7 @@
                 
               </table>
             </div>
-            <div>
-              {% include 'app/paginator.html' %}
-            </div>
-
+          
 
           </div>
         </div>
