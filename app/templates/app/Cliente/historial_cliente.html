@@ -1,4 +1,5 @@
 {% extends 'app/base.html' %}
+{% load humanize %}
 
 {% load static %}
 
@@ -16,39 +17,44 @@
                     <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
                     <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
                     <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
-                    <p><strong>Teléfono:</strong> {{ cliente.fono }}</p>
+                    <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
                 </div>
                 <hr>
             </div>
         </div>
         <div class="table-responsive">
+            <h2>Detalles de los Arreglos</h2>
+            <hr>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Tipo de Servicio</th>
-                        <th>Fecha</th>
-                        <th>Producto o Servicio</th>
-                        <th>Total</th>
+                        <th>Tipo de Servicio o Arreglo</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha Término</th>
+                        <th>Modelo Bicicleta</th>
+                        <th>Estado de Arreglo</th>
+                        <th>Total Facturado</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for t in talleres %}
+                    {% for taller in talleres %}
                         <tr>
-                            <td>{{ t.tipo_servicio }}</td>
-                            <td>{{ t.fecha }}</td>
-                            <td>{{ t.producto_servicio }}</td>
-                            <td>{{ t.total }}</td>
+                            <td>{{ taller.get_tipo_arreglo_display }}</td>
+                            <td>{{ taller.fecha_ingreso }}</td>
+                            <td>{{ taller.fecha_termino }}</td>
+                            <td>{{ taller.modelo_bicicleta }}</td>
+                            <td>{{ taller.get_estado_display }}</td>
+                            <td> $ {{ taller.valor | intcomma }}</td>
                             <td>
-                                <!-- Opciones -->
+                                <button class="btn bi-file-earmark-text btn-secondary btn-md"></button>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <hr>
-        <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm">ATRAS</a>
+        <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm" style="float: right;" >ATRAS</a>
     </div>
 </div>
 </main>

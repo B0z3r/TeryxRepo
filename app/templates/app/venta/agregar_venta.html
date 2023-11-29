@@ -261,7 +261,7 @@
                             {% for taller in talleres %}
                                 <tr>
                                     <td>{{ taller.id_taller }}</td>
-                                    <td>{{ taller.tipo_arreglo }}</td>
+                                    <td>{{ taller.get_tipo_arreglo_display }}</td>
                                     <td>${{ taller.valor | intcomma }}</td>
                                     <td>{{ taller.abono }}</td>
                                     <td>

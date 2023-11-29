@@ -188,14 +188,14 @@ def eliminar_cliente(request, id):
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_cliente")
 
-def historial_cliente(request, rut_cliente):
-    cliente = get_object_or_404(Cliente, rut_cliente=rut_cliente)
-    talleres = Taller.objects.filter(cliente_rut_cliente=rut_cliente)
-
-    print(f"Cliente: {cliente}")
-    print(f"Talleres: {talleres}")
-
-    return render(request, 'app/Cliente/historial_cliente.html', {'cliente': cliente, 'talleres': talleres})
+def historial_cliente(request, id):
+    
+    data = {
+        'cliente': get_object_or_404(Cliente, rut_cliente=id),
+        'talleres': Taller.objects.filter(cliente_rut_cliente=id)
+    }
+   
+    return render(request, 'app/Cliente/historial_cliente.html', data)
 
 @permission_required('app.add_producto')
 def agregar_producto(request):

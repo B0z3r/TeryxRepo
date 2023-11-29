@@ -121,6 +121,9 @@ class Taller(models.Model):
     def get_estado_pago_display(self):
         return dict(opc_estado_pago)[self.estado_pago]
     
+    def get_tipo_arreglo_display(self):
+        return dict(opc_tipo_arreglo)[self.tipo_arreglo]
+    
 
 class Venta(models.Model):
     id_venta = models.AutoField('Nº Venta', primary_key=True)
