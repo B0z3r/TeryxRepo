@@ -30,10 +30,8 @@
     document.addEventListener('DOMContentLoaded', function () {
         var formularioVenta = document.getElementById('formularioVenta');
         var listaProductos = document.getElementById('listaProductos');
-        var listaTalleres = document.getElementById('listaTalleres');
         var totalInput = document.getElementById('id_total');
         var idProductoInput = document.getElementById('id_producto_id_producto');
-        var idTallerInput = document.getElementById('id_taller_id_taller');
 
         formularioVenta.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -58,21 +56,6 @@
             });
         });
 
-        function agregarProducto(productoId, productoNombre, productoPrecio, cantidad) {
-            // Verificar si el producto ya está en la lista y actualizar la cantidad
-            var productoExistente = Array.from(listaProductos.querySelectorAll('li')).find(function (item) {
-                return item.dataset.id === productoId;
-            });
-
-            if (productoExistente) {
-                var cantidadInput = productoExistente.querySelector('input');
-                cantidadInput.value = parseFloat(cantidadInput.value) + cantidad;
-                actualizarSubtotal(productoExistente);
-            } else {
-                agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio, cantidad);
-            }
-        }
-
         document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
             btn.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -81,83 +64,89 @@
                 var productoNombre = this.dataset.nombre;
                 var productoPrecio = parseFloat(this.dataset.precio);
 
-                // Preguntar al usuario la cantidad de productos
-                var cantidadProductos = prompt('Ingrese la cantidad de productos', '1');
-                cantidadProductos = parseFloat(cantidadProductos);
-
-                if (!isNaN(cantidadProductos) && cantidadProductos > 0) {
-                    // Si el usuario ingresó una cantidad válida
-                    agregarProducto(productoId, productoNombre, productoPrecio, cantidadProductos);
-                } else {
-                    console.error("Error: Cantidad de productos inválida.");
-                }
+                // Agregar el producto con cantidad manual
+                agregarProducto(productoId, productoNombre, productoPrecio, 1); // Inicializar con cantidad 1
             });
         });
 
-        function agregarItem(lista, idInput, itemId, itemName, itemPrecio, cantidad) {
-            var eliminarButton = document.createElement('button');
-            eliminarButton.textContent = 'Eliminar';
-            eliminarButton.addEventListener('click', function () {
-                // Eliminar el producto o taller de la lista y actualizar el total
-                lista.removeChild(listItem);
-                actualizarTotal();
+        function agregarProducto(productoId, productoNombre, productoPrecio, cantidad) {
+            // Verificar si el producto ya está en la lista y actualizar la cantidad
+            var productoExistente = Array.from(listaProductos.children).find(function (item) {
+                return item.dataset.id === productoId;
             });
+
+            if (productoExistente) {
+                var cantidadInput = productoExistente.querySelector('.cantidad-input');
+                cantidadInput.value = parseFloat(cantidadInput.value) + cantidad;
+            } else {
+                agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio, cantidad);
+            }
+            // Actualizar el total
+            actualizarTotal();
+        }
+
+        function agregarItem(lista, idInput, itemId, itemName, itemPrecio, cantidad) {
+            var listItem = document.createElement('li');
+            listItem.dataset.id = itemId;
+            listItem.classList.add('producto-item');
 
             var cantidadInput = document.createElement('input');
             cantidadInput.type = 'number';
             cantidadInput.value = cantidad;
             cantidadInput.min = '1';
+            cantidadInput.classList.add('cantidad-input');
             cantidadInput.addEventListener('input', function () {
                 // Actualizar el subtotal al cambiar la cantidad
-                actualizarSubtotal(listItem);
+                actualizarSubtotal(listItem, itemPrecio);
+                // Actualizar el total
                 actualizarTotal();
             });
 
-            var listItem = document.createElement('li');
-            listItem.dataset.id = itemId;
-            listItem.textContent = itemName;
+            var eliminarButton = document.createElement('button');
+            eliminarButton.textContent = 'Eliminar';
+            eliminarButton.addEventListener('click', function () {
+                // Eliminar el producto de la lista y actualizar el total
+                lista.removeChild(listItem);
+                // Actualizar el total
+                actualizarTotal();
+            });
+
+            var contenidoItem = document.createElement('span');
+            contenidoItem.textContent = itemName + ' - Precio: $' + itemPrecio.toFixed(2);
+
+            listItem.appendChild(contenidoItem);
             listItem.appendChild(cantidadInput);
             listItem.appendChild(eliminarButton);
 
             lista.appendChild(listItem);
 
-            // Asignar el id del producto o taller al input oculto
+            // Asignar el id del producto al input oculto
             idInput.value = itemId;
 
-            // Actualizar el total
-            actualizarSubtotal(listItem);
-            actualizarTotal();
+            // Actualizar el subtotal
+            actualizarSubtotal(listItem, itemPrecio);
         }
 
-        function actualizarSubtotal(item) {
-            var cantidad = parseFloat(item.querySelector('input').value);
-            var precio = parseFloat(item.textContent.split(': ')[1]);
+        function actualizarSubtotal(item, precio) {
+            var cantidad = parseFloat(item.querySelector('.cantidad-input').value);
             var subtotal = cantidad * precio;
-            item.textContent = item.textContent.split(' - Subtotal:')[0] + ' - Subtotal: $' + subtotal.toFixed(2);
+            item.querySelector('span').textContent = item.querySelector('span').textContent.split(' - Subtotal:')[0] + ' - Subtotal: $' + subtotal.toFixed(2);
         }
 
         function actualizarTotal() {
-            var subtotalesProductos = Array.from(listaProductos.querySelectorAll('li')).map(function (item) {
-                return parseFloat(item.textContent.split('Subtotal: $')[1]);
+            var subtotalesProductos = Array.from(listaProductos.children).map(function (item) {
+                return parseFloat(item.querySelector('span').textContent.split('Subtotal: $')[1]);
             });
 
-            var subtotalesTalleres = Array.from(listaTalleres.querySelectorAll('li')).map(function (item) {
-                return parseFloat(item.textContent.split('Subtotal: $')[1]);
-            });
-
-            var totalProductos = subtotalesProductos.reduce(function (acc, subtotal) {
-                return acc + subtotal;
+            var total = subtotalesProductos.reduce(function (acc, subtotal) {
+                return acc + (isNaN(subtotal) ? 0 : subtotal);
             }, 0);
 
-            var totalTalleres = subtotalesTalleres.reduce(function (acc, subtotal) {
-                return acc + subtotal;
-            }, 0);
-
-            var total = totalProductos + totalTalleres;
             totalInput.value = total.toFixed(2);
         }
     });
 </script>
+
 
 <main>
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

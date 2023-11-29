@@ -40,7 +40,6 @@
         <div class="card" style="border-radius: 10px">
           <div class="card-header" style="background-color:#3F3F37 ; color: white;">
             <span><i class="bi bi-table me-2"></i></span> Historial Colaboradores 
-            <button onclick="imprimirTabla()">Imprimir</button>
             {% if perms.app.add_colaborador %}
             <a href="{% url 'regcolaborador' %}" class="btn btn-primary" style="float: right">Agregar Colaborador</a>
             {% endif %}
