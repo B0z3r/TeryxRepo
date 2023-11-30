@@ -227,8 +227,6 @@ class ProveedorForm(forms.ModelForm):
 
 class TallerForm(forms.ModelForm):
 
-    
-
     opc_tipo_arreglo = [
     [0,"Ajustes básicos"],
     [1,"Cambio de neumáticos"],
@@ -328,11 +326,12 @@ class VentaForm(forms.ModelForm):
     
     class Meta:
         model = Venta
-        fields = ['fecha', 'total', 'tipopago','producto_id_producto', 'taller_id_taller'] 
+        fields = ['fecha', 'total', 'tipopago', 'cantidad_productos_vendidos','producto_id_producto', 'taller_id_taller'] 
 
         widgets = {
             'producto_id_producto': forms.HiddenInput(),
             'taller_id_taller': forms.HiddenInput(),
+            'cantidad_productos_vendidos': forms.HiddenInput(),
         }
 
         fecha = forms.DateField(
@@ -342,7 +341,6 @@ class VentaForm(forms.ModelForm):
         required=False,
     )
     
-        
     total = forms.IntegerField(
         label='Total',
         required=False,

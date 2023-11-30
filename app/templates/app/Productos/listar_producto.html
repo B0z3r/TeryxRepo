@@ -74,6 +74,28 @@
   });
 </script>
 
+{{ block.super }}
+<script>
+  $(document).ready(function () {
+    // Obtén todas las celdas de stock
+    var stockCells = $('.stock-cell');
+
+    // Itera sobre cada celda y aplica el color según el valor de stock
+    stockCells.each(function () {
+      var stockValue = parseInt($(this).text());
+
+      // Aplica el color rojo si el stock es menor que 5, de lo contrario, verde
+      if (stockValue < 5) {
+        $(this).css('background-color', 'red');
+        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+      } else {
+        $(this).css('background-color', 'green');
+        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+      }
+    });
+  });
+</script>
+
 
 {% endblock %} 
 
@@ -111,13 +133,13 @@
                       {% for p in entity %}
                       <tr>
                         <td>{{ p.id_producto }}</td>
-                        <td>{{ p.nombre_producto }}</td>
+                        <td>{{ p.nombre_producto | capfirst }}</td>
                         <td>{{ p.marca }}</td>
                         <td>{{ p.proveedor.nombre_proveedor }}</td>
                         <td>{{ p.fecha_registro }}</td>
                         <td>{{ p.descripcion }}</td>
                         <td>${{ p.precio_unitario | intcomma }}</td>
-                        <td>{{ p.stock }}</td>
+                        <td class="stock-cell">{{ p.stock }}</td>
                         <td>{{ p.get_categoria_display }}</td>
                         {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
                           <td>
@@ -140,123 +162,3 @@
   </main>
 
   {% endblock %}
-<!--
-    <div class="modal fade" id="mymodalclient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table
-                id="example"
-                class="table table-striped-columns table-hover data-table"
-                style="width: 100%"
-              >
-                <thead>
-                  <tr>
-                    <th>Nº</th>
-                    <th>Nombre Producto</th>
-                    <th>Marca</th>
-                    <th>Descripción</th>
-                    <th>Precio Unitario</th>
-                    <th>Stock</th>
-                    <th>Categoria</th>
-                    <th>Opciones</th>
-                  </tr>
-                </thead>
-
-                
-                <tbody>
-                  {% for p in entity %}
-                  <tr>
-                    <td>{{ p.id_producto }}</td>
-                    <td>{{ p.nombre_producto }}</td>
-                    <td>{{ p.marca }}</td>
-                    <td>{{ p.descripcion }}</td>
-                    <td>{{ p.precio_unitario }}</td>
-                    <td>{{ p.stock }}</td>
-                    <td>{{ p.categoria }}</td>
-                    {% if perms.app.change_producto %}
-                     {% if perms.app.delete_producto %}
-                    <td>
-                      <a
-                        href="{% url 'modificar_producto' p.id_producto %}"
-                        class="btn btn-info bi-pencil-square btn-md"
-                      ></a>
-                      <a
-                        href="#"
-                        onclick="eliminarProducto({{ p.id_producto }})"
-                        class="btn bi-trash btn-danger btn-md"
-                      ></a>
-                    </td>
-                    {% endif %} {% endif %}
-                  </tr>
-                  {% endfor %}
-                </tbody>
-                
-              </table>
-            </div>
-            <div>{% include 'app/paginator.html' %}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="modal fade"
-    id="mymodalclient"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="{% url 'agregar_producto' %}" method="post">
-            {% csrf_token %} {{form | crispy}}
-            <br />
-            <hr />
-            <br />
-            <div class="d-flex justify-content-center">
-              <a
-                href="{% url 'listar_producto' %}"
-                value="Cancelar"
-                class="btn btn-danger"
-                >Cancelar</a
-              >
-              &nbsp;
-              <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
--->

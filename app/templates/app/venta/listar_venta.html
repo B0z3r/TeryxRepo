@@ -22,7 +22,8 @@
         });
     }
 </script>
-{% endblock %} {% block contenido %}
+{% endblock %}
+{% block contenido %}
 <main class="mt-5 pt-3">
     <div class="container-fluid">
 <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 250px; margin: 10px; border-radius: 10px;" >
@@ -40,39 +41,45 @@
                     <thead>
                         <tr>
                             <th>Nº</th>
-                            <th>Fecha Venta</th>
+                            <th>Fecha de Venta</th>
+                            <th>Detalle de Venta</th>
                             <th>Tipo de Pago</th>
                             <th>total</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
-                    
-                        <tbody>
-                            {% for p in entity %}
-                            <tr>
-
-                                <td>{{ p.id_venta }}</td>
-                                <td>{{ p.fecha }}</td>
-                                <td>{{ p.tipopago }}</td>
-                                <td>${{ p.total|intcomma}}</td>
-                                {% for detalle in venta.detalleventa_set.all %}
-                                    <td>{% if detalle.producto %}{{ detalle.producto.nombre }}{% else %}{{ detalle.taller.tipo_arreglo }}{% endif %}</td>
-                                {% endfor %}
-                                {% if perms.app.change_venta %}
-                                {% if perms.app.delete_venta %}
-                                    <td><a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                                        <a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a>
-                                    </td>
-                                {% endif %}
-                                
-                                  
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                   
+                    <tbody>
+                        {% for p in entity %}
+                        <tr>
+                            <td>{{ p.id_venta }}</td>
+                            <td>{{ p.fecha }}</td>
+                            <td>
+                                <ul>
+                                 {% for detalle in xx %}
+                                        <li>
+                                            {% if detalle.producto %}
+                                                {{ detalle.producto.nombre }} - Cantidad: {{ detalle.cantidad }}
+                                            {% else %}
+                                                {{ detalle.taller.tipo_arreglo }} 
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ p.tipopago }}</td>
+                            <td>${{ p.total|intcomma}}</td>
+                            {% if perms.app.change_venta %}
+                            {% if perms.app.delete_venta %}
+                            <td>
+                                <a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a>
+                                <a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a>
+                            </td>
+                            {% endif %}
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
-               
             </div>
         </div>
     </div>

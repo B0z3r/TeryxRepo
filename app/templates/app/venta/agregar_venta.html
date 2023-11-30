@@ -8,6 +8,15 @@
 {% load crispy_forms_tags %}
 
 <script>
+    $(document).ready(function () {
+        $('#PAGAR').click(function () {
+            $('#confirmacionVenta').modal('show');
+        });
+    });
+  </script>
+
+
+<script>
     $(function () {
         $('#staticBackdrop').modal('show');
     });
@@ -18,15 +27,10 @@
         });
     });
 
-
     $('.close').on('click', function () {
         $('#staticBackdrop').modal('hide');
     });
 
-    
-</script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function () {
         var formularioVenta = document.getElementById('formularioVenta');
         var listaProductos = document.getElementById('listaProductos');
@@ -36,6 +40,8 @@
         formularioVenta.addEventListener('submit', function (event) {
             event.preventDefault();
 
+
+            // Continuar con el envío del formulario
             var formData = new FormData(formularioVenta);
 
             fetch(formularioVenta.action, {
@@ -147,6 +153,28 @@
     });
 </script>
 
+{{ block.super }}
+<script>
+  $(document).ready(function () {
+    // Obtén todas las celdas de stock
+    var stockCells = $('.stock-cell');
+
+    // Itera sobre cada celda y aplica el color según el valor de stock
+    stockCells.each(function () {
+      var stockValue = parseInt($(this).text());
+
+      // Aplica el color rojo si el stock es menor que 5, de lo contrario, verde
+      if (stockValue < 5) {
+        $(this).css('background-color', 'red');
+        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+      } else {
+        $(this).css('background-color', 'green');
+        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+      }
+    });
+  });
+</script>
+
 
 <main>
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -164,7 +192,7 @@
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
-                                <button type="submit" class="btn btn-success">PAGAR</button>
+                                <button id="PAGAR" type="submit" class="btn btn-success">PAGAR</button>
                             </div>
                         </div>
                     </form>
@@ -207,7 +235,7 @@
                             <tr>
                                 <th>Nº</th>
                                 <th>Nombre Producto</th>
-                                <th>Cantidad</th>
+                                <th>Stock</th>
                                 <th>Precio</th>
                                 <th>Opción</th>
                             </tr>
@@ -217,7 +245,7 @@
                                 <tr>
                                     <td>{{ producto.id_producto }}</td>
                                     <td>{{ producto.nombre_producto }}</td>
-                                    <td>{{ producto.stock }}</td>
+                                    <td class="stock-cell">{{ producto.stock }}</td>
                                     <td>${{ producto.precio_unitario | intcomma }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
@@ -282,5 +310,43 @@
             </div>
         </div>
     </div>
+
+     <!-- Modal de confirmación de venta -->
+        <div id="confirmacionVenta" class="modal fade" tabindex="-1" aria-labelledby="confirmacionVentaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="confirmacionVentaLabel">Confirmación de Venta</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Por favor, revisa los detalles de la venta antes de confirmar:</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th>Tipo de Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalleVentaBody">
+                                <!-- Aquí se agregarán las filas con los detalles de la venta -->
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                    <td>{{ producto.nombre_producto }}</td>
+                                    <td></td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="confirmarVentaBtn">CONFIRMAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 {% endblock %}
