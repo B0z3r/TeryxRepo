@@ -306,7 +306,7 @@ class TallerForm(forms.ModelForm):
     )
 
     cliente_rut_cliente = forms.ModelChoiceField(
-        label='Cliente',
+        label='Nombre y Rut del Cliente',
         queryset=Cliente.objects.all(),
         widget=forms.Select(attrs={'placeholder': 'Selecciona un Cliente', 'required': False}),
         required=False,
