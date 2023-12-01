@@ -13,83 +13,72 @@
         <h2>Bievenido a teryx {{ user.username }} </h2>
       </div>
     </div>
-
     <div class="row">
       <div class="col-md-3 mb-3">
         <div class="card text-white " style="border-radius: 20px; background: #216869">
           <div class="card-body py-5" style="align-content: center; text-align: center;">
-
-            <p style="font-size: 20px;">Total Clientes</p>
-
-            <p class="bi bi-people-fill d-flex align-items-center justify-content-center" style="font-size: 40px; ">
-              {{ total_clientes }}
-            </p>
-
+            <p style="font-size: 20px;">Total de Clientes</p>
+            <p class="bi bi-people-fill d-flex align-items-center justify-content-center" style="font-size: 40px; ">{{ total_clientes }}</p>
           </div>
           <a class="card-footer d-flex justify-content-center " href="{% url 'listar_cliente'%}"
-            style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado
-            Clientes</a>
-
+             style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado de Clientes</a>
         </div>
       </div>
-
-
       <div class="col-md-3 mb-3">
         <div class="card text-white" style="border-radius: 20px; background: #629460">
-
           <div class="card-body py-5" style="align-content: center; text-align: center;">
-
-            <p style="font-size: 20px;">Total Proveedores</p>
-
-            <p class="bi bi-person-bounding-box d-flex align-items-center justify-content-center" style="font-size: 40px; ">
-              {{ total_proveedores }}
-            </p>
+            <p style="font-size: 20px;">Total de Proveedores</p>
+            <p class="bi bi-person-bounding-box d-flex align-items-center justify-content-center" style="font-size: 40px; ">{{ total_proveedores }}</p>
           </div>
           <a class="card-footer d-flex justify-content-center" href="{% url 'listar_proveedor'%}"
-            style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado
-            Proveedores</a>
-
+             style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado de Proveedores</a>
         </div>
       </div>
-
       <div class="col-md-3 mb-3">
         <div class="card  text-white " style="border-radius: 20px; background: #9D5C63">
-
           <div class="card-body py-5" style="align-content: center; text-align: center;">
-            <p style="font-size: 20px;">Total Productos</p>
-
-            <p class="bi bi-basket2 d-flex align-items-center justify-content-center" style="font-size: 40px; ">
-              {{ total_productos }}
-            </p>
-
+            <p style="font-size: 20px;">Total de Productos</p>
+            <p class="bi bi-basket2 d-flex align-items-center justify-content-center" style="font-size: 40px; ">{{ total_productos }}</p>
           </div>
           <a class="card-footer d-flex justify-content-center" href="{% url 'listar_producto'%}"
-            style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado
-            Productos</a>
+             style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado de Productos</a>
         </div>
       </div>
-
-
       <div class="col-md-3 mb-3">
         <div class="card  text-white " style="border-radius: 20px;background:#ba542b">
           <div class="card-body py-5" style="align-content: center; text-align: center;">
-
-            <p style="font-size: 20px;">Total Agendamiento</p>
-
-            <p class="bi bi-list-task d-flex align-items-center justify-content-center" style="font-size: 40px;">
-            {{ total_talleres }}
-            </p>
-
+            <p style="font-size: 20px;">Total de Agendamiento</p>
+            <p class="bi bi-list-task d-flex align-items-center justify-content-center" style="font-size: 40px;">{{ total_talleres }}</p>
           </div>
-          <a class="card-footer d-flex justify-content-center" href="{% url 'list_taller'%}"
-            style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado
-            Agendamientos</a>
-
-
-
+          <a class="card-footer d-flex justify-content-center" href="{% url 'list_taller'%}" 
+             style="color: rgb(255, 255, 255);  text-decoration: none; border-radius: 15px; border-color: transparent; ">Listado de Agendamientos</a>
         </div>
       </div>
     </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Productos con menos de 5 unidades disponibles</h2>
+        <table class="table table-bordered">
+          <thead >
+            <tr>
+              <th>Nombre del Producto</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for producto in productos_menos_cinco %}
+              <tr>
+                <td>{{ producto.nombre_producto }}</td>
+                <td style="color: {% if producto.stock < 5 %}red{% else %}black{% endif %};">{{ producto.stock }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr>
+    
 
   </div>
 </main>

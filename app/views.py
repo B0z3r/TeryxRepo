@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from datetime import date
 
 
 # Create your views here.
@@ -34,6 +35,9 @@ def inicio_admin(request):
     total_productos = productos.count()
     talleres = Taller.objects.all()
     total_talleres = talleres.count()
+    productos_menos_cinco = Producto.objects.filter(stock__lt=5).values('nombre_producto', 'stock')
+    talleres_atrasados = Taller.objects.filter(fecha_termino__lt=date.today())
+
     data = {
         'clientes': clientes,
         'total_clientes': total_clientes,
@@ -42,7 +46,9 @@ def inicio_admin(request):
         'productos': productos,
         'total_productos': total_productos,
         'talleres': talleres,
-        'total_talleres': total_talleres
+        'total_talleres': total_talleres,
+        'productos_menos_cinco': productos_menos_cinco,
+        'talleres_atrasados': talleres_atrasados,
     }
     return render(request, 'app/inicio_admin.html', data)
 
