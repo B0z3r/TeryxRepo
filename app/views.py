@@ -10,6 +10,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -304,6 +305,7 @@ def agregar_taller(request):
         formulario = TallerForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
+
             messages.success(request, "Agendamiento Creado Correctamente!")
             return redirect(to="list_taller")
         else:
@@ -314,11 +316,13 @@ def agregar_taller(request):
 @permission_required('app.view_taller')
 def list_taller(request):
     taller_con_cliente = Taller.objects.select_related('cliente_rut_cliente').all()
+    
     for taller in taller_con_cliente:
         taller.total_neto = taller.valor - taller.abono
 
     data = {
         'entity': taller_con_cliente,
+        
     }
 
     return render(request, 'app/taller/list_taller.html', data)
@@ -350,12 +354,14 @@ def agregar_venta(request):
     data = {
         'form': VentaForm(),
         'productos': Producto.objects.all(),
-        'talleres': Taller.objects.all()
+        'talleres': Taller.objects.all(),
+        'user': User.objects.all()
     }
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
         if formulario.is_valid():
             cantidad_vendida = formulario.cleaned_data['cantidad_productos_vendidos']
+            
             # Obtener el ID del producto seleccionado desde el formulario
             producto_id_seleccionado = request.POST.get('producto_id_producto')
             if producto_id_seleccionado:

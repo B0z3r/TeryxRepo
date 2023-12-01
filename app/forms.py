@@ -44,13 +44,14 @@ class ClienteForm(forms.ModelForm):
 
       fono = forms.IntegerField(
         label='Teléfono',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Teléfono'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Ejemplo: 987654321'}),
         required=False,
     )
 
       class Meta:
         model = Cliente
         fields = '__all__'
+
 
 class CustomUserCreationForm(UserCreationForm):
     alphanumeric_regex = re.compile(r'^[a-zA-Z]+$')
@@ -117,8 +118,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ["username", "password1", "password2", "first_name", "email", "tipo_perfil"]
 
 class ProductoForm(forms.ModelForm):
-    
-         
+
     opc_consl_cat = [
         ('', 'Selecciona una opción....'),
         [0,"Indumentaria"],
@@ -159,7 +159,9 @@ class ProductoForm(forms.ModelForm):
     )
 
     nombre_proveedor = forms.ModelChoiceField(
-        queryset=Proveedor.objects.all(),  # Asegúrate de ajustar el queryset según tus cambios en el modelo
+        label='Nombre Proveedor',
+        empty_label='Selecciona una Proveedor....',  
+        queryset=Proveedor.objects.all(), 
         required=False,
     )
 
