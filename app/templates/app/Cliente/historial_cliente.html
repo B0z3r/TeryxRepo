@@ -7,21 +7,38 @@
 {% load crispy_forms_tags %}
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
     <div class="container-fluid" style="background-color: rgb(255, 255, 255);">
-        <div class="card-body">
-            <div class="row">
-                <h1>Detalles del Cliente</h1>
-                <hr>
-                <div class="col-12 col-md-6 offset-md-3">
-                    <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
-                    <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
-                    <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
-                    <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
-                    <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
-                    <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
-                </div>
-                <hr>
+        <h2>Detalles cliente</h2>
+        <hr>
+       
+        <div class="row">
+            <div class="col-md-3 mb-3">
+           <i class="bi bi-person-bounding-box" style="font-size: 200px; padding-left: 20px;"></i>
+            </div>
+      
+      
+            <div class="col-md-9 mb-4">
+                <div class="card" style="width: 18rem; border-radius: 20px;">
+                    <div class="card-body">
+                        <div style="flex: 1;">
+                            <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
+                            <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
+                            <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
+                            <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
+                            <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
+                            <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
+                        </div>
+                    </div>
+                  </div>
+        
             </div>
         </div>
+        <hr>
+
+
+
+
+
+        
         <div class="table-responsive">
             <h2>Detalles de los Arreglos</h2>
             <hr>
