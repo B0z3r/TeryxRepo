@@ -1,71 +1,88 @@
 {% extends 'app/base.html' %}
 {% load humanize %}
-
 {% load static %}
-
 {% block contenido %}
-{% load crispy_forms_tags %}
-<main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
-    <div class="container-fluid" style="background-color: rgb(255, 255, 255);">
-        <h2>Detalles cliente</h2>
-        <hr>
-       
-        <div class="row">
-            <div class="col-md-3 mb-3">
-           <i class="bi bi-person-bounding-box" style="font-size: 200px; padding-left: 20px;"></i>
-            </div>
-      
-      
-            <div class="col-md-9 mb-4">
-                <div class="card" style="width: 18rem; border-radius: 20px;">
-                    <div class="card-body">
-                        <div style="flex: 1;">
-                            <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
-                            <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
-                            <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
-                            <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
-                            <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
-                            <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
+        <div class="container-fluid" style="background-color: rgb(255, 255, 255);">
+            <h2>Detalles cliente</h2>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <i class="bi bi-person-bounding-box" style="font-size: 200px; padding-left: 20px;"></i>
+                </div>
+
+                <div class="col-md-9 mb-4">
+                    <div class="card border-5" style="width: 30rem; border-radius: 20px;">
+                        <div class="card-body">
+                            <div style="flex: 1;">
+                                <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
+                                <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
+                                <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
+                                <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
+                                <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
+                                <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
+                            </div>
                         </div>
                     </div>
-                  </div>
-        
+                </div>
             </div>
-        </div>
-        <div class="table-responsive">
+            <hr>
+
             <h2>Detalles de los Arreglos</h2>
             <hr>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Tipo de Servicio o Arreglo</th>
-                        <th>Fecha inicio</th>
-                        <th>Fecha Término</th>
-                        <th>Modelo Bicicleta</th>
-                        <th>Estado de Arreglo</th>
-                        <th>Total Facturado</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for taller in talleres %}
-                        <tr>
-                            <td>{{ taller.get_tipo_arreglo_display }}</td>
-                            <td>{{ taller.fecha_ingreso }}</td>
-                            <td>{{ taller.fecha_termino }}</td>
-                            <td>{{ taller.modelo_bicicleta |capfirst }}</td>
-                            <td>{{ taller.get_estado_display }}</td>
-                            <td> $ {{ taller.valor | intcomma }}</td>
-                            <td>
-                                <button class="btn bi-file-earmark-text btn-secondary btn-md"></button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+
+            <div class="container-fluid">
+                <div class="col-md-12 mb-3" style="padding-top: 10px; padding-bottom: 40px;">
+                    <div class="card" style="border-radius: 10px;">
+                        <div class="card-header" style="background-color:#3F3F37 ; color: white;">
+                            <span><i class="bi bi-table me-2"></i></span> Historial Arreglos
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped-columns table-hover data-table"
+                                    style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo de Servicio o Arreglo</th>
+                                            <th>Fecha inicio</th>
+                                            <th>Fecha Término</th>
+                                            <th>Modelo Bicicleta</th>
+                                            <th>Estado de Arreglo</th>
+                                            <th>Total Facturado</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for taller in talleres %}
+                                        <tr>
+                                            <td>{{ taller.get_tipo_arreglo_display }}</td>
+                                            <td>{{ taller.fecha_ingreso }}</td>
+                                            <td>{{ taller.fecha_termino }}</td>
+                                            <td>{{ taller.modelo_bicicleta |capfirst }}</td>
+                                            <td>{{ taller.get_estado_display }}</td>
+                                            <td> $ {{ taller.valor | intcomma }}</td>
+                                            <td>
+                                                <button class="btn bi-file-earmark-text btn-secondary btn-md"></button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm"
+                                style="float: right;">ATRAS</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm" style="float: right;" >ATRAS</a>
-    </div>
-</div>
-</main>
+    </main>
 {% endblock %}
