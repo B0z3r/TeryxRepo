@@ -11,47 +11,67 @@ class ColaboradorForm(forms.ModelForm):
         model = Persona
         fields = '__all__'
 
+class ColaboradorForm(forms.ModelForm):
+    class Meta:
+        model = Persona
+        fields = '__all__'
+
 class ClienteForm(forms.ModelForm):
-      rut_cliente = forms.CharField(
+    rut_cliente = forms.CharField(
         label='Rut Cliente',
-        widget=forms.TextInput(attrs={'placeholder': 'Ingresa el RUT del cliente'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Ejemplo 123456789'}),
         required=False,
     )
 
-      nombre_cliente = forms.CharField(
+    nombre_cliente = forms.CharField(
         label='Nombre cliente',
         widget=forms.TextInput(attrs={'placeholder': 'Ingresa nombre del cliente'}),
         required=False,
     )
 
-      apePaterno = forms.CharField(
+    apePaterno = forms.CharField(
         label='Apellido Paterno',
         widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Apellido Paterno'}),
         required=False,
     )
 
-      apeMaterno = forms.CharField(
+    apeMaterno = forms.CharField(
         label='Apellido Materno',
         widget=forms.TextInput(attrs={'placeholder': 'Ingresa el Apellido Materno'}),
         required=False,
     )
 
-      email = forms.EmailField(
+    email = forms.EmailField(
         label='Correo Electrónico',
         widget=forms.EmailInput(attrs={'placeholder': 'Ingresa el Correo Electrónico'}),
         required=False,
     )
 
-      fono = forms.IntegerField(
+    fono = forms.IntegerField(
         label='Teléfono',
-        widget=forms.TextInput(attrs={'placeholder': 'Ejemplo: 987654321'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Ejemplo: 987654321', 'class': 'phone-input'}),
         required=False,
+        min_value=100000000,  # Valor mínimo de 9 dígitos
+        max_value=999999999,  # Valor máximo de 9 dígitos
     )
 
-      class Meta:
+    class Meta:
         model = Cliente
         fields = '__all__'
 
+    def clean_rut_cliente(self):
+        rut_cliente = self.cleaned_data.get('rut_cliente')
+
+        if rut_cliente is not None:
+            rut_str = str(rut_cliente).replace(".", "").replace("-", "")
+            
+            # Verifica que el RUT tenga un mínimo de 8 y un máximo de 9 dígitos
+            if not (8 <= len(rut_str) <= 9):
+                raise ValidationError('El RUT debe tener entre 8 y 9 dígitos.')
+
+        return rut_cliente
+
+    
 
 class CustomUserCreationForm(UserCreationForm):
     alphanumeric_regex = re.compile(r'^[a-zA-Z]+$')
@@ -226,6 +246,18 @@ class ProveedorForm(forms.ModelForm):
         model = Proveedor
         fields = '__all__' 
 
+        def clean_rut_proveedor(self):
+            rut_proveedor = self.cleaned_data.get('rut_proveedor')
+
+            if rut_proveedor is not None:
+                rut_str = str(rut_proveedor).replace(".", "").replace("-", "")
+            
+            # Verifica que el RUT tenga un mínimo de 8 y un máximo de 9 dígitos
+            if not (8 <= len(rut_str) <= 9):
+                raise ValidationError('El RUT debe tener entre 8 y 9 dígitos.')
+
+            return rut_proveedor
+
 
 class TallerForm(forms.ModelForm):
 
@@ -308,11 +340,16 @@ class TallerForm(forms.ModelForm):
     )
 
     cliente_rut_cliente = forms.ModelChoiceField(
-        label='Nombre y Rut del Cliente',
+        label='Rut y Nombre del Cliente',
         queryset=Cliente.objects.all(),
         widget=forms.Select(attrs={'placeholder': 'Selecciona un Cliente', 'required': False}),
         required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Personaliza cómo se muestra cada instancia de Cliente en este formulario
+        self.fields['cliente_rut_cliente'].label_from_instance = lambda obj: f"{obj.formatted_rut()} - {obj.nombre_cliente} {obj.apePaterno} {obj.apeMaterno}"
     
     class Meta:
         model = Taller

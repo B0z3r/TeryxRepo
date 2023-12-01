@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.bundle.min.js"></script>
 
 <script>
   function eliminarCliente(id) {
@@ -25,15 +26,6 @@
   }
 </script>
 
-<script>
-  $(document).ready(function () {
-    $('#table_id').DataTable({
-      "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-      }
-    });
-  });
-</script>
 
 <script>
   $(document).ready(function () {
@@ -48,6 +40,7 @@
     });
   });
 </script>
+
 
 
 {% endblock %}
@@ -88,7 +81,7 @@
                 <tbody>
                   {% for p in entity %}
                   <tr>
-                    <td>{{ p.rut_cliente }}</td>
+                    <td>{{ p.formatted_rut }}</td>
                     <td>{{ p.nombre_cliente |capfirst }} {{ p.apePaterno |capfirst }} {{ p.apeMaterno |capfirst }}</td>
                     <td>{{ p.email }}</td>
                     <td>{{ p.fono }}</td>

@@ -9,27 +9,23 @@
     <div class="container-fluid" style="background-color: rgb(255, 255, 255);">
         <h2>Detalles cliente</h2>
         <hr>
-       
-        <div class="row">
-            <div class="col-md-3 mb-3">
-           <i class="bi bi-person-bounding-box" style="font-size: 200px; padding-left: 20px;"></i>
+        <div class="row" style="padding-left: 50px;">
+            <div class="col-md-3 mb-3" style="margin-right: -200px;">
+                <i class="bi bi-person-bounding-box" style="font-size: 200px;"></i>
             </div>
-      
-      
             <div class="col-md-9 mb-4">
-                <div class="card" style="width: 18rem; border-radius: 20px;">
+                <div class="card" style="width: 25rem; border-radius: 20px;">
                     <div class="card-body">
                         <div style="flex: 1;">
-                            <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
+                            <p><strong>Rut:</strong> {{ cliente.formatted_rut  }}</p>
                             <p><strong>Nombre:</strong> {{ cliente.nombre_cliente }}</p>
                             <p><strong>Apellido Paterno:</strong> {{ cliente.apePaterno }}</p>
                             <p><strong>Apellido Materno:</strong> {{ cliente.apeMaterno }}</p>
                             <p><strong>Correo Electrónico:</strong> {{ cliente.email }}</p>
-                            <p><strong>Teléfono:</strong>+56 {{ cliente.fono }}</p>
+                            <p><strong>Teléfono:</strong> +56 {{ cliente.fono }}</p>
                         </div>
                     </div>
-                  </div>
-        
+                </div>
             </div>
         </div>
         <div class="table-responsive">

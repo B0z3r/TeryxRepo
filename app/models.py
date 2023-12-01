@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -15,6 +15,10 @@ class Cliente(models.Model):
     
     def __str__(self):
         return self.nombre_cliente
+    
+    def formatted_rut(self):
+        rut_str = f"{self.rut_cliente:09d}"  # Asegurarse de tener 9 dígitos
+        return f"{rut_str[:2]}.{rut_str[2:5]}.{rut_str[5:8]}-{rut_str[8]}"
     
 opciones_consulta = [
         [0,"Administrador"],
@@ -55,6 +59,10 @@ class Proveedor(models.Model):
     
     def get_categoria_display(self):
         return dict(opc_consulta_cat)[self.categoria]
+    
+    def formatted_rut(self):
+        rut_str = f"{self.rut_proveedor:09d}"  # Asegurarse de tener 9 dígitos
+        return f"{rut_str[:2]}.{rut_str[2:5]}.{rut_str[5:8]}-{rut_str[8]}"
     
 opc_consl_cat = [
         [0,"Indumentaria"],
