@@ -89,7 +89,7 @@
                   {% for p in entity %}
                   <tr>
                     <td>{{ p.rut_cliente }}</td>
-                    <td>{{ p.nombre_cliente }} {{ p.apePaterno }} {{ p.apeMaterno }}</td>
+                    <td>{{ p.nombre_cliente |capfirst }} {{ p.apePaterno |capfirst }} {{ p.apeMaterno |capfirst }}</td>
                     <td>{{ p.email }}</td>
                     <td>{{ p.fono }}</td>
                     {% if perms.app.change_cliente %}

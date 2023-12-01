@@ -17,7 +17,7 @@
       
       
             <div class="col-md-9 mb-4">
-                <div class="card" style="width: 25rem; border-radius: 20px;">
+                <div class="card" style="width: 18rem; border-radius: 20px;">
                     <div class="card-body">
                         <div style="flex: 1;">
                             <p><strong>Rut:</strong> {{ cliente.rut_cliente }}</p>
@@ -32,13 +32,6 @@
         
             </div>
         </div>
-        <hr>
-
-
-
-
-
-        
         <div class="table-responsive">
             <h2>Detalles de los Arreglos</h2>
             <hr>
@@ -60,7 +53,7 @@
                             <td>{{ taller.get_tipo_arreglo_display }}</td>
                             <td>{{ taller.fecha_ingreso }}</td>
                             <td>{{ taller.fecha_termino }}</td>
-                            <td>{{ taller.modelo_bicicleta }}</td>
+                            <td>{{ taller.modelo_bicicleta |capfirst }}</td>
                             <td>{{ taller.get_estado_display }}</td>
                             <td> $ {{ taller.valor | intcomma }}</td>
                             <td>

@@ -58,7 +58,7 @@
                                           {% for p in entity %}
                                             <tr>
                                                 <td>{{ p.rut_proveedor }}</td>
-                                                <td>{{ p.nombre_proveedor }}</td>
+                                                <td>{{ p.nombre_proveedor |capfirst }}</td>
                                                 <td>{{ p.email }}</td>
                                                 <td>{{ p.fono }}</td>
                                                 <td>{{ p.get_categoria_display }}</td>

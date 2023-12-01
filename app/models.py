@@ -111,7 +111,7 @@ class Taller(models.Model):
     modelo_bicicleta = models.CharField('Modelo De Bicicleta', max_length=30)
     estado_pago = models.IntegerField('Estado de Pago', choices=opc_estado_pago, null=True, blank=True)
     abono = models.IntegerField('Abono')
-    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    cliente_rut_cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return str(self.id_taller)
