@@ -12,6 +12,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from datetime import date
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -361,7 +362,7 @@ def agregar_venta(request):
         'form': VentaForm(),
         'productos': Producto.objects.all(),
         'talleres': Taller.objects.all(),
-        'user': User.objects.all()
+        'user': request.user
     }
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)

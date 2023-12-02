@@ -175,7 +175,6 @@
   });
 </script>
 
-
 <main>
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 100px;">
@@ -187,8 +186,9 @@
                 <div class="modal-body">
                     <form action="{% url 'agregar_venta' %}" method="post" id="formularioVenta" enctype="multipart/form-data">
                         <div>
-                            
-                            <p><strong>Nombre vendedor :</strong>{{ user.username|upper }}</p>
+                            {% if user.is_authenticated %}
+                                <p><strong>Nombre vendedor : </strong>{{ user.username|upper }}</p>
+                            {% endif %}
                         </div>
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -207,14 +207,10 @@
                     <hr>
                     <!-- Lista para mostrar productos seleccionados -->
                     <ul id="listaProductos"></ul>
-
-                    
                     <!-- Lista para mostrar talleres seleccionados -->
                     <ul id="listaTalleres"></ul>
-
                     <!-- Campo oculto para almacenar el total -->
                     <input type="hidden" id="id_total" name="total" value="0.00">
-
                     <!-- Campos ocultos para almacenar los IDs de producto y taller -->
                     <input type="hidden" id="id_producto_id_producto" name="producto_id_producto">
                     <input type="hidden" id="id_taller_id_taller" name="taller_id_taller">
@@ -224,7 +220,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal de productos -->
     <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -269,7 +264,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal de talleres -->
     <div class="modal fade" id="modalTalleres" tabindex="-1" aria-labelledby="modalTalleresLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
