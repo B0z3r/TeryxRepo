@@ -233,6 +233,7 @@ def listar_producto(request):
     }
 
     return render(request, 'app/Productos/listar_producto.html', data)
+
 @permission_required('app.change_producto')
 def modificar_producto(request, id):
     producto = get_object_or_404(Producto, pk=id)
@@ -254,6 +255,21 @@ def eliminar_producto(request, id):
     producto.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_producto")
+
+def agregar_cantidad_stock(request, producto_id):
+    if request.method == 'POST':
+        producto = get_object_or_404(Producto, pk=producto_id)
+        cantidad_a_agregar = int(request.POST.get('cantidad', 0))
+
+        if cantidad_a_agregar > 0:
+            producto.stock += cantidad_a_agregar
+            producto.save()
+            message = f"Se agregó {cantidad_a_agregar} unidad(es) al stock de {producto.nombre_producto}."
+            return JsonResponse({'status': 'success', 'message': message})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'La cantidad debe ser mayor que 0.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})
 
 @permission_required('app.add_proveedor')
 def agregar_proveedor(request):

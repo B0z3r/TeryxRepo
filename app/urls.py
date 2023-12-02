@@ -3,7 +3,7 @@ from .views import  gestionar_productos,cambio_pass,inicio_admin,regcolaborador,
 modificar_cliente, eliminar_cliente,ProfilePasswordChangeView,\
 historial_cliente,agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
 agregar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta,\
-list_taller
+list_taller, agregar_cantidad_stock
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from . import views
@@ -24,6 +24,7 @@ urlpatterns = [
     path('listar-producto/', listar_producto, name="listar_producto"),
     path('modificar-producto/<id>/', modificar_producto, name="modificar_producto"),
     path('eliminar-producto/<id>/', eliminar_producto, name="eliminar_producto"),
+    path('agregar-cantidad-stock/<int:producto_id>/', views.agregar_cantidad_stock, name='agregar_cantidad_stock'),
     path('agregar-proveedor/', agregar_proveedor, name="agregar_proveedor"),
     path('listar-proveedor/', listar_proveedor, name="listar_proveedor"),
     path('modificar-proveedor/<id>/', modificar_proveedor, name="modificar_proveedor"),
