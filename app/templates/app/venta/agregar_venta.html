@@ -13,8 +13,7 @@
             $('#confirmacionVenta').modal('show');
         });
     });
-  </script>
-
+</script>
 
 <script>
     $(function () {
@@ -40,7 +39,6 @@
         formularioVenta.addEventListener('submit', function (event) {
             event.preventDefault();
 
-
             // Continuar con el envío del formulario
             var formData = new FormData(formularioVenta);
 
@@ -48,18 +46,18 @@
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Venta creada correctamente.');
-                    window.location.href = "{% url 'listar_venta' %}";
-                } else {
-                    alert('Hubo un error al crear la venta.');
-                }
-            })
-            .catch(error => {
-                console.error('Error en la solicitud AJAX:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Venta creada correctamente.');
+                        window.location.href = "{% url 'listar_venta' %}";
+                    } else {
+                        alert('Hubo un error al crear la venta.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud AJAX:', error);
+                });
         });
 
         document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
@@ -86,9 +84,28 @@
                 cantidadInput.value = parseFloat(cantidadInput.value) + cantidad;
             } else {
                 agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio, cantidad);
+                mostrarMensaje('Producto agregado correctamente', 'success');
             }
+            
+            // Actualizar la cantidad en el formulario
+            var cantidadInputForm = document.getElementById('id_cantidad_productos_vendidos');
+            cantidadInputForm.value = cantidad;
+
             // Actualizar el total
             actualizarTotal();
+            
+            // Actualizar el stock en la interfaz
+            actualizarStockEnInterfaz(productoId, cantidad);
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            Swal.fire({
+                title: tipo === 'success' ? 'Éxito' : 'Error',
+                text: mensaje,
+                icon: tipo,
+                timer: 1000, // Duración del mensaje en milisegundos (opcional)
+                showConfirmButton: false // Oculta el botón de confirmación (opcional)
+            });
         }
 
         function agregarItem(lista, idInput, itemId, itemName, itemPrecio, cantidad) {
@@ -150,29 +167,75 @@
 
             totalInput.value = total.toFixed(2);
         }
+
+        function actualizarStockEnInterfaz(productoId, cantidad) {
+            // Encontrar la celda de stock correspondiente y actualizarla
+            var stockCell = $(`.stock-cell[data-id='${productoId}']`);
+            var stockValue = parseInt(stockCell.text());
+
+            if (!isNaN(stockValue)) {
+                stockValue -= cantidad;
+                stockCell.text(stockValue);
+
+                // Actualizar el color según el nuevo valor de stock
+                if (stockValue < 5) {
+                    stockCell.css('background-color', 'red');
+                    stockCell.css('color', 'white');
+                } else {
+                    stockCell.css('background-color', 'green');
+                    stockCell.css('color', 'white');
+                }
+            }
+        }
+
+        // Confirmar la venta
+        $('#confirmarVentaBtn').click(function () {
+            var detalleVentaBody = $('#detalleVentaBody');
+
+            // Limpiar el cuerpo de la tabla antes de agregar los nuevos detalles
+            detalleVentaBody.empty();
+
+            // Iterar sobre los productos en la lista
+            Array.from(listaProductos.children).forEach(function (item) {
+                var cantidad = parseFloat(item.querySelector('.cantidad-input').value);
+                var nombreProducto = item.querySelector('span').textContent.split(' - Precio')[0];
+                var subtotal = cantidad * parseFloat(item.dataset.precio);
+
+                // Agregar una fila a la tabla de detalles
+                detalleVentaBody.append('<tr>' +
+                    '<td>' + nombreProducto + '</td>' +
+                    '<td>' + cantidad + '</td>' +
+                    '<td>$' + subtotal.toFixed(2) + '</td>' +
+                    '<td>' + 'Efectivo' + '</td>' +
+                    '</tr>');
+            });
+
+            // Ocultar el modal de confirmación de venta
+            $('#confirmacionVenta').modal('hide');
+        });
     });
 </script>
 
 {{ block.super }}
 <script>
-  $(document).ready(function () {
-    // Obtén todas las celdas de stock
-    var stockCells = $('.stock-cell');
+    $(document).ready(function () {
+        // Obtén todas las celdas de stock
+        var stockCells = $('.stock-cell');
 
-    // Itera sobre cada celda y aplica el color según el valor de stock
-    stockCells.each(function () {
-      var stockValue = parseInt($(this).text());
+        // Itera sobre cada celda y aplica el color según el valor de stock
+        stockCells.each(function () {
+            var stockValue = parseInt($(this).text());
 
-      // Aplica el color rojo si el stock es menor que 5, de lo contrario, verde
-      if (stockValue < 5) {
-        $(this).css('background-color', 'red');
-        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
-      } else {
-        $(this).css('background-color', 'green');
-        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
-      }
+            // Aplica el color rojo si el stock es menor que 5, de lo contrario, verde
+            if (stockValue < 5) {
+                $(this).css('background-color', 'red');
+                $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+            } else {
+                $(this).css('background-color', 'green');
+                $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
+            }
+        });
     });
-  });
 </script>
 
 <main>
@@ -289,7 +352,7 @@
                                     <td>{{ taller.id_taller }}</td>
                                     <td>{{ taller.get_tipo_arreglo_display }}</td>
                                     <td>${{ taller.valor | intcomma }}</td>
-                                    <td>${{ taller.abono  | intcomma }}</td>
+                                    <td>{{ taller.abono }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-taller" style="float: inline-end;"
                                                 data-id="{{ taller.id_taller }}" data-nombre="{{ taller.nombre_taller }}"
@@ -309,6 +372,68 @@
         </div>
     </div>
 
+<!-- Agrega esta sección a tu script -->
+<script>
+    var listaTalleres = [];  // Lista para almacenar los talleres seleccionados
+
+    document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var tallerId = this.dataset.id;
+            var tallerNombre = this.dataset.nombre;
+            var tallerPrecio = parseFloat(this.dataset.precio);
+            var clienteNombre = this.dataset.clienteNombre;
+            var clienteRut = this.dataset.clienteRut;
+
+            // Agregar el taller a la lista
+            agregarTallerALista(tallerId, tallerNombre, tallerPrecio, clienteNombre, clienteRut);
+        });
+    });
+
+    function agregarTallerALista(tallerId, tallerNombre, tallerPrecio, clienteNombre, clienteRut) {
+        var tallerExistente = listaTalleres.find(function (taller) {
+            return taller.id === tallerId;
+        });
+
+        if (tallerExistente) {
+            // Si el taller ya está en la lista, puedes actualizar la cantidad u otros detalles si es necesario
+            tallerExistente.cantidad += 1;
+        } else {
+            // Agregar el nuevo taller a la lista
+            listaTalleres.push({
+                id: tallerId,
+                nombre: tallerNombre,
+                precio: tallerPrecio,
+                cantidad: 1,
+                clienteNombre: clienteNombre,
+                clienteRut: clienteRut
+            });
+
+            // Mostrar mensaje o realizar otras acciones si es necesario
+            mostrarMensaje('Taller agregado correctamente', 'success');
+        }
+
+        // Actualizar la interfaz según tus necesidades
+        actualizarListaTalleresEnInterfaz();
+    }
+
+    function actualizarListaTalleresEnInterfaz() {
+        var listaTalleresElement = document.getElementById('listaTalleres');
+        listaTalleresElement.innerHTML = '';  // Limpiar la lista antes de actualizarla
+
+        listaTalleres.forEach(function (taller) {
+            var listItem = document.createElement('li');
+            listItem.textContent = taller.nombre + ' - Precio: $' + taller.precio.toFixed(2) +
+                ' - Cliente: ' + taller.clienteNombre + ' - RUT Cliente: ' + taller.clienteRut +
+                ' - Cantidad: ' + taller.cantidad;
+
+            listaTalleresElement.appendChild(listItem);
+        });
+
+        // También puedes realizar otras actualizaciones en tu interfaz si es necesario
+    }
+</script>
      <!-- Modal de confirmación de venta -->
         <div id="confirmacionVenta" class="modal fade" tabindex="-1" aria-labelledby="confirmacionVentaLabel" aria-hidden="true">
             <div class="modal-dialog">

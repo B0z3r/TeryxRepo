@@ -139,7 +139,7 @@ class Venta(models.Model):
     fecha = models.DateField('Fecha', default=datetime.now)
     total = models.IntegerField('Total')
     tipopago = models.CharField('Tipo De Pago', choices=[('EFECTIVO','EFECTIVO'), ('DEBITO', 'DEBITO'), ('CREDITO', 'CREDITO')], max_length=30)
-    cantidad_productos_vendidos = models.IntegerField('cantidad de Productos', default=0)
+    cantidad_productos_vendidos  = models.IntegerField('cantidad de Productos', default=0)
     producto_id_producto = models.ForeignKey(Producto, on_delete = models.PROTECT, null=True, blank=True)
     taller_id_taller = models.ForeignKey(Taller, on_delete = models.PROTECT, null=True, blank=True)
 
