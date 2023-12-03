@@ -289,7 +289,7 @@
                                     <td>{{ taller.id_taller }}</td>
                                     <td>{{ taller.get_tipo_arreglo_display }}</td>
                                     <td>${{ taller.valor | intcomma }}</td>
-                                    <td>{{ taller.abono }}</td>
+                                    <td>${{ taller.abono  | intcomma }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-agregar-taller" style="float: inline-end;"
                                                 data-id="{{ taller.id_taller }}" data-nombre="{{ taller.nombre_taller }}"
