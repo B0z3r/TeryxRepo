@@ -1,7 +1,7 @@
 {% extends 'app/base.html' %} {% block js %} {% load crispy_forms_tags %} {% load humanize %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -52,66 +52,65 @@
     // Itera sobre cada celda y aplica el color según el valor de stock
     stockCells.each(function () {
       var stockValue = parseInt($(this).text());
+      aplicarColorStock($(this), stockValue);
+    });
 
-      // Aplica el color rojo si el stock es menor que 5, de lo contrario, verde
-      if (stockValue < 5) {
-        $(this).css('background-color', 'red');
-        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
-      } else {
-        $(this).css('background-color', 'green');
-        $(this).css('color', 'white');  // Cambia el color del texto para que sea legible
-      }
+    $('.btn-agregar-cantidad').click(function () {
+      var idProducto = $(this).data('id');
+      var nombreProducto = $(this).data('nombre_producto');
+
+      // Puedes utilizar la librería SweetAlert o cualquier otra modal de tu elección
+      Swal.fire({
+        title: 'Agregar Cantidad',
+        html: `Nombre del Producto: ${nombreProducto}<br>Cantidad a agregar: <input type="number" id="cantidad-${idProducto}" min="1" value="1">`,
+        showCancelButton: true,
+        confirmButtonText: 'Agregar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        preConfirm: () => {
+          // Puedes acceder a la cantidad ingresada utilizando el ID del input
+          var cantidad = $(`#cantidad-${idProducto}`).val();
+
+          // Realiza una solicitud AJAX para agregar la cantidad al stock
+          $.ajax({
+            url: `/agregar-cantidad-stock/${idProducto}/`,
+            method: 'POST',
+            data: { cantidad: cantidad },
+            success: function (data) {
+                if (data.status === 'success') {
+                    // Muestra un mensaje de éxito
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: data.message,
+                        icon: 'success'
+                    });
+                    // Recarga la página
+                    location.reload();
+                } else {
+                    // Muestra un mensaje de error
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+        }
+      });
     });
   });
-</script>
 
-<script>
-  $(document).ready(function () {
-     $('.btn-agregar-cantidad').click(function () {
-        var idProducto = $(this).data('id');
-        var nombreProducto = $(this).data('nombre_producto');
-
-        // Puedes utilizar la librería SweetAlert o cualquier otra modal de tu elección
-        Swal.fire({
-           title: 'Agregar Cantidad',
-           html: `Nombre del Producto: ${nombreProducto}<br>Cantidad a agregar: <input type="number" id="cantidad-${idProducto}" min="1" value="1">`,
-           showCancelButton: true,
-           confirmButtonText: 'Agregar',
-           cancelButtonText: 'Cancelar',
-           reverseButtons: true,
-           preConfirm: () => {
-              // Puedes acceder a la cantidad ingresada utilizando el ID del input
-              var cantidad = $(`#cantidad-${idProducto}`).val();
-
-              // Realiza una solicitud AJAX para agregar la cantidad al stock
-              $.ajax({
-                 url: `/agregar-cantidad-stock/${idProducto}/`,
-                 method: 'POST',
-                 data: { cantidad: cantidad },
-                 success: function (data) {
-                    if (data.status === 'success') {
-                       // Muestra un mensaje de éxito
-                       Swal.fire({
-                          title: 'Éxito',
-                          text: data.message,
-                          icon: 'success'
-                       });
-                       // Actualiza la celda de stock en la tabla
-                       $(`.stock-cell-${idProducto}`).text(data.new_stock);
-                    } else {
-                       // Muestra un mensaje de error
-                       Swal.fire({
-                          title: 'Error',
-                          text: data.message,
-                          icon: 'error'
-                       });
-                    }
-                 }
-              });
-           }
-        });
-     });
-  });
+  // Función para aplicar el color de fondo según el valor de stock
+  function aplicarColorStock(stockCell, stockValue) {
+    if (stockValue < 5) {
+      stockCell.css('background-color', 'red');
+      stockCell.css('color', 'white');
+    } else {
+      stockCell.css('background-color', 'green');
+      stockCell.css('color', 'white');
+    }
+  }
 </script>
 
 {% endblock %} 
@@ -156,7 +155,13 @@
                         <td>{{ p.fecha_registro }}</td>
                         <td>{{ p.descripcion }}</td>
                         <td>${{ p.precio_unitario | intcomma }}</td>
-                        <td class="stock-cell stock-cell-{{ p.id_producto }}">{{ p.stock }} <button class="bi bi-box-arrow-up-right btn-agregar-cantidad" data-id="{{ p.id_producto }}" data-nombre_producto="{{ p.nombre_producto }}"></button></td>
+                        <td class="stock-cell stock-cell-{{ p.id_producto }}">
+                          {{ p.stock }} 
+                          <button class="bi bi-box-arrow-up-right btn-agregar-cantidad" 
+                                  data-id="{{ p.id_producto }}" 
+                                  data-nombre_producto="{{ p.nombre_producto }}">
+                          </button>
+                        </td>
                         <td>{{ p.get_categoria_display }}</td>
                         {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
                           <td>

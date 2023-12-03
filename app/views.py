@@ -13,6 +13,8 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from datetime import date
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -214,7 +216,6 @@ def agregar_producto(request):
         formulario = ProductoForm(data=request.POST)
         if formulario.is_valid():
             proveedor_id = formulario.cleaned_data['nombre_proveedor'].rut_proveedor
-            # Asigna el proveedor al campo proveedor_id del modelo
             formulario.instance.proveedor_id = proveedor_id
             formulario.save()
             messages.success(request, "Producto Registrado Correctamente!")
@@ -256,20 +257,22 @@ def eliminar_producto(request, id):
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="listar_producto")
 
+@csrf_exempt
 def agregar_cantidad_stock(request, producto_id):
     if request.method == 'POST':
-        producto = get_object_or_404(Producto, pk=producto_id)
-        cantidad_a_agregar = int(request.POST.get('cantidad', 0))
+        cantidad = request.POST.get('cantidad')
+        try:
+            cantidad = int(cantidad)
+        except ValueError:
+            return JsonResponse({'status': 'error', 'message': 'La cantidad debe ser un número entero.'})
 
-        if cantidad_a_agregar > 0:
-            producto.stock += cantidad_a_agregar
-            producto.save()
-            message = f"Se agregó {cantidad_a_agregar} unidad(es) al stock de {producto.nombre_producto}."
-            return JsonResponse({'status': 'success', 'message': message})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'La cantidad debe ser mayor que 0.'})
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})
+        producto = get_object_or_404(Producto, pk=producto_id)
+        producto.stock += cantidad
+        producto.save()
+
+        return JsonResponse({'status': 'success', 'message': 'Cantidad agregada correctamente.', 'new_stock': producto.stock})
+
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido.'})
 
 @permission_required('app.add_proveedor')
 def agregar_proveedor(request):
@@ -372,6 +375,36 @@ def eliminar_taller(request, id):
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="list_taller")
 
+@require_POST
+@csrf_exempt
+def actualizar_stock(request):
+    if request.method == 'POST':
+        producto_id = request.POST.get('producto_id')
+        cantidad_vendida = request.POST.get('cantidad')
+
+        try:
+            producto_seleccionado = get_object_or_404(Producto, pk=producto_id)
+            if producto_seleccionado.stock >= int(cantidad_vendida):
+                producto_seleccionado.stock -= int(cantidad_vendida)
+                producto_seleccionado.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'No hay suficiente stock disponible.'})
+        except Producto.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'El producto seleccionado no existe.'})
+
+    return JsonResponse({'success': False, 'message': 'Método no permitido.'})
+
+def verificar_stock(producto_id, cantidad):
+    try:
+        producto = get_object_or_404(Producto, pk=producto_id)
+        if producto.stock >= int(cantidad):
+            return {'success': True}
+        else:
+            return {'success': False, 'message': 'No hay suficiente stock disponible.'}
+    except Producto.DoesNotExist:
+        return {'success': False, 'message': 'El producto seleccionado no existe.'}
+
 @permission_required('app.add_venta')
 def agregar_venta(request):
     data = {
@@ -380,33 +413,39 @@ def agregar_venta(request):
         'talleres': Taller.objects.all(),
         'user': request.user
     }
+
     if request.method == 'POST':
         formulario = VentaForm(data=request.POST)
         if formulario.is_valid():
             cantidad_vendida = formulario.cleaned_data['cantidad_productos_vendidos']
-            
-            # Obtener el ID del producto seleccionado desde el formulario
-            producto_id_seleccionado = request.POST.get('producto_id_producto')
-            if producto_id_seleccionado:
-                # Obtener el objeto Producto
-                producto_seleccionado = get_object_or_404(Producto, pk=producto_id_seleccionado)
-                # Verificar si hay suficiente stock
-                if producto_seleccionado.stock >= cantidad_vendida:
-                    # Descuento de stock
-                    producto_seleccionado.stock -= cantidad_vendida
-                    producto_seleccionado.save()
 
-                    # Guardar el producto en el campo correspondiente de la venta
-                    formulario.instance.producto_id_producto = producto_seleccionado
-                else:
-                    messages.error(request, f"No hay suficiente stock disponible para {producto_seleccionado.nombre_producto}.")
-                    return JsonResponse({'success': False, 'message': 'No hay suficiente stock disponible.'})
-            # Agregar la lógica para el taller
+            # Obtener los productos seleccionados desde el formulario
+            productos_ids_seleccionados = request.POST.getlist('producto_id_producto')
+
+            for producto_id_seleccionado in productos_ids_seleccionados:
+                try:
+                    producto_seleccionado = get_object_or_404(Producto, pk=producto_id_seleccionado)
+                    # Verificar si hay suficiente stock
+                    if producto_seleccionado.stock >= cantidad_vendida:
+                        # Descuento de stock
+                        producto_seleccionado.stock -= cantidad_vendida
+                        producto_seleccionado.save()
+                        # Guardar el producto en el campo correspondiente de la venta
+                        venta = formulario.save(commit=False)
+                        venta.producto_id_producto = producto_seleccionado
+                        venta.save()
+                    else:
+                        messages.error(request, f"No hay suficiente stock disponible para {producto_seleccionado.nombre_producto}.")
+                        return JsonResponse({'success': False, 'message': 'No hay suficiente stock disponible.'})
+                except Producto.DoesNotExist:
+                    messages.error(request, "Uno de los productos seleccionados no existe.")
+                    return JsonResponse({'success': False, 'message': 'Uno de los productos seleccionados no existe.'})
+
             taller_id_seleccionado = request.POST.get('taller_id_taller')
             if taller_id_seleccionado:
                 taller_seleccionado = get_object_or_404(Taller, pk=taller_id_seleccionado)
                 formulario.instance.taller_id_taller = taller_seleccionado
-            formulario.save()
+
             messages.success(request, "Venta Creada Correctamente!")
             return JsonResponse({'success': True})
         else:

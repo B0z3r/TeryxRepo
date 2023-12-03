@@ -24,7 +24,6 @@ urlpatterns = [
     path('listar-producto/', listar_producto, name="listar_producto"),
     path('modificar-producto/<id>/', modificar_producto, name="modificar_producto"),
     path('eliminar-producto/<id>/', eliminar_producto, name="eliminar_producto"),
-    path('agregar-cantidad-stock/<int:producto_id>/', views.agregar_cantidad_stock, name='agregar_cantidad_stock'),
     path('agregar-proveedor/', agregar_proveedor, name="agregar_proveedor"),
     path('listar-proveedor/', listar_proveedor, name="listar_proveedor"),
     path('modificar-proveedor/<id>/', modificar_proveedor, name="modificar_proveedor"),
@@ -46,5 +45,6 @@ urlpatterns = [
     path('cambio-pass/', views.cambio_pass, name='cambio_pass'),
     path('gestionar-productos/', gestionar_productos, name='gestionar_productos'),
     path('agregar_venta_y_listar_producto/', views.agregar_venta_and_listar_producto, name='agregar_venta_y_listar_producto'),
-    path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',)
+    path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',),
+    path('agregar-cantidad-stock/<int:producto_id>/', views.agregar_cantidad_stock, name='agregar_cantidad_stock'),
 ]
