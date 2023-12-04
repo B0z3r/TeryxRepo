@@ -2,8 +2,8 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
 <script src="https://printjs.crabbly.com/print.min.js"></script>
+
 <script>
   function eliminarColaborador(id) {
     Swal.fire({
@@ -22,6 +22,7 @@
     });
   }
 </script>
+
 
 {% endblock %} {% block contenido %}
 
@@ -67,16 +68,8 @@
                     {% if perms.app.change_colaborador %} 
                     {% if perms.app.delete_colaborador %}
                     <td>
-                      <a
-                        href="{% url 'modificar_colaborador' p.id %}"
-                        class="btn btn-info bi-pencil-square btn-md"
-                      ></a>
-                      <a
-                        href="#"
-                        onclick="eliminarColaborador({{p.id}})"
-                        class="btn bi-trash btn-danger btn-md"
-                      >
-                      </a>
+                      <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info bi-pencil-square btn-md"></a>
+                      <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn bi-trash btn-danger btn-md"></a>
                     </td>
                     {% endif %} {% endif %}
                   </tr>

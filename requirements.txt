@@ -3,3 +3,4 @@ pillow
 django-admin-interface
 mysqlclient
 django-crispy-forms
+xhtml2pdf
