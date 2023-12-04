@@ -6,98 +6,126 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#example tbody tr').each(function () {
+      var fechaTermino = $(this).find('td:eq(4)').text(); // Índice 4 es la columna de Fecha de Término
+      var estado = $(this).find('td:eq(1)').text(); // Índice 1 es la columna de Estado visual
+
+      // Convertir la fecha a un objeto Date
+      var fechaTerminoObj = new Date(fechaTermino);
+      var fechaActualObj = new Date();
+
+      if (fechaTerminoObj < fechaActualObj && estado !== "Atrasado" && estado !== "Terminado") {
+        $(this).find('td:eq(1)').text("Atrasado");
+        $(this).find('td:eq(13)').text("Atrasado"); // Índice 13 es la columna de Estado real
+      }
+    });
+  });
+</script>
+
 
 <script>
-  function eliminarTaller(id){
-      Swal.fire({
-          title: "¿Estás Seguro?",
-          text: "¿Qué deseas Eliminar este Agendamiento?",
-          icon: "warning", 
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonText: "Eliminar",
-          reverseButtons: true,
-          confirmButtonColor: "#dc3545"
-      })
-      .then(function(result){
-          if(result.isConfirmed){
-              window.location.href = "/eliminar-taller/" + id + "/";
-          }
+  function eliminarTaller(id) {
+    Swal.fire({
+      title: "¿Estás Seguro?",
+      text: "¿Qué deseas Eliminar este Agendamiento?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Eliminar",
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545"
+    })
+      .then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminar-taller/" + id + "/";
+        }
       });
   }
 </script>
 
 {% endblock %}
 {% block contenido %}
-  <main class="mt-5 pt-3">
-    <div class="container-fluid">
-      <div class="row" style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
-        <div class="col-md-12 mb-3" style="padding-top: 30px;">
-          <div class="card" style="border-radius: 10px;">
-            <div class="card-header"  style="background-color:#3F3F37; color: white;">
-              <span><i class="bi bi-table me-2"></i></span> Historial taller
-              {% if perms.app.add_taller %}
-                <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
-              {% endif %}
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100% ;">
-                  <thead>
-                      <tr>
-                        <th>Nº</th>
-                        <th>Estado</th>
-                        <th>Modelo de Bicicleta</th>
-                        <th>Fecha de Inicio</th>
-                        <th>Fecha de Término</th>
-                        <th>Rut cliente</th>
-                        <th>Nombre del Cliente</th>
-                        <th>Teléfono</th>
-                        <th>Tipo de Arreglo</th>
-                        <th>Valor del Arreglo</th>
-                        <th>Descipción</th>
-                        <th>Tipo de Pago</th>
-                        <th>Abono</th>
-                        <th>Total</th>
-                        <th>Opciones</th>
-                      </tr>
-                   </thead>
-                   <tbody>
-                    
-                      {% for datos in entity %}
-                        <tr>
-                          <td>{{ datos.id_taller }}</td>
-                          <td>{{ datos.get_estado_display}}</td>
-                          <td>{{ datos.modelo_bicicleta }}</td>
-                          <td>{{ datos.fecha_ingreso }}</td>
-                          <td>{{ datos.fecha_termino }}</td>
-                          <td>{{ datos.cliente_rut_cliente.formatted_rut }}</td>
-                          <td>{{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}</td>
-                          <td>{{ datos.cliente_rut_cliente.fono }}</td>
-                          <td>{{ datos.get_tipo_arreglo_display }}</td>
-                          <td>${{ datos.valor | intcomma }}</td>
-                          <td>{{ datos.descripcion }}</td>
-                          <td>{{ datos.get_estado_pago_display}}</td>
-                          <td>${{ datos.abono | intcomma }}</td>
-                          <td>${{ datos.total_neto  | intcomma }}</td>
-                          {% if perms.app.change_venta %}
-                          {% if perms.app.delete_venta %}
-                        <td>
-                          <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                          <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a>
-                        </td>
-                          {% endif %}
-                          {% endif %} 
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                </table>
-                <div>{% include 'app/paginator.html' %}</div>
-              </div>
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row"
+      style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
+      <div class="col-md-12 mb-3" style="padding-top: 30px;">
+        <div class="card" style="border-radius: 10px;">
+          <div class="card-header" style="background-color:#3F3F37; color: white;">
+            <span><i class="bi bi-table me-2"></i></span> Historial taller
+            {% if perms.app.add_taller %}
+            <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100% ;">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Estado</th>
+                    <th>Modelo de Bicicleta</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Término</th>
+                    <th>Rut cliente</th>
+                    <th>Nombre del Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Tipo de Arreglo</th>
+                    <th>Valor del Arreglo</th>
+                    <th>Descipción</th>
+                    <th>Tipo de Pago</th>
+                    <th>Abono</th>
+                    <th>Total</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for datos in entity %}
+                  <tr>
+                    <td>{{ datos.id_taller }}</td>
+                    <td style="color: 
+                      {% if datos.estado == 0 %}  orange; {% elif datos.estado == 1 %}green;{% else %}red;{% endif %}">
+                      {{ datos.get_estado_display }}
+                    </td>
+
+                    <td>{{ datos.modelo_bicicleta }}</td>
+                    <td>{{ datos.fecha_ingreso }}</td>
+                    <td>{{ datos.fecha_termino }}</td>
+                    <td>{{ datos.cliente_rut_cliente.formatted_rut }}</td>
+                    <td>
+                      {{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}
+                  </td>
+                  
+                    <td>{{ datos.cliente_rut_cliente.fono }}</td>
+                    <td>{{ datos.get_tipo_arreglo_display }}</td>
+                    <td>${{ datos.valor | intcomma }}</td>
+                    <td>{{ datos.descripcion }}</td>
+                    <td>{{ datos.get_estado_pago_display}}</td>
+                    <td>${{ datos.abono | intcomma }}</td>
+                    <td>${{ datos.total_neto | intcomma }}</td>
+                    {% if perms.app.change_venta %}
+                    {% if perms.app.delete_venta %}
+                    <td>
+                      <a href="{% url 'modificar_taller' datos.id_taller %}"
+                        class="btn bi-pencil-square btn-info btn-md"></a>
+                      <a href="#" onclick="eliminarTaller({{datos.id_taller}})"
+                        class="btn  bi-trash btn-danger btn-md"></a>
+                    </td>
+                    {% endif %}
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div>{% include 'app/paginator.html' %}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
+</main>
 {% endblock %}
