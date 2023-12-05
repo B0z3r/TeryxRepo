@@ -348,7 +348,7 @@ class TallerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Personaliza cómo se muestra cada instancia de Cliente en este formulario
+       
         self.fields['cliente_rut_cliente'].label_from_instance = lambda obj: f"{obj.formatted_rut()} - {obj.nombre_cliente} {obj.apePaterno} {obj.apeMaterno}"
     
     class Meta:

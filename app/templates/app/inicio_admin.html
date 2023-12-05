@@ -3,7 +3,9 @@
 {% load static %}
 
 {% block contenido %}
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <!-- offcanvas -->
 <main class="mt-5 pt-3">
@@ -83,12 +85,15 @@
           </div>
         </div>
       </div>
-      
-      <div class="col-md-6 " >
+    </div>
+    <div class="row">
+      <div class="col-md-12 " >
         <div class="card" >
           <div class="card-body">
             <h3 class="card-title">Agendamientos en Estado <span style="color: red;">ATRASADOS</span></h3>
-            <table>
+            
+              <div class="table-responsive">
+            <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100% ; font-size: 12px;">
               <thead>
                 <tr style="background-color:#1b1b1b ;color: rgb(235, 232, 232);">
                   <th>Nº</th>
@@ -106,7 +111,7 @@
                     <td>{{ taller.cliente_rut_cliente.rut_cliente }} - {{ taller.cliente_rut_cliente.nombre_cliente }} {{ taller.cliente_rut_cliente.apePaterno }} {{ taller.cliente_rut_cliente.apeMaterno }}</td>
                     <td>{{ taller.modelo_bicicleta }}</td>
                     <td>{{ taller.fecha_ingreso }}</td>
-                    <td>{{ taller.fecha_termino }}</td>
+                    <td> <span style="color: red;">{{ taller.fecha_termino }}</span></td>
                     <!-- Agrega más celdas según sea necesario -->
                   </tr>
                 {% endfor %}
@@ -115,7 +120,8 @@
           </div>
         </div>
       </div>
-
+      </div>
+    </div>
     </div>
 
  

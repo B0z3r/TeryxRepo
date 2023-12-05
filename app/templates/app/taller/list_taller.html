@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
+
 <script>
   $(document).ready(function () {
     $('#example tbody tr').each(function () {
@@ -45,10 +49,29 @@
   }
 </script>
 
+<script>
+  function imprimirBoleta() {
+    var contenidoBoleta = document.getElementById('boleta').innerHTML;
+    var ventanaImpresion = window.open('', '_blank');
+    ventanaImpresion.document.write('<html><head><title>Boleta de taller</title>');
+    ventanaImpresion.document.write('</head><body>');
+    ventanaImpresion.document.write(contenidoBoleta);
+    ventanaImpresion.document.write('</body></html>');
+    ventanaImpresion.document.close();
+    ventanaImpresion.print();
+  }
+</script>
+
+
 {% endblock %}
 {% block contenido %}
+
+
+
 <main class="mt-5 pt-3">
   <div class="container-fluid">
+
+ 
     <div class="row"
       style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
       <div class="col-md-12 mb-3" style="padding-top: 30px;">
@@ -57,13 +80,17 @@
             <span><i class="bi bi-table me-2"></i></span> Historial taller
             {% if perms.app.add_taller %}
             <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
+            <button onclick="imprimirBoleta()" class="btn btn-secondary" style="float: right; margin-right: 10px;">Imprimir Boleta</button>
             {% endif %}
           </div>
+          
           <div class="card-body">
             <div class="table-responsive">
-              <table id="example" class="table table-striped-columns table-hover data-table" style="width: 100% ;">
+              <div id="boleta" >
+                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 90% ; font-size: 10px;">
+               
                 <thead>
-                  <tr>
+                  <tr >
                     <th>Nº</th>
                     <th>Estado</th>
                     <th>Modelo de Bicicleta</th>
@@ -113,6 +140,7 @@
                         class="btn bi-pencil-square btn-info btn-md"></a>
                       <a href="#" onclick="eliminarTaller({{datos.id_taller}})"
                         class="btn  bi-trash btn-danger btn-md"></a>
+                      
                     </td>
                     {% endif %}
                     {% endif %}
@@ -126,6 +154,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </main>
 {% endblock %}
