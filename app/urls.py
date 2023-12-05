@@ -3,7 +3,7 @@ from .views import  gestionar_productos,cambio_pass,inicio_admin,regcolaborador,
 modificar_cliente, eliminar_cliente,ProfilePasswordChangeView,\
 historial_cliente,agregar_producto,listar_producto, modificar_producto, eliminar_producto, agregar_proveedor, listar_proveedor, modificar_proveedor, eliminar_proveedor,\
 agregar_taller, modificar_taller, eliminar_taller, agregar_venta, listar_venta, modificar_venta, eliminar_venta,\
-list_taller, agregar_cantidad_stock
+list_taller
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from . import views
@@ -47,4 +47,5 @@ urlpatterns = [
     path('agregar_venta_y_listar_producto/', views.agregar_venta_and_listar_producto, name='agregar_venta_y_listar_producto'),
     path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',),
     path('agregar-cantidad-stock/<int:producto_id>/', views.agregar_cantidad_stock, name='agregar_cantidad_stock'),
+   
 ]

@@ -18,6 +18,9 @@ from django.views.decorators.http import require_POST
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -44,6 +47,8 @@ def inicio_admin(request):
     productos_menos_cinco = Producto.objects.filter(stock__lt=5).values('nombre_producto', 'stock')
     talleres_atrasados = Taller.objects.filter(fecha_termino__lt=date.today())
 
+    talleres_atrasados_estado = Taller.objects.filter(estado="2")
+
     data = {
         'clientes': clientes,
         'total_clientes': total_clientes,
@@ -55,6 +60,7 @@ def inicio_admin(request):
         'total_talleres': total_talleres,
         'productos_menos_cinco': productos_menos_cinco,
         'talleres_atrasados': talleres_atrasados,
+        'talleres_atrasados_estado': talleres_atrasados_estado,
     }
     return render(request, 'app/inicio_admin.html', data)
 
@@ -342,6 +348,7 @@ def agregar_taller(request):
 
     return render(request, 'app/taller/agregar_taller.html', data)
 
+
 @permission_required('app.view_taller')
 def list_taller(request):
     taller_con_cliente = Taller.objects.select_related('cliente_rut_cliente').all()
@@ -377,6 +384,7 @@ def eliminar_taller(request, id):
     taller.delete()
     messages.success(request, "Eliminado Correctamente!")
     return redirect(to="list_taller")
+
 
 @require_POST
 @csrf_exempt

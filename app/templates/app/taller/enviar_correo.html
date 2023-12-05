@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correo de Agendamiento</title>
+</head>
+<body>
+    <p>Gracias por agendar en TERYX, {{ nombre_cliente }} {{ apellido_paterno }} {{ apellido_materno }}.</p>
+    <p>Detalles del Taller:</p>
+    <ul>
+        <li>Fecha de Ingreso: {{ fecha_ingreso }}</li>
+        <li>Fecha de Término: {{ fecha_termino }}</li>
+        <li>Tipo de Arreglo: {{ tipo_arreglo }}</li>
+        <li>Valor del Arreglo: {{ valor_arreglo }}</li>
+        <li>Descripción del Arreglo: {{ descripcion_arreglo }}</li>
+        <li>Estado de Pago: {{ estado_pago }}</li>
+        <li>Abono: {{ abono }}</li>
+    </ul>
+</body>
+</html>
