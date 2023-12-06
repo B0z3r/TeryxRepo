@@ -54,19 +54,11 @@
                             <td>{{ p.id_venta }}</td>
                             <td>{{ p.fecha }}</td>
                             <td>
-                                <!--
-                                    <ul>
-                                 {% for detalle in xx %}
-                                        <li>
-                                            {% if detalle.producto %}
-                                                {{ detalle.producto.nombre }} - Cantidad: {{ detalle.cantidad }}
-                                            {% else %}
-                                                {{ detalle.taller.tipo_arreglo }} 
-                                            {% endif %}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                                -->
+                                {% if p.producto_id_producto %}
+                                  {{ p.producto_id_producto.nombre_producto }} - Cantidad: {{ p.cantidad_productos_vendidos }}
+                                {% elif p.taller_id_taller %}
+                                  {{ p.taller_id_taller.get_tipo_arreglo_display }}
+                                {% endif %}
                             </td>
                             <td>{{ p.tipopago }}</td>
                             <td>${{ p.total|intcomma}}</td>

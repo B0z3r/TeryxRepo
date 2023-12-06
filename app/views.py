@@ -455,7 +455,16 @@ def agregar_venta(request):
             taller_id_seleccionado = request.POST.get('taller_id_taller')
             if taller_id_seleccionado:
                 taller_seleccionado = get_object_or_404(Taller, pk=taller_id_seleccionado)
+
+                # Calcula el valor del arreglo menos el abono
+                valor_arreglo = taller_seleccionado.valor
+                abono = taller_seleccionado.abono if taller_seleccionado.abono else 0
+                total_taller = valor_arreglo - abono
+
+                # Actualiza el campo correspondiente de la venta
                 formulario.instance.taller_id_taller = taller_seleccionado
+                formulario.instance.total = total_taller
+                formulario.save()
 
             messages.success(request, "Venta Creada Correctamente!")
             return JsonResponse({'success': True})
