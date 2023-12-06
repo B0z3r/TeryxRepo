@@ -47,5 +47,6 @@ urlpatterns = [
     path('agregar_venta_y_listar_producto/', views.agregar_venta_and_listar_producto, name='agregar_venta_y_listar_producto'),
     path('password_change/',login_required (ProfilePasswordChangeView.as_view()),name='Profile_password_change',),
     path('agregar-cantidad-stock/<int:producto_id>/', views.agregar_cantidad_stock, name='agregar_cantidad_stock'),
-   
+    
 ]
+

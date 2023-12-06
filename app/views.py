@@ -21,6 +21,7 @@ from django.template.loader import get_template
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
+import json
 
 
 # Create your views here.
@@ -632,5 +633,4 @@ def agregar_venta_and_listar_producto(request):
     })
 
     return render(request, 'app/venta/agregar_venta.html', data)
-
 

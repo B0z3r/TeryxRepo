@@ -2,10 +2,136 @@
 
 {% block js %}
 {% load humanize %}
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<style>
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo de la tabla */
+#example {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Espacio entre la tabla y otros elementos */
+}
+
+#example th, #example td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+#example th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Estilos para datos específicos */
+/* Puedes ajustar estos estilos según tus necesidades */
+#example td:nth-child(2) { /* Estilo para la columna de Estado */
+    color: #ffffff; /* Color del texto */
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Agregar más estilos para otras columnas si es necesario */
+
+/* Estilos para el encabezado y pie de página */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+</style>
+
+<script>
+function generarBoletaPDF() {
+    // Obtener datos de la tabla
+    var data = [];
+    $('#example tbody tr').each(function () {
+        var rowData = [];
+        $(this).find('td').each(function () {
+            rowData.push($(this).text().trim());
+        });
+        data.push(rowData);
+    });
+
+    // Definir el contenido del PDF
+    var contenido = [];
+    contenido.push(
+        { text: 'Boleta', style: 'encabezado' },
+        { text: '\n\n' },
+        
+    );
+
+    // Agregar los datos de la tabla al contenido del PDF
+    for (var i = 0; i < data.length; i++) {
+        var row = data[i];
+        var rowContent = [];
+        for (var j = 0; j < row.length; j++) {
+            rowContent.push({ text: row[j] });
+        }
+        contenido.push(rowContent);
+        contenido.push({ text: '\n' });
+    }
+
+    // Definir estilos
+    var estilos = {
+        encabezado: {
+            fontSize: 20,
+            bold: true,
+            alignment: 'center'
+        }
+        // Agrega más estilos si es necesario
+    };
+
+    // Configurar documento PDF
+    var docDefinition = {
+        content: contenido,
+        styles: estilos
+    };
+
+    // Generar PDF
+    pdfMake.createPdf(docDefinition).open(); // Abre el PDF en una nueva ventana
+    // También puedes usar pdfMake.createPdf(docDefinition).download('boleta.pdf'); para descargar el PDF
+}
+
+</script>
+
+<script>
+$('#example').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ]
+});
+</script>
 
 
 
@@ -49,29 +175,10 @@
   }
 </script>
 
-<script>
-  function imprimirBoleta() {
-    var contenidoBoleta = document.getElementById('boleta').innerHTML;
-    var ventanaImpresion = window.open('', '_blank');
-    ventanaImpresion.document.write('<html><head><title>Boleta de taller</title>');
-    ventanaImpresion.document.write('</head><body>');
-    ventanaImpresion.document.write(contenidoBoleta);
-    ventanaImpresion.document.write('</body></html>');
-    ventanaImpresion.document.close();
-    ventanaImpresion.print();
-  }
-</script>
-
-
 {% endblock %}
 {% block contenido %}
-
-
-
 <main class="mt-5 pt-3">
   <div class="container-fluid">
-
- 
     <div class="row"
       style="background-color: rgb(237, 239, 241); padding-bottom: 420px; margin: 10px; border-radius: 10px;">
       <div class="col-md-12 mb-3" style="padding-top: 30px;">
@@ -80,17 +187,16 @@
             <span><i class="bi bi-table me-2"></i></span> Historial taller
             {% if perms.app.add_taller %}
             <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
-            <button onclick="imprimirBoleta()" class="btn btn-secondary" style="float: right; margin-right: 10px;">Imprimir Boleta</button>
             {% endif %}
+            <button onclick="generarBoletaPDF()">Generar Boleta PDF</button>
+
+
           </div>
-          
           <div class="card-body">
             <div class="table-responsive">
-              <div id="boleta" >
-                <table id="example" class="table table-striped-columns table-hover data-table" style="width: 90% ; font-size: 10px;">
-               
+              <table id="example" class="table table-striped-columns table-hover data-table boleta-table">
                 <thead>
-                  <tr >
+                  <tr>
                     <th>Nº</th>
                     <th>Estado</th>
                     <th>Modelo de Bicicleta</th>
@@ -140,7 +246,8 @@
                         class="btn bi-pencil-square btn-info btn-md"></a>
                       <a href="#" onclick="eliminarTaller({{datos.id_taller}})"
                         class="btn  bi-trash btn-danger btn-md"></a>
-                      
+
+                        <button onclick="generarBoletaPDF('{{ datos.id_taller }}')">Generar PDF</button>
                     </td>
                     {% endif %}
                     {% endif %}
@@ -154,7 +261,6 @@
         </div>
       </div>
     </div>
-  </div>
   </div>
 </main>
 {% endblock %}
