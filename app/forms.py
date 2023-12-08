@@ -262,6 +262,7 @@ class ProveedorForm(forms.ModelForm):
 class TallerForm(forms.ModelForm):
 
     opc_tipo_arreglo = [
+    ('', 'Selecciona una opción....'),
     [0,"Ajustes básicos"],
     [1,"Cambio de neumáticos"],
     [2,"Cambio Frenos"],

@@ -4,7 +4,6 @@
 {% load humanize %}
 <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
- 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
@@ -17,58 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-<style>
-/* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
 
-/* Estilo de la tabla */
-#example {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px; /* Espacio entre la tabla y otros elementos */
-}
-
-#example th, #example td {
-    border: 1px solid #ccc;
-    padding: 8px;
-}
-
-#example th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: left;
-}
-
-/* Estilos para datos específicos */
-/* Puedes ajustar estos estilos según tus necesidades */
-#example td:nth-child(2) { /* Estilo para la columna de Estado */
-    color: #ffffff; /* Color del texto */
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Agregar más estilos para otras columnas si es necesario */
-
-/* Estilos para el encabezado y pie de página */
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #777;
-}
-
-</style>
 
 <script>
 function generarBoletaPDF() {

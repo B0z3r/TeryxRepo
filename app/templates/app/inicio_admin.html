@@ -70,18 +70,14 @@
               </tr>
             </thead>
             <tbody style="border-radius: 20px;">
-              {% for producto in productos_menos_cinco %}
-                <tr >
-                  <td>{{ producto.nombre_producto }}</td>
-                  <div style="text-align: center;">
-                    <td   style="color: {% if producto.stock < 5 %}red{% else %}black{% endif %} ; ">{{ producto.stock }}</td>
-                  </div>
-                  
+              {% for producto in productos_bajo_stock %}
+                <tr>
+                    <td>{{ producto.0 }}</td><!-- este es el nombre del producto-->
+                    <td style="{% if producto.1 <= 5 %}color: red;{% endif %}">{{ producto.1 }}</td><!-- este es el stock-->
                 </tr>
               {% endfor %}
             </tbody>
             </table>
-    
           </div>
         </div>
       </div>
