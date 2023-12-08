@@ -3,8 +3,29 @@
 
 {% block js %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
 
 <script>
   function eliminarProveedor(id) {
@@ -24,6 +45,65 @@
       }
     });
   }
+</script>
+
+<script>
+  $('#example').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+              {
+                  extend:    'excelHtml5',
+                  text:      '<i class="fa fa-file-excel-o"></i>',
+                  titleAttr: 'Excel',
+                  className: 'btn-success',
+                  title:     'Historial de Proveedores',
+                  pageSize:  'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                  },
+              },
+              {
+                  extend:    'csvHtml5',
+                  text:      '<i class="fa fa-file-text-o"></i>',
+                  titleAttr: 'CSV',
+                  className: 'btn-info',
+                  title:     'Historial de Proveedores',
+                  pageSize:  'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                  },
+              },
+              {
+                  extend:    'pdfHtml5',
+                  text:      '<i class="fa fa-file-pdf-o"></i>',
+                  titleAttr: 'PDF',
+                  className: 'btn-danger',
+                  title:     'Historial de Proveedores',
+                  pageSize:  'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                  },
+              },
+              {
+                  extend:    'print',
+                  text:      '<i class="fa fa-solid fa-print"></i>',
+                  titleAttr: 'Imprimir',
+                  title:     'Historial de Proveedores',
+                  className: 'btn-secondary',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                  },
+              },
+          ],
+          customize: function(win) {
+              // Modifica el estilo de la tabla para la impresión
+              $(win.document.body).find('#example').css({
+                  'transform': 'rotate(-90deg)',
+                  'transform-origin': 'left top',
+                  'white-space': 'nowrap' // Para evitar que el texto se ajuste
+              });
+          }
+      });
 </script>
 {% endblock %} 
 {% block contenido %}

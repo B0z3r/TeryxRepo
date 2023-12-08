@@ -1,6 +1,86 @@
 {% extends 'app/base.html' %}
 {% load humanize %}
 {% load static %}
+{% block js %}
+
+<script>
+   function generarBoletaPDF(id_taller) {
+    var clienteData = {};  // Objeto para almacenar datos del cliente
+    var tallerData = {};   // Objeto para almacenar datos del taller
+
+    // Iterar sobre las filas y obtener datos del cliente y del taller
+    $('#example tbody tr').each(function () {
+        var rowData = [];
+        var currentId = $(this).find('td:first').text().trim();
+
+        if (currentId === id_taller) {
+            // Obtener datos del taller
+            $(this).find('td').each(function (index) {
+                tallerData[index] = $(this).text().trim();
+            });
+
+            // Obtener datos del cliente (suponiendo que la información del cliente está en la primera fila)
+            $('#example tbody tr:first').find('td').each(function (index) {
+                clienteData[index] = $(this).text().trim();
+            });
+        }
+    });
+
+    // Definir el contenido del PDF
+    var contenido = [];
+    contenido.push(
+        { text: 'BOLETA ELECTRÓNICA', style: 'encabezado' },
+        { text: '\n\n' },
+        { text: 'Datos del Cliente', style: 'subtitulo' },
+        { text: '\n\n' },
+        { text: 'Nombre: ' + clienteData[6], style: 'dato' },  // Supongo que el nombre está en la séptima columna
+        { text: 'Rut: ' + clienteData[5], style: 'dato' },     // Supongo que el RUT está en la sexta columna
+        { text: 'Teléfono: ' + clienteData[7], style: 'dato' },
+        { text: 'Correo Electrónico: ' + tallerData[3], style: 'dato' },  // Supongo que el teléfono está en la octava columna
+        { text: '\n\n' },
+        { text: 'Datos del Taller', style: 'subtitulo' },
+        { text: '\n\n' },
+        { text: 'Tipo de Arreglo: ' + tallerData[3], style: 'dato' }, 
+        { text: 'Modelo de Bicicleta: ' + tallerData[2], style: 'dato' },  // Supongo que el modelo está en la tercera columna
+        { text: 'Fecha de Inicio: ' + tallerData[3], style: 'dato' }, 
+        { text: 'Fecha de Término: ' + tallerData[3], style: 'dato' },  
+        { text: 'Estado del Arreglo: ' + tallerData[3], style: 'dato' }, 
+        { text: '\n\n' },
+        { text: '----------------------------------------------------------------------------------------------------' },
+        { text: '\n\n' },
+        { text: 'Total Facturado: ' + tallerData[3], style: 'dato' },     // Supongo que la fecha de inicio está en la cuarta columna
+        // Agrega más datos según sea necesario
+    );
+
+    // Definir estilos
+    var estilos = {
+        encabezado: {
+            fontSize: 20,
+            bold: true,
+            alignment: 'center'
+        },
+        subtitulo: {
+            fontSize: 16,
+            bold: true
+        },
+        dato: {
+            fontSize: 14
+        }
+        // Agrega más estilos si es necesario
+    };
+
+    // Configurar documento PDF
+    var docDefinition = {
+        content: contenido,
+        styles: estilos
+    };
+
+    // Generar PDF
+    pdfMake.createPdf(docDefinition).download('boleta.pdf'); // Cambiado de 'open()' a 'download()'
+}
+</script>
+
+{% endblock %}
 {% block contenido %}
 {% load crispy_forms_tags %}
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);">
@@ -63,7 +143,7 @@
                                             <td>{{ taller.get_estado_display }}</td>
                                             <td> $ {{ taller.valor | intcomma }}</td>
                                             <td>
-                                                <button class="btn bi-file-earmark-text btn-secondary btn-md"></button>
+                                                <a href="#" onclick="generarBoletaPDF('{{ datos.id_taller }}')" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
                                             </td>
                                         </tr>
                                         {% endfor %}

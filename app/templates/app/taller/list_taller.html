@@ -15,74 +15,73 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
 
-
-
-<script>
-function generarBoletaPDF() {
-    // Obtener datos de la tabla
-    var data = [];
-    $('#example tbody tr').each(function () {
-        var rowData = [];
-        $(this).find('td').each(function () {
-            rowData.push($(this).text().trim());
-        });
-        data.push(rowData);
-    });
-
-    // Definir el contenido del PDF
-    var contenido = [];
-    contenido.push(
-        { text: 'Boleta', style: 'encabezado' },
-        { text: '\n\n' },
-        
-    );
-
-    // Agregar los datos de la tabla al contenido del PDF
-    for (var i = 0; i < data.length; i++) {
-        var row = data[i];
-        var rowContent = [];
-        for (var j = 0; j < row.length; j++) {
-            rowContent.push({ text: row[j] });
-        }
-        contenido.push(rowContent);
-        contenido.push({ text: '\n' });
-    }
-
-    // Definir estilos
-    var estilos = {
-        encabezado: {
-            fontSize: 20,
-            bold: true,
-            alignment: 'center'
-        }
-        // Agrega más estilos si es necesario
-    };
-
-    // Configurar documento PDF
-    var docDefinition = {
-        content: contenido,
-        styles: estilos
-    };
-
-    // Generar PDF
-    pdfMake.createPdf(docDefinition).open(); // Abre el PDF en una nueva ventana
-    // También puedes usar pdfMake.createPdf(docDefinition).download('boleta.pdf'); para descargar el PDF
-}
-
-</script>
 
 <script>
 $('#example').DataTable({
     dom: 'Bfrtip',
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-    ]
-});
+            {
+                extend:    'excelHtml5',
+                text:      '<i class="fa fa-file-excel-o"></i>',
+                titleAttr: 'Excel',
+                title:     'Historial de Taller',
+                className: 'btn-success',
+                orientation: 'landscape',
+                pageSize:  'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                },
+            },
+            {
+                extend:    'csvHtml5',
+                text:      '<i class="fa fa-file-text-o"></i>',
+                titleAttr: 'CSV',
+                title:     'Historial de Taller',
+                className: 'btn-info',
+                orientation: 'landscape',
+                pageSize:  'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                },
+            },
+            {
+                extend:    'pdfHtml5',
+                text:      '<i class="fa fa-file-pdf-o"></i>',
+                titleAttr: 'PDF',
+                title:     'Historial de Taller',
+                className: 'btn-danger',
+                orientation: 'landscape',
+                pageSize:  'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                },
+            },
+            {
+                extend:    'print',
+                text:      '<i class="fa fa-solid fa-print"></i>',
+                titleAttr: 'Imprimir',
+                title:     'Historial de Taller',
+                className: 'btn-secondary',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
+                },
+            },
+        ],
+        customize: function(win) {
+            // Modifica el estilo de la tabla para la impresión
+            $(win.document.body).find('#example').css({
+                'transform': 'rotate(-90deg)',
+                'transform-origin': 'left top',
+                'white-space': 'nowrap' // Para evitar que el texto se ajuste
+            });
+        }
+    });
 </script>
-
-
-
 
 <script>
   $(document).ready(function () {
@@ -136,8 +135,6 @@ $('#example').DataTable({
             {% if perms.app.add_taller %}
             <a href="{% url 'agregar_taller' %}" class="btn btn-primary" style="float: right;"> Agregar Agendamiento</a>
             {% endif %}
-            <button onclick="generarBoletaPDF()">Generar Boleta PDF</button>
-
 
           </div>
           <div class="card-body">
@@ -179,7 +176,6 @@ $('#example').DataTable({
                     <td>
                       {{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}
                   </td>
-                  
                     <td>{{ datos.cliente_rut_cliente.fono }}</td>
                     <td>{{ datos.get_tipo_arreglo_display }}</td>
                     <td>${{ datos.valor | intcomma }}</td>
@@ -189,13 +185,9 @@ $('#example').DataTable({
                     <td>${{ datos.total_neto | intcomma }}</td>
                     {% if perms.app.change_venta %}
                     {% if perms.app.delete_venta %}
-                    <td>
-                      <a href="{% url 'modificar_taller' datos.id_taller %}"
-                        class="btn bi-pencil-square btn-info btn-md"></a>
-                      <a href="#" onclick="eliminarTaller({{datos.id_taller}})"
-                        class="btn  bi-trash btn-danger btn-md"></a>
-
-                        <button onclick="generarBoletaPDF('{{ datos.id_taller }}')">Generar PDF</button>
+                    <td id="opciones">
+                      <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-info btn-md"></a>
+                      <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a>
                     </td>
                     {% endif %}
                     {% endif %}

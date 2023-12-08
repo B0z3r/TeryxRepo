@@ -22,7 +22,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 import json
-from .utils import obtener_productos_bajo_stock
+from .utils import obtener_productos_bajo_stock, obtener_suma_totales_por_tipo_pago
 
 
 # Create your views here.
@@ -47,6 +47,7 @@ def inicio_admin(request):
     talleres = Taller.objects.all()
     total_talleres = talleres.count()
     productos_bajo_stock = obtener_productos_bajo_stock()
+    suma_totales_por_tipo_pago = obtener_suma_totales_por_tipo_pago()
     talleres_atrasados = Taller.objects.filter(fecha_termino__lt=date.today())
     talleres_atrasados_estado = Taller.objects.filter(estado="2")
 
@@ -60,6 +61,7 @@ def inicio_admin(request):
         'talleres': talleres,
         'total_talleres': total_talleres,
         'productos_bajo_stock': productos_bajo_stock,
+        'suma_totales_por_tipo_pago': suma_totales_por_tipo_pago,
         'talleres_atrasados': talleres_atrasados,
         'talleres_atrasados_estado': talleres_atrasados_estado,
     }
