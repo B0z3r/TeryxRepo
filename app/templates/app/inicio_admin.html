@@ -4,11 +4,19 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="//code.highcharts.com/css/highcharts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
 <script src="//code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 
 <!-- offcanvas -->
 <main class="mt-5 pt-3">
@@ -91,8 +99,8 @@
         </div>
       </div>
 <!--GRAFICO DE SUMA DE TOTALES DE TIPO DE PAGO-->
-      <div class="col-md-6 " >
-        <div id="contenedor" class="shadow-lg p-3 mb-5">
+      <div class="col-md-6" >
+        <div id="contenedor" >
           <div class="container-fluid">
             <div class="row">
               <div class="col">
@@ -120,74 +128,86 @@
       <script>
         $(document).ready(function(){
           var table = $("#exampleGrafico").DataTable({
-            dom: 'Pfrtip', //P para ver el panel de busqueda
+            dom: 'Pfrtip', //P para ver el panel de búsqueda
           })
-  
-          //Grafico con los datos 
-          var container = $('#contenedor');
-          var chart = Highcharts.chart(container[0],{
-                chart: {
-                    type: 'pie',
-                    plotBackgroundColor: '#F2F2F2',
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.y}',
-                                distance: -50,
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            },
-                            showInLegend: true
-                        }
-                    },
-                },
-                title:{
-                    text: 'Gráfico Suma de Totales por Tipo de Pago'
-                },
-                tooltip: {
-                    valueSuffix: '%'
-                },
-                series: [
-                    {
-                        data: chartData(table),
-                        dataLabels: {
-                            enabled: true, // Asegura que las etiquetas estén habilitadas
-                        }
+      
+          // Gráfico con los datos 
+          var graf = $('#contenedor');
+          var chart = Highcharts.chart(graf[0], {
+            chart: {
+              type: 'pie',
+              plotBackgroundColor: 'white',
+              plotBorderWidth: null,
+              plotShadow: false,
+              plotOptions: {
+                pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y}',
+                    distance: -50,
+                    style: {
+                      color: 'black'
                     }
-                ]
+                  },
+                  showInLegend: true
+                }
+              },
+            },
+            title: {
+              text: 'Gráfico Suma de Totales por Tipo de Pago'
+            },
+            tooltip: {
+              pointFormat: '{point.name}: <b>{point.y}</b>',
+            },
+            series: [{
+              data: chartData(table),
+              dataLabels: {
+                enabled: true, // Asegura que las etiquetas estén habilitadas
+              }
+            }]
           });
-          //por cada seleccion del filtro se actualiza los datos del grafico
+      
+          // Por cada selección del filtro se actualiza los datos del gráfico
           table.on('draw', function(){
             chart.series[0].setData(chartData(table));
           });
-          //funcion chartData
-          function chartData(table){
-              var filasAfectadas = {};
-              table.column(1, { search: 'applied' }).data().each(function (val){
-                if (filasAfectadas[val]) {
-                  filasAfectadas[val] += 1;
-                } else {
-                  filasAfectadas[val] = 1;
-                }
-              });
-  
-              return $.map(filasAfectadas, function (cantidad, clave){
-                  return{
-                    name: clave,
-                    y: cantidad
-                  };
-              });
+      
+          // Configuración adicional para la exportación y visualización
+          Highcharts.setOptions({
+            lang: {
+              viewFullscreen: "Ver pantalla completa",
+              printChart: "Imprimir gráfico",
+              downloadPNG: "Descargar como PNG",
+              downloadJPEG: "Descargar como JPEG",
+              downloadPDF: "Descargar como PDF",
+              downloadSVG: "Descargar como SVG",
+              downloadCSV: "Descargar datos CSV",
+            }
+          });
+          
+          // Función chartData
+          function chartData(table) {
+            var filasAfectadas = {};
+            table.column(1, { search: 'applied' }).data().each(function (val){
+              if (filasAfectadas[val]) {
+                filasAfectadas[val] += 1;
+              } else {
+                filasAfectadas[val] = 1;
+              }
+            });
+      
+            return $.map(filasAfectadas, function (cantidad, clave){
+              return{
+                name: clave,
+                y: cantidad
+              };
+            });
           }
         });
       </script>
     </div>
-
 <!--AGENDAMIENTOS EN ESTADO ATRASADOS-->
     <div class="row">
       <div class="col-md-12 " >
