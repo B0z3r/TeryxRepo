@@ -144,22 +144,22 @@ $(document).ready(function () {
                     <tbody>
                         {% for p in entity %}
                         <tr>
-                            <td>{{ p.id_venta }}</td>
-                            <td>{{ p.fecha }}</td>
+                            <td>{{ p.id_venta|upper }}</td>
+                            <td>{{ p.fecha|upper }}</td>
                             <td>
                                 {% if p.producto_id_producto %}
-                                  {{ p.producto_id_producto.nombre_producto }} - Cantidad: {{ p.cantidad_productos_vendidos }}
+                                  {{ p.producto_id_producto.nombre_producto|upper }} - Cantidad: {{ p.cantidad_productos_vendidos|upper }}
                                 {% elif p.taller_id_taller %}
-                                  {{ p.taller_id_taller.get_tipo_arreglo_display }}
+                                  {{ p.taller_id_taller.get_tipo_arreglo_display|upper }}
                                 {% endif %}
                             </td>
-                            <td>{{ p.tipopago }}</td>
-                            <td>${{ p.total|intcomma}}</td>
+                            <td>{{ p.tipopago|upper }}</td>
+                            <td>${{ p.total|intcomma|upper }}</td>
                             {% if perms.app.change_venta %}
                             {% if perms.app.delete_venta %}
                             <td>
                                 <a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                               
+                                               
                                 <a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a>
                             </td>
                             {% endif %}
@@ -167,6 +167,7 @@ $(document).ready(function () {
                         </tr>
                         {% endfor %}
                     </tbody>
+                    
 
                 
                 </table>

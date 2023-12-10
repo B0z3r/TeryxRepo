@@ -4,8 +4,19 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@latest"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"></script>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 {% load static %}
 {% load humanize %}
@@ -13,8 +24,21 @@
 {% block contenido %}
 {% load crispy_forms_tags %}
 
+
+
 <script>
     $(document).ready(function () {
+        $('#exampleProductos').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"
+            }
+        });
+
+        $('#exampleTalleres').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"
+            }
+        });
         $('#PAGAR').click(function () {
             // Verificar si hay al menos un producto o taller seleccionado
             if (listaProductos.length > 0 || listaTalleres.length > 0) {
@@ -326,7 +350,7 @@
                 </div>
                 <div class="modal-body" style="overflow: scroll;">
                     <div class="table-responsive" >
-                        <table id="example" class="table table-striped data-table" style="width: 100% ;">     
+                        <table id="exampleProductos" class="table table-striped data-table" style="width: 100% ;">     
                         <thead>
                             <tr>
                                 <th>Nº</th>
@@ -371,7 +395,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="overflow: scroll;">
-                    <table class="table table-hover" id="myTableTalleres">
+                    <table id="exampleTalleres" class="table table-striped data-table" style="width: 100% ;">  
+                          
                         <thead>
                             <tr>
                                 <th>Nº</th>
