@@ -44,118 +44,73 @@
     }
 </script>
 
-<script>
-    function generarBoletaPDF(id_venta) {
-        var data = [];
-        $('#example tbody tr').each(function () {
-            var rowData = [];
-            var currentId = $(this).find('td:first').text().trim(); 
-    
-    
-            if (currentId === id_venta) {
-                $(this).find('td').each(function () {
-                    rowData.push($(this).text().trim());
-                });
-                data.push(rowData);
-            }
-        });
-    
-        // Definir el contenido del PDF
-        var contenido = [];
-        contenido.push(
-            { text: 'BOLETA ELECTRÓNICA', style: 'encabezado' },
-            { text: '\n\n' },
-        );
-    
-        for (var i = 0; i < data.length; i++) {
-            var row = data[i];
-            var rowContent = [];
-            for (var j = 0; j < row.length; j++) {
-                rowContent.push({ text: row[j] });
-            }
-            contenido.push(rowContent);
-            contenido.push({ text: '\n' });
-        }
-    
-        // Definir estilos
-        var estilos = {
-            encabezado: {
-                fontSize: 20,
-                bold: true,
-                alignment: 'center'
-            }
-            // Agrega más estilos si es necesario
-        };
-    
-        // Configurar documento PDF
-        var docDefinition = {
-            content: contenido,
-            styles: estilos
-        };
-    
-        // Generar PDF
-        pdfMake.createPdf(docDefinition).open(); // Abre el PDF en una nueva ventana
-        // También puedes usar pdfMake.createPdf(docDefinition).download('boleta.pdf'); para descargar el PDF
-    }
-</script>
 
 <script>
+$(document).ready(function () {
+    // Verifica si ya existe una tabla DataTable y la destruye antes de volver a inicializarla
+    if ($.fn.DataTable.isDataTable('#example')) {
+        $('#example').DataTable().destroy();
+    }
+
     $('#example').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+        },
         dom: 'Bfrtip',
         buttons: [
-                {
-                    extend:    'excelHtml5',
-                    text:      '<i class="fa fa-file-excel-o"></i>',
-                    titleAttr: 'Excel',
-                    className: 'btn-success',
-                    title:     'Historial de Ventas',
-                    pageSize:  'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                    },
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel-o"></i>',
+                titleAttr: 'Excel',
+                className: 'btn-success',
+                title: 'Historial de Ventas',
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
                 },
-                {
-                    extend:    'csvHtml5',
-                    text:      '<i class="fa fa-file-text-o"></i>',
-                    titleAttr: 'CSV',
-                    className: 'btn-info',
-                    title:     'Historial de Ventas',
-                    pageSize:  'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                    },
+            },
+            {
+                extend: 'csvHtml5',
+                text: '<i class="fa fa-file-text-o"></i>',
+                titleAttr: 'CSV',
+                className: 'btn-info',
+                title: 'Historial de Ventas',
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
                 },
-                {
-                    extend:    'pdfHtml5',
-                    text:      '<i class="fa fa-file-pdf-o"></i>',
-                    titleAttr: 'PDF',
-                    className: 'btn-danger',
-                    title:     'Historial de Ventas',
-                    pageSize:  'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                    },
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="fa fa-file-pdf-o"></i>',
+                titleAttr: 'PDF',
+                className: 'btn-danger',
+                title: 'Historial de Ventas',
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
                 },
-                {
-                    extend:    'print',
-                    text:      '<i class="fa fa-solid fa-print"></i>',
-                    titleAttr: 'Imprimir',
-                    title:     'Historial de Ventas',
-                    className: 'btn-secondary',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                    },
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-solid fa-print"></i>',
+                titleAttr: 'Imprimir',
+                title: 'Historial de Ventas',
+                className: 'btn-secondary',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
                 },
-            ],
-            customize: function(win) {
-                // Modifica el estilo de la tabla para la impresión
-                $(win.document.body).find('#example').css({
-                    'transform': 'rotate(-90deg)',
-                    'transform-origin': 'left top',
-                    'white-space': 'nowrap' // Para evitar que el texto se ajuste
-                });
-            }
-        });
+            },
+        ],
+        customize: function (win) {
+            $(win.document.body).find('#example').css({
+                'transform': 'rotate(-90deg)',
+                'transform-origin': 'left top',
+                'white-space': 'nowrap'
+            });
+        }
+    });
+});
 </script>
 {% endblock %}
 {% block contenido %}
@@ -201,7 +156,7 @@
                             {% if perms.app.delete_venta %}
                             <td>
                                 <a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                                <a href="#" onclick="generarBoletaPDF('{{ datos.id_venta }}')" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
+                               
                                 <a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a>
                             </td>
                             {% endif %}
