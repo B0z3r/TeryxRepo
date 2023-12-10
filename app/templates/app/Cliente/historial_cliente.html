@@ -3,83 +3,99 @@
 {% load static %}
 {% block js %}
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
+
 <script>
-   function generarBoletaPDF(id_taller) {
-    var clienteData = {};  // Objeto para almacenar datos del cliente
-    var tallerData = {};   // Objeto para almacenar datos del taller
+    $(document).ready(function () {
+    // Verifica si ya existe una tabla DataTable y la destruye antes de volver a inicializarla
+    if ($.fn.DataTable.isDataTable('#example')) {
+        $('#example').DataTable().destroy();
+    }
 
-    // Iterar sobre las filas y obtener datos del cliente y del taller
-    $('#example tbody tr').each(function () {
-        var rowData = [];
-        var currentId = $(this).find('td:first').text().trim();
-
-        if (currentId === id_taller) {
-            // Obtener datos del taller
-            $(this).find('td').each(function (index) {
-                tallerData[index] = $(this).text().trim();
-            });
-
-            // Obtener datos del cliente (suponiendo que la información del cliente está en la primera fila)
-            $('#example tbody tr:first').find('td').each(function (index) {
-                clienteData[index] = $(this).text().trim();
+    $('#example').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+        },
+        dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel-o"></i>',
+                titleAttr: 'Excel',
+                className: 'btn-success',
+                title: 'Historial de {{ cliente.nombre_cliente }}', 
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
+                },
+            },
+            {
+                extend: 'csvHtml5',
+                text: '<i class="fa fa-file-text-o"></i>',
+                titleAttr: 'CSV',
+                className: 'btn-info',
+                title: 'Historial de {{ cliente.nombre_cliente }}', 
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
+                },
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="fa fa-file-pdf-o"></i>',
+                titleAttr: 'PDF',
+                className: 'btn-danger',
+                title: 'Historial de {{ cliente.nombre_cliente }}', 
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
+                },
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-solid fa-print"></i>',
+                titleAttr: 'Imprimir',
+                title: 'Historial de {{ cliente.nombre_cliente }}', 
+                className: 'btn-secondary',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
+                },
+            },
+        ],
+        customize: function (win) {
+            $(win.document.body).find('#example').css({
+                'transform': 'rotate(-90deg)',
+                'transform-origin': 'left top',
+                'white-space': 'nowrap'
             });
         }
     });
-
-    // Definir el contenido del PDF
-    var contenido = [];
-    contenido.push(
-        { text: 'BOLETA ELECTRÓNICA', style: 'encabezado' },
-        { text: '\n\n' },
-        { text: 'Datos del Cliente', style: 'subtitulo' },
-        { text: '\n\n' },
-        { text: 'Nombre: ' + clienteData[6], style: 'dato' },  // Supongo que el nombre está en la séptima columna
-        { text: 'Rut: ' + clienteData[5], style: 'dato' },     // Supongo que el RUT está en la sexta columna
-        { text: 'Teléfono: ' + clienteData[7], style: 'dato' },
-        { text: 'Correo Electrónico: ' + tallerData[3], style: 'dato' },  // Supongo que el teléfono está en la octava columna
-        { text: '\n\n' },
-        { text: 'Datos del Taller', style: 'subtitulo' },
-        { text: '\n\n' },
-        { text: 'Tipo de Arreglo: ' + tallerData[3], style: 'dato' }, 
-        { text: 'Modelo de Bicicleta: ' + tallerData[2], style: 'dato' },  // Supongo que el modelo está en la tercera columna
-        { text: 'Fecha de Inicio: ' + tallerData[3], style: 'dato' }, 
-        { text: 'Fecha de Término: ' + tallerData[3], style: 'dato' },  
-        { text: 'Estado del Arreglo: ' + tallerData[3], style: 'dato' }, 
-        { text: '\n\n' },
-        { text: '----------------------------------------------------------------------------------------------------' },
-        { text: '\n\n' },
-        { text: 'Total Facturado: ' + tallerData[3], style: 'dato' },     // Supongo que la fecha de inicio está en la cuarta columna
-        // Agrega más datos según sea necesario
-    );
-
-    // Definir estilos
-    var estilos = {
-        encabezado: {
-            fontSize: 20,
-            bold: true,
-            alignment: 'center'
-        },
-        subtitulo: {
-            fontSize: 16,
-            bold: true
-        },
-        dato: {
-            fontSize: 14
-        }
-        // Agrega más estilos si es necesario
-    };
-
-    // Configurar documento PDF
-    var docDefinition = {
-        content: contenido,
-        styles: estilos
-    };
-
-    // Generar PDF
-    pdfMake.createPdf(docDefinition).download('boleta.pdf'); // Cambiado de 'open()' a 'download()'
-}
-</script>
-
+});
+    </script>
 {% endblock %}
 {% block contenido %}
 {% load crispy_forms_tags %}
@@ -130,7 +146,7 @@
                                             <th>Modelo Bicicleta</th>
                                             <th>Estado de Arreglo</th>
                                             <th>Total Facturado</th>
-                                            <th>Opciones</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -142,13 +158,14 @@
                                             <td>{{ taller.modelo_bicicleta |capfirst }}</td>
                                             <td>{{ taller.get_estado_display }}</td>
                                             <td> $ {{ taller.valor | intcomma }}</td>
-                                            <td>
-                                                <a href="#" onclick="generarBoletaPDF('{{ datos.id_taller }}')" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
-                                            </td>
+                                           
                                         </tr>
                                         {% endfor %}
                                     </tbody>
+                                 
+
                                 </table>
+
                             </div>
                             <a href="{% url 'listar_cliente' %}" class="btn btn-primary btn-sm"
                                 style="float: right;">ATRAS</a>

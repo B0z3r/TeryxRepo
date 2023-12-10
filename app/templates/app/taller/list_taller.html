@@ -21,67 +21,75 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
 
 
+
 <script>
-$('#example').DataTable({
-    dom: 'Bfrtip',
-    buttons: [
-            {
-                extend:    'excelHtml5',
-                text:      '<i class="fa fa-file-excel-o"></i>',
-                titleAttr: 'Excel',
-                title:     'Historial de Taller',
-                className: 'btn-success',
-                orientation: 'landscape',
-                pageSize:  'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                },
-            },
-            {
-                extend:    'csvHtml5',
-                text:      '<i class="fa fa-file-text-o"></i>',
-                titleAttr: 'CSV',
-                title:     'Historial de Taller',
-                className: 'btn-info',
-                orientation: 'landscape',
-                pageSize:  'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                },
-            },
-            {
-                extend:    'pdfHtml5',
-                text:      '<i class="fa fa-file-pdf-o"></i>',
-                titleAttr: 'PDF',
-                title:     'Historial de Taller',
-                className: 'btn-danger',
-                orientation: 'landscape',
-                pageSize:  'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                },
-            },
-            {
-                extend:    'print',
-                text:      '<i class="fa fa-solid fa-print"></i>',
-                titleAttr: 'Imprimir',
-                title:     'Historial de Taller',
-                className: 'btn-secondary',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)' // Imprime solo las columnas visibles, excluyendo la última
-                },
-            },
-        ],
-        customize: function(win) {
-            // Modifica el estilo de la tabla para la impresión
-            $(win.document.body).find('#example').css({
-                'transform': 'rotate(-90deg)',
-                'transform-origin': 'left top',
-                'white-space': 'nowrap' // Para evitar que el texto se ajuste
-            });
-        }
-    });
-</script>
+  $(document).ready(function () {
+      // Verifica si ya existe una tabla DataTable y la destruye antes de volver a inicializarla
+      if ($.fn.DataTable.isDataTable('#example')) {
+          $('#example').DataTable().destroy();
+      }
+  
+      $('#example').DataTable({
+          "language": {
+              "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+          },
+          dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
+          lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
+          buttons: [
+              {
+                  extend: 'excelHtml5',
+                  text: '<i class="fa fa-file-excel-o"></i>',
+                  titleAttr: 'Excel',
+                  className: 'btn-success',
+                  title: 'Historial Taller',
+                  pageSize: 'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)'
+                  },
+              },
+              {
+                  extend: 'csvHtml5',
+                  text: '<i class="fa fa-file-text-o"></i>',
+                  titleAttr: 'CSV',
+                  className: 'btn-info',
+                  title: 'Historial Taller',
+                  pageSize: 'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)'
+                  },
+              },
+              {
+                  extend: 'pdfHtml5',
+                  text: '<i class="fa fa-file-pdf-o"></i>',
+                  titleAttr: 'PDF',
+                  className: 'btn-danger',
+                  title: 'Historial Taller',
+                  pageSize: 'LEGAL',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)'
+                  },
+              },
+              {
+                  extend: 'print',
+                  text: '<i class="fa fa-solid fa-print"></i>',
+                  titleAttr: 'Imprimir',
+                  title: 'Historial Taller',
+                  className: 'btn-secondary',
+                  exportOptions: {
+                      columns: ':visible:not(:last-child)'
+                  },
+              },
+          ],
+          customize: function (win) {
+              $(win.document.body).find('#example').css({
+                  'transform': 'rotate(-90deg)',
+                  'transform-origin': 'left top',
+                  'white-space': 'nowrap'
+              });
+          }
+      });
+  });
+  </script>
 
 <script>
   $(document).ready(function () {

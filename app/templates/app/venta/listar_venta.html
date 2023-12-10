@@ -56,7 +56,8 @@ $(document).ready(function () {
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
         },
-        dom: 'Bfrtip',
+        dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
         buttons: [
             {
                 extend: 'excelHtml5',
@@ -112,6 +113,8 @@ $(document).ready(function () {
     });
 });
 </script>
+
+
 {% endblock %}
 {% block contenido %}
 <main class="mt-5 pt-3">
@@ -164,6 +167,8 @@ $(document).ready(function () {
                         </tr>
                         {% endfor %}
                     </tbody>
+
+                
                 </table>
             </div>
         </div>
