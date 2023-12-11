@@ -1,4 +1,11 @@
 {% extends 'app/base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block contenido %}
+{% load crispy_forms_tags %}
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -17,13 +24,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-{% load static %}
-{% load humanize %}
-
-{% block contenido %}
-{% load crispy_forms_tags %}
-
 
 
 <script>
@@ -170,21 +170,34 @@
             cantidadInput.value = cantidad;
             cantidadInput.min = '1';
             cantidadInput.classList.add('cantidad-input');
+            cantidadInput.style.border = '2px solid green'; // Establecer un borde rojo de 2px
+            cantidadInput.style.padding = '8px'; // Añadir relleno alrededor del input
+            cantidadInput.style.borderRadius = '5px'; // Dar bordes redondeados
+            cantidadInput.style.backgroundColor = 'lightgrey'; // Fondo gris claro
+            cantidadInput.style.color = 'black'; // Texto en color negro
+            cantidadInput.style.width = '120px'; // Ancho del input
             cantidadInput.addEventListener('input', function () {
                 // Actualizar el subtotal al cambiar la cantidad
-                actualizarSubtotal(listItem, itemPrecio);
-                // Actualizar el total
-                actualizarTotal();
-            });
+            actualizarSubtotal(listItem, itemPrecio);
+            // Actualizar el total
+            actualizarTotal();
+        });
+                 var eliminarButton = document.createElement('button');
 
-            var eliminarButton = document.createElement('button');
-            eliminarButton.textContent = 'Eliminar';
-            eliminarButton.addEventListener('click', function () {
-                // Eliminar el producto de la lista y actualizar el total
-                lista.removeChild(listItem);
-                // Actualizar el total
-                actualizarTotal();
-            });
+                    eliminarButton.textContent = 'Eliminar';
+                    eliminarButton.style.color = 'white'; // Color del texto del botón
+                    eliminarButton.style.backgroundColor = '#e7241b'; // Color de fondo del botón
+                    eliminarButton.style.padding = '8px 12px'; // Espaciado dentro del botón
+                    eliminarButton.style.border = 'none'; // Sin borde
+                    eliminarButton.style.borderRadius = '4px'; // Borde redondeado
+                    eliminarButton.style.cursor = 'pointer'; // Cursor al pasar el ratón
+
+                    eliminarButton.addEventListener('click', function () {
+                        // Eliminar el producto de la lista y actualizar el total
+                        lista.removeChild(listItem);
+                        // Actualizar el total
+                        actualizarTotal();
+                    });
 
             var contenidoItem = document.createElement('span');
             contenidoItem.textContent = itemName + ' - Precio: $' + itemPrecio.toFixed(2);
@@ -247,30 +260,40 @@
 
         // Confirmar la venta
         $('#confirmarVentaBtn').click(function () {
-            var detalleVentaBody = $('#detalleVentaBody');
+    var detalleVentaBody = $('#detalleVentaBody');
 
-            // Limpiar el cuerpo de la tabla antes de agregar los nuevos detalles
-            detalleVentaBody.empty();
+    // Limpia el cuerpo de la tabla antes de agregar los nuevos detalles
+    detalleVentaBody.empty();
 
-            // Iterar sobre los productos en la lista
-            Array.from(listaProductos.children).forEach(function (item) {
-                var cantidad = parseFloat(item.querySelector('.cantidad-input').value);
-                var nombreProducto = item.querySelector('span').textContent.split(' - Precio')[0];
-                var subtotal = cantidad * parseFloat(item.dataset.precio);
+    // Crea la estructura de la tabla con sus títulos y estilos
+    var tabla = $('<table class="table table-striped"></table>');
+    var cabecera = $('<thead><tr><th>Nombre Producto</th><th>Cantidad</th><th>Subtotal</th><th>Método de Pago</th></tr></thead>');
+    tabla.append(cabecera);
 
-                // Agregar una fila a la tabla de detalles
-                detalleVentaBody.append('<tr>' +
-                    '<td>' + nombreProducto + '</td>' +
-                    '<td>' + cantidad + '</td>' +
-                    '<td>$' + subtotal.toFixed(2) + '</td>' +
-                    '<td>' + 'Efectivo' + '</td>' +
-                    '</tr>');
-            });
+    // Crea el cuerpo de la tabla con los detalles de cada producto
+    var cuerpoTabla = $('<tbody></tbody>');
 
-            // Ocultar el modal de confirmación de venta
-            $('#confirmacionVenta').modal('hide');
-        });
+    // Itera sobre los productos en la lista y agrega filas a la tabla
+    Array.from(listaProductos.children).forEach(function (item) {
+        var cantidad = parseFloat(item.querySelector('.cantidad-input').value);
+        var nombreProducto = item.querySelector('span').textContent.split(' - Precio')[0];
+        var subtotal = cantidad * parseFloat(item.dataset.precio);
+
+        // Crea una fila para cada producto
+        var fila = $('<tr><td>' + nombreProducto + '</td><td>' + cantidad + '</td><td>$' + subtotal.toFixed(2) + '</td><td>Efectivo</td></tr>');
+        cuerpoTabla.append(fila);
     });
+
+    // Agrega el cuerpo a la tabla
+    tabla.append(cuerpoTabla);
+
+    // Agrega la tabla al contenedor
+    detalleVentaBody.append(tabla);
+
+    // Oculta el modal de confirmación de venta
+    $('#confirmacionVenta').modal('hide');
+});
+});
 </script>
 
 {{ block.super }}
@@ -297,7 +320,7 @@
 
 <main>
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 100px;">
+        aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 50px;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
@@ -313,6 +336,11 @@
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="modal-footer">
+                            <hr>
+                            <!-- Botón para abrir el modal de productos y Taller -->
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
+                            <hr>
                             <div class="d-flex justify-content-center">
                                 <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
                                 &nbsp;
@@ -320,15 +348,16 @@
                             </div>
                         </div>
                     </form>
-                    <hr>
-                    <!-- Botón para abrir el modal de productos y Taller -->
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
-                    <hr>
+                   
                     <!-- Lista para mostrar productos seleccionados -->
-                    <ul id="listaProductos"></ul>
-                    <!-- Lista para mostrar talleres seleccionados -->
-                    <ul id="listaTalleres"></ul>
+                    <div id="productosContainer" style="max-height: 200px; overflow-y: auto;">
+                        <ul id="listaProductos"></ul>
+                    </div>
+                    
+                    <div id="talleresContainer" style="max-height: 200px; overflow-y: auto;">
+                        <ul id="listaTalleres"></ul>
+                    </div>
+                    
                     <!-- Campo oculto para almacenar el total -->
                     <input type="hidden" id="id_total" name="total" value="0.00">
                     <!-- Campos ocultos para almacenar los IDs de producto y taller -->
@@ -348,44 +377,45 @@
                     <h3 class="modal-title" id="modalProductosLabel">Listado de Productos</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="overflow: scroll;">
-                    <div class="table-responsive" >
-                        <table id="exampleProductos" class="table table-striped data-table" style="width: 100% ;">     
-                        <thead>
-                            <tr>
-                                <th>Nº</th>
-                                <th>Nombre Producto</th>
-                                <th>Stock</th>
-                                <th>Precio</th>
-                                <th>Opción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for producto in productos %}
+                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                    <div class="table-responsive">
+                        <table id="exampleProductos" class="table table-striped data-table" style="width: 100%;">
+                            <thead>
                                 <tr>
-                                    <td>{{ producto.id_producto }}</td>
-                                    <td>{{ producto.nombre_producto }}</td>
-                                    <td class="stock-cell">{{ producto.stock }}</td>
-                                    <td>${{ producto.precio_unitario | intcomma }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
-                                                data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
-                                                data-precio="{{ producto.precio_unitario }}">
-                                            Agregar
-                                        </button>
-                                    </td>
+                                    <th>Nº</th>
+                                    <th>Nombre Producto</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Opción</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for producto in productos %}
+                                    <tr>
+                                        <td>{{ producto.id_producto }}</td>
+                                        <td>{{ producto.nombre_producto | upper }}</td>
+                                        <td class="stock-cell">{{ producto.stock }}</td>
+                                        <td>${{ producto.precio_unitario | intcomma }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
+                                                    data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
+                                                    data-precio="{{ producto.precio_unitario }}">
+                                                Agregar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
-        </div>
     </div>
+    
     <!-- Modal de talleres -->
     <div class="modal fade" id="modalTalleres" tabindex="-1" aria-labelledby="modalTalleresLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -394,9 +424,8 @@
                     <h3 class="modal-title" id="modalTalleresLabel">Listados de Agendamientos</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="overflow: scroll;">
-                    <table id="exampleTalleres" class="table table-striped data-table" style="width: 100% ;">  
-                          
+                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                    <table id="exampleTalleres" class="table table-striped data-table" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>Nº</th>
@@ -443,6 +472,7 @@
             </div>
         </div>
     </div>
+    
 
     <script>
         var listaTalleres = [];  // Lista para almacenar los talleres seleccionados
