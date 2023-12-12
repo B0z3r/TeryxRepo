@@ -1,3 +1,6 @@
+
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -18,11 +21,6 @@
          
     </head>
 </head>
-<script>
-    $(document).ready( function () {
-      $('#example').DataTable(
-{ "language":{"url":"//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"}});});
-</script>
 
 <body >
 
@@ -260,18 +258,11 @@
                                 <li>
                                     <a href="{% url 'listar_producto' %}" class="nav-link px-3">
                                         <span class="me-2"><i class="bi bi-subtract"></i></span>
-                                        <span>Stock De Productos</span>
+                                        <span>Historial productos</span>
                                     </a>
                                 </li>
-                                <li class="my-2">
-                                    <hr class="dropdown-divider bg-light" />
-                                </li>
-                                <li>
-                                    <a href="{% url 'listar_producto' %}" class="nav-link px-3">
-                                        <span class="me-2"><i class="bi bi-receipt"></i></span>
-                                        <span>Compra De Productos</span>
-                                    </a>
-                                </li>
+                               
+                              
                             </ul>
                         </div>
                     </li>
@@ -363,3 +354,9 @@
 </body>
 
 </html>
+
+
+
+
+
+
