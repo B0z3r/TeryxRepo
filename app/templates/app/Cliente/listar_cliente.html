@@ -22,6 +22,7 @@
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
 
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
@@ -61,20 +62,24 @@
           dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
           lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
           buttons: [
-              {
+            {
                   extend: 'excelHtml5',
-                  text: '<i class="fa fa-file-excel-o"></i>',
+                  text: '<i class="fas fa-file-excel"></i>',
                   titleAttr: 'Excel',
                   className: 'btn-success',
                   title: 'Historial Clientes',
                   pageSize: 'LEGAL',
                   exportOptions: {
-                      columns: ':visible:not(:last-child)'
+                      columns: ':visible:not(:last-child)',
+                      customize: function (xlsx) {
+                          var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                          $('row c[r^="A"]', sheet).attr('s', '51');
+                      }
                   },
               },
               {
                   extend: 'csvHtml5',
-                  text: '<i class="fa fa-file-text-o"></i>',
+                  text: '<i class="fas fa-file-csv"></i>',
                   titleAttr: 'CSV',
                   className: 'btn-info',
                   title: 'Historial Clientes',
@@ -84,15 +89,19 @@
                   },
               },
               {
-                  extend: 'pdfHtml5',
-                  text: '<i class="fa fa-file-pdf-o"></i>',
-                  titleAttr: 'PDF',
-                  className: 'btn-danger',
-                  title: 'Historial Clientes',
-                  pageSize: 'LEGAL',
-                  exportOptions: {
-                      columns: ':visible:not(:last-child)'
-                  },
+                extend: 'pdfHtml5',
+                text: '<i class="fas fa-file-pdf"></i>',
+                titleAttr: 'PDF',
+                className: 'btn-danger',
+                title: 'Historial Clientes',
+                pageSize: 'LEGAL',
+                exportOptions: {
+                    columns: ':visible:not(:last-child)'
+                },
+                customize: function (doc) {
+                    // ajusta la orientación del documento a horizontal
+                    doc.pageOrientation = 'landscape';
+                }
               },
               {
                   extend: 'print',

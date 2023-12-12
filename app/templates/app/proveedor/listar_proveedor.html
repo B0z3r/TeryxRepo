@@ -61,39 +61,60 @@
             dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
             lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
             buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fa fa-file-excel-o"></i>',
-                    titleAttr: 'Excel',
-                    className: 'btn-success',
-                    title: 'Historial Proveedores',
-                    pageSize: 'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fas fa-file-excel"></i>',
+                        titleAttr: 'Excel',
+                        className: 'btn-success',
+                        title: 'Historial Proveedores',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            customize: function (xlsx) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                $('row c[r^="A"]', sheet).attr('s', '51');
+                            }
+                        },
                     },
-                },
-                {
-                    extend: 'csvHtml5',
-                    text: '<i class="fa fa-file-text-o"></i>',
-                    titleAttr: 'CSV',
-                    className: 'btn-info',
-                    title: 'Historial Proveedores',
-                    pageSize: 'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                    {
+                        extend: 'csvHtml5',
+                        text:'<i class="fas fa-file-csv"></i>',
+                        titleAttr: 'CSV',
+                        className: 'btn-info',
+                        title: 'Historial Proveedores',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
                     },
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: '<i class="fa fa-file-pdf-o"></i>',
-                    titleAttr: 'PDF',
-                    className: 'btn-danger',
-                    title: 'Historial Proveedores',
-                    pageSize: 'LEGAL',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i>',
+                        titleAttr: 'PDF',
+                        className: 'btn-danger',
+                        title: 'Historial Proveedores',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                        customize: function (doc) {
+                            // Ajusta el tamaño del texto
+                            doc.styles.tableHeader.fontSize = 10;
+                            doc.styles.tableBodyEven.fontSize = 8;
+                            doc.styles.tableBodyOdd.fontSize = 8;
+
+                            // Ajusta la orientación del documento a horizontal
+                            doc.pageOrientation = 'landscape';
+
+                            // Aplica estilos adicionales al contenido del documento
+                            var rowCount = doc.content[1].table.body.length;
+                            for (var i = 0; i < rowCount; i++) {
+                                doc.content[1].table.body[i].forEach(function (cell) {
+                                    cell.alignment = 'center';
+                                });
+                            }
+                        }
                     },
-                },
                 {
                     extend: 'print',
                     text: '<i class="fa fa-solid fa-print"></i>',

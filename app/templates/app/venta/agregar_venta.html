@@ -7,12 +7,12 @@
 {% load crispy_forms_tags %}
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
@@ -26,19 +26,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-<!-- Archivo de idioma en español para DataTables -->
 <script src="//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"></script>
 
 
@@ -67,20 +55,6 @@
         });
     });
 
-    // Agregar evento al botón de confirmar venta en el modal
-    $('#confirmarVentaBtn').click(function () {
-            // Verificar nuevamente antes de confirmar la venta
-            if (listaProductos.length > 0 || listaTalleres.length > 0) {
-                // Lógica para confirmar la venta y continuar con el proceso
-                // ...
-
-                // Cerrar el modal de confirmación después de realizar la venta
-                $('#confirmacionVenta').modal('hide');
-            } else {
-                // Mostrar un mensaje indicando que no hay elementos seleccionados
-                mostrarMensaje('No se puede confirmar la venta sin productos o talleres seleccionados', 'error');
-            }
-        });
 </script>
 
 <script>
@@ -462,14 +436,14 @@ document.addEventListener('DOMContentLoaded', function () {
             var tallerExistente = listaTalleres.find(function (taller) {
                 return taller.id === tallerId;
             });
-
+    
             if (tallerExistente) {
                 // Si el taller ya está en la lista, puedes actualizar la cantidad u otros detalles si es necesario
                 tallerExistente.cantidad = 1;
             } else {
                 // Calcular el precio total restando el abono
                 var precioTotal = tallerPrecio - abono;
-
+    
                 // Agregar el nuevo taller a la lista
                 listaTalleres.push({
                     id: tallerId,
@@ -477,24 +451,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     precio: precioTotal,
                     cantidad: 1
                 });
-
+    
+                // Eliminar el taller del listado original
+                eliminarTallerDeListadoOriginal(tallerId);
+    
                 // Mostrar mensaje o realizar otras acciones si es necesario
                 mostrarMensaje('Taller agregado correctamente', 'success');
             }
-
+    
             // Actualizar la interfaz según tus necesidades
             actualizarListaTalleresEnInterfaz();
-
-            // Verificar si el total es 0 y, en ese caso, resetear el campo total
-            if (listaTalleres.length === 0) {
-                totalInput.value = ''; // Puedes dejarlo en blanco o asignar otro valor según tus necesidades
-            }
+            // Actualizar la sección de agendamientos seleccionados en el formulario
+            actualizarAgendamientosSeleccionados();
         }
     
         function actualizarListaTalleresEnInterfaz() {
             var listaTalleresElement = document.getElementById('listaTalleres');
             listaTalleresElement.innerHTML = '';  // Limpiar la lista antes de actualizarla
-
+    
             listaTalleres.forEach(function (taller) {
                 var listItem = document.createElement('li');
                 listItem.innerHTML =
@@ -502,18 +476,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     ' - <strong>Nombre Cliente:</strong> ' + taller.nombre +
                     ' - <strong>Total a Pagar:</strong> $' + taller.precio.toFixed(2) +
                     ' <button class="btn btn-danger btn-eliminar-taller" data-id="' + taller.id + '">Eliminar</button>';
-
+    
                 listaTalleresElement.appendChild(listItem);
             });
-
-            // Actualizar el total en el formulario
-            actualizarTotal();
-
+    
             // Agregar eventos para los botones de eliminar
             document.querySelectorAll('.btn-eliminar-taller').forEach(function (btn) {
                 btn.addEventListener('click', function (event) {
                     event.preventDefault();
-
+    
                     var tallerId = this.dataset.id;
                     eliminarTallerDeLista(tallerId);
                 });
@@ -528,6 +499,23 @@ document.addEventListener('DOMContentLoaded', function () {
     
             // Actualizar la interfaz después de eliminar
             actualizarListaTalleresEnInterfaz();
+            // Actualizar la sección de agendamientos seleccionados en el formulario
+            actualizarAgendamientosSeleccionados();
+        }
+    
+        function actualizarAgendamientosSeleccionados() {
+            var agendamientosSeleccionadosElement = document.getElementById('agendamientosSeleccionados');
+            agendamientosSeleccionadosElement.innerHTML = '';  // Limpiar la sección antes de actualizarla
+    
+            listaTalleres.forEach(function (taller) {
+                var agendamientoItem = document.createElement('div');
+                agendamientoItem.innerHTML =
+                    '<strong>ID:</strong> ' + taller.id +
+                    ' - <strong>Nombre Cliente:</strong> ' + taller.nombre +
+                    ' - <strong>Total a Pagar:</strong> $' + taller.precio.toFixed(2);
+    
+                agendamientosSeleccionadosElement.appendChild(agendamientoItem);
+            });
         }
     
         function mostrarMensaje(mensaje, tipo) {
