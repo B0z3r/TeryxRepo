@@ -359,18 +359,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <div class="modal-footer">
-                            <hr>
+                        <div class="modal-footer" style="align-items: center; margin-right: 40px;">
+                           
                             <!-- Botón para abrir el modal de productos y Taller -->
-                            <button type="button"  style="background-color:   #2959d8 ; color: white;" class="btn " data-bs-toggle="modal"  data-bs-target="#modalProductos">Seleccionar Producto</button>
-                            <button type="button"  style="background-color:   #2959d8 ; color: white;"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
-                            <hr>
-                            <div class="d-flex justify-content-center">
-                                <a href="{% url 'listar_venta' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
-                                &nbsp;
-                                <button id="PAGAR" type="submit" class="btn btn-success">PAGAR</button>
-                            </div>
+                            <button type="button" style="background-color: #2959d8; color: white;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
+                            <button type="button" style="background-color: #2959d8; color: white;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
+                           
+                           
+                                <a href="{% url 'listar_venta' %}" class="btn btn-danger" style="width: 100px;">Cancelar</a>
+                                <button id="PAGAR" type="submit" class="btn btn-success" style="width: 100px;">PAGAR</button>
+                            
+                            
                         </div>
+                        
                     </form>
                    
                     <!-- Lista para mostrar productos seleccionados -->
