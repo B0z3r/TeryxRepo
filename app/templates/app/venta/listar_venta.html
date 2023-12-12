@@ -24,6 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.6/datatables.min.css"/>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.9/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<!-- Archivo de idioma en español para DataTables -->
+<script src="//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"></script>
 
 <script>
     function eliminarVenta(id) {
@@ -42,78 +52,87 @@
             }
         });
     }
+
+    
 </script>
+
+
 
 
 <script>
-$(document).ready(function () {
-    // Verifica si ya existe una tabla DataTable y la destruye antes de volver a inicializarla
-    if ($.fn.DataTable.isDataTable('#example')) {
-        $('#example').DataTable().destroy();
-    }
-
-    $('#example').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
-        },
-        dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
-        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-file-excel-o"></i>',
-                titleAttr: 'Excel',
-                className: 'btn-success',
-                title: 'Historial de Ventas',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)'
+    $(document).ready(function() {
+        var table = $('#example');
+    
+        if (!$.fn.DataTable.isDataTable(table)) {
+            table.DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
-            },
-            {
-                extend: 'csvHtml5',
-                text: '<i class="fa fa-file-text-o"></i>',
-                titleAttr: 'CSV',
-                className: 'btn-info',
-                title: 'Historial de Ventas',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)'
-                },
-            },
-            {
-                extend: 'pdfHtml5',
-                text: '<i class="fa fa-file-pdf-o"></i>',
-                titleAttr: 'PDF',
-                className: 'btn-danger',
-                title: 'Historial de Ventas',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)'
-                },
-            },
-            {
-                extend: 'print',
-                text: '<i class="fa fa-solid fa-print"></i>',
-                titleAttr: 'Imprimir',
-                title: 'Historial de Ventas',
-                className: 'btn-secondary',
-                exportOptions: {
-                    columns: ':visible:not(:last-child)'
-                },
-            },
-        ],
-        customize: function (win) {
-            $(win.document.body).find('#example').css({
-                'transform': 'rotate(-90deg)',
-                'transform-origin': 'left top',
-                'white-space': 'nowrap'
+                dom: 'lBfrtip', // Incluye 'l' para mostrar el selector de longitud de página
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]], // Configura las opciones del selector
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel',
+                        className: 'btn-success',
+                        title: 'Historial de Ventas',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV',
+                        className: 'btn-info',
+                        title: 'Historial de Ventas',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF',
+                        className: 'btn-danger',
+                        title: 'Historial de Ventas',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-solid fa-print"></i>',
+                        titleAttr: 'Imprimir',
+                        title: 'Historial de Ventas',
+                        className: 'btn-secondary',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                    },
+                ],
+                customize: function (win) {
+                    $(win.document.body).find('#example').css({
+                        'transform': 'rotate(-90deg)',
+                        'transform-origin': 'left top',
+                        'white-space': 'nowrap'
+                    });
+                }
+            });
+        } else {
+            table.DataTable().destroy();
+            table.DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                }
             });
         }
     });
-});
-</script>
-
+    </script>
 
 {% endblock %}
 {% block contenido %}
