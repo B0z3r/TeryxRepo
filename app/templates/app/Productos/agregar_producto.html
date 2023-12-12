@@ -15,6 +15,39 @@
   });
 </script>
 
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var costoRealField = document.querySelector('#id_costo_real');
+        var porcentajeGananciaField = document.querySelector('#id_porcentaje_ganancia');
+        var precioUnitarioField = document.querySelector('#id_precio_unitario');
+
+        costoRealField.addEventListener('input', function () {
+            actualizarPrecioUnitario();
+        });
+
+        porcentajeGananciaField.addEventListener('input', function () {
+            actualizarPrecioUnitario();
+        });
+
+        function actualizarPrecioUnitario() {
+            var costoReal = parseFloat(costoRealField.value);
+            var porcentajeGanancia = parseFloat(porcentajeGananciaField.value);
+            var iva = 0.19; // IVA fijo del 19%
+
+            if (!isNaN(costoReal) && !isNaN(porcentajeGanancia)) {
+                var ganancia = costoReal * (porcentajeGanancia / 100);
+                var precioSinIva = costoReal + ganancia;
+                var precioConIva = precioSinIva * (1 + iva);
+                precioUnitarioField.value = precioConIva.toFixed(2);
+            } else {
+                precioUnitarioField.value = '';
+            }
+        }
+    });
+</script>
+
 <main class="mt-5 pt-3" style="background-color: rgb(255, 255, 255);" >
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -22,20 +55,23 @@
           <div class="modal-header justify-content-center">
             <h1 class="modal-title fs-8" id="staticBackdropLabel">Agregar producto</h1>
           </div>
-          <div class="modal-body">
-              <form action="" method="post">   
-                  {% csrf_token %}
-                  {{ form|crispy }}
-                  <div class="modal-footer">
+          <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+            <form action="" method="post" id="productoForm">
+                {% csrf_token %}
+                {{ form|crispy }}
+        
+                <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                      <a href="{% url 'listar_producto' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
-                      &nbsp;
-                      <input type="submit" value="Guardar" class="btn btn-primary">
+                        <a href="{% url 'listar_producto' %}" value="Cancelar" class="btn btn-danger">Cancelar</a>
+                        &nbsp;
+                        <input type="submit" value="Guardar" class="btn btn-primary">
                     </div>
                 </div>
-              </form>
-              {{ mensaje }}
-          </div>
+            </form>
+        
+            {{ mensaje }}
+        </div>
+        
         </div>
       </div>
     </div>

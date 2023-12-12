@@ -1,27 +1,57 @@
-{% extends 'app/base.html' %} {% block js %}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://printjs.crabbly.com/print.min.js"></script>
+{% extends 'app/base.html' %}
 
-<script>
-  function eliminarColaborador(id) {
-    Swal.fire({
-      title: "¿Estas Seguro?",
-      text: "Que deseas Eliminar este Colaborador",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonText: "Eliminar",
-      reverseButtons: true,
-      confirmButtonColor: "#dc3545",
-    }).then(function (result) {
-      if (result.isConfirmed) {
-        window.location.href = "/eliminar-colaborador/" + id + "/";
+{% block js %}
+  <!-- Estilos de DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  <!-- Archivo de idioma en español para DataTables -->
+  <script src="//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"></script>
+
+  <script>
+    function eliminarColaborador(id) {
+      Swal.fire({
+        title: "¿Estás Seguro?",
+        text: "¿Qué deseas Eliminar este Colaborador?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Eliminar",
+        reverseButtons: true,
+        confirmButtonColor: "#dc3545",
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/eliminar-colaborador/" + id + "/";
+        }
+      });
+    }
+
+    $(document).ready(function() {
+      // Verificar si la tabla ya es un DataTable
+      if (!$.fn.DataTable.isDataTable('#example')) {
+        $('#example').DataTable({
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+          }
+        });
+      } else {
+        // Si ya es un DataTable, destruir la instancia anterior y luego inicializarla
+        $('#example').DataTable().destroy();
+        $('#example').DataTable({
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+          }
+        });
       }
     });
-  }
-</script>
+  </script>
+ 
+
 
 
 {% endblock %} {% block contenido %}

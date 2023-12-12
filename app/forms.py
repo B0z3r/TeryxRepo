@@ -161,9 +161,22 @@ class ProductoForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'placeholder': 'Ingresa la descripción del producto', 'cols': 30, 'rows': 3, 'required': False}),
         required=False,
     )
+
     precio_unitario = forms.DecimalField(
         label='Precio Unitario',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el precio unitario', 'required': False}),
+        required=False,
+    )
+
+    costo_real = forms.DecimalField(
+        label='Costo Real',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el costo real del producto', 'required': False}),
+        required=False,
+    )
+
+    porcentaje_ganancia = forms.DecimalField(
+        label='Porcentaje de Ganancia (%)',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el porcentaje de ganancia', 'required': False}),
         required=False,
     )
     stock = forms.IntegerField(
@@ -192,9 +205,22 @@ class ProductoForm(forms.ModelForm):
         input_formats=['%Y-%m-%d'],  # Formato de fecha deseado
     )
     
+    costo_real = forms.DecimalField(
+        label='Costo Real',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el costo real del producto', 'required': False}),
+        required=False,
+    )
+
+    porcentaje_ganancia = forms.DecimalField(
+        label='Porcentaje de Ganancia (%)',
+        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el porcentaje de ganancia', 'required': False}),
+        required=False,
+    )
+
     class Meta:
         model = Producto
-        fields = ["nombre_producto","marca","descripcion","precio_unitario","stock","categoria","nombre_proveedor","fecha_registro"]
+        fields = ["nombre_producto","marca","descripcion","precio_unitario","stock","categoria","nombre_proveedor","fecha_registro", "costo_real", "porcentaje_ganancia"]
+
 
 class ProveedorForm(forms.ModelForm):
      
