@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(formData);
                 if (data.success) {
                     alert('Venta creada correctamente.');
                     window.location.href = "{% url 'listar_venta' %}";
@@ -266,14 +267,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
         btn.addEventListener('click', function (event) {
             event.preventDefault();
-            console.log(btn);
+            console.log(this.dataset);
             var tallerId = this.dataset.id;
             var tallerNombreCliente = this.dataset.tallerNombreCliente;
             var tallerPrecio = parseFloat(this.dataset.precio);
             var abono = parseFloat(this.dataset.abono);
 
             console.log('Taller seleccionado:', tallerId, tallerNombreCliente, tallerPrecio, abono);
-
 
             // Agregar el taller a la lista
             agregarTallerALista(tallerId, tallerNombreCliente, tallerPrecio, abono);
