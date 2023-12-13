@@ -298,7 +298,7 @@ class TallerForm(forms.ModelForm):
 
     opc_estado = [
         [0,"En proceso"],
-        [1,"Términado"],
+        [1,"Terminado"],
         [2,"Atrasado"],
     ]
 
