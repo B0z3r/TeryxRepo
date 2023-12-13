@@ -187,6 +187,7 @@ def listar_cliente(request):
     }
 
     return render(request, 'app/Cliente/listar_cliente.html', data)
+
 @permission_required('app.change_cliente')
 def modificar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
