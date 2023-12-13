@@ -6,7 +6,7 @@
 {% block contenido %}
 {% load crispy_forms_tags %}
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
 <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -26,7 +26,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"></script>
 
 
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-agregar-producto').forEach(function (btn) {
         btn.addEventListener('click', function (event) {
             event.preventDefault();
-
+            console.log(event);
             var productoId = this.dataset.id;
             var productoNombre = this.dataset.nombre;
             var productoPrecio = parseFloat(this.dataset.precio);
@@ -130,7 +129,10 @@ document.addEventListener('DOMContentLoaded', function () {
             cantidadInput.value = parseFloat(cantidadInput.value) + cantidad;
         } else {
             agregarItem(listaProductos, idProductoInput, productoId, productoNombre, productoPrecio, cantidad);
-            mostrarMensaje('Producto agregado correctamente', 'success');
+            // Mostrar mensaje solo si no se está realizando una venta relacionada con id_taller_id_taller
+            if (!document.getElementById('id_taller_id_taller').value) {
+                mostrarMensaje('Producto agregado correctamente', 'success');
+            }
         }
 
         // Actualizar la cantidad en el formulario
@@ -218,19 +220,23 @@ document.addEventListener('DOMContentLoaded', function () {
         item.querySelector('span').textContent = item.querySelector('span').textContent.split(' - Subtotal:')[0] + ' - Subtotal: $' + subtotal.toFixed(2);
     }
 
+    // Función para actualizar el total general
     function actualizarTotal() {
-        var subtotalesProductos = Array.from(listaProductos.children).map(function (item) {
-            return parseFloat(item.querySelector('span').textContent.split('Subtotal: $')[1]);
-        });
+        var totalTalleres = listaTalleres.reduce(function (acc, taller) {
+            return acc + taller.precio;
+        }, 0);
 
-        var total = subtotalesProductos.reduce(function (acc, subtotal) {
+        var totalProductos = Array.from(listaProductos.children).map(function (item) {
+            return parseFloat(item.querySelector('span').textContent.split('Subtotal: $')[1]);
+        }).reduce(function (acc, subtotal) {
             return acc + (isNaN(subtotal) ? 0 : subtotal);
         }, 0);
 
-        totalInput.value = total.toFixed(2);
+        // Actualizar el input del total en el formulario
+        totalInput.value = totalTalleres + totalProductos;
 
         // Verificar si el total es 0 y, en ese caso, resetear el campo total
-        if (total === 0) {
+        if (totalInput.value === '0') {
             totalInput.value = ''; // Puedes dejarlo en blanco o asignar otro valor según tus necesidades
         }
     }
@@ -254,42 +260,107 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+    
+    var listaTalleres = [];  // Lista para almacenar los talleres seleccionados
 
-    // Confirmar la venta
-    $('#confirmarVentaBtn').click(function () {
-        var detalleVentaBody = $('#detalleVentaBody');
+    document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            console.log(btn);
+            var tallerId = this.dataset.id;
+            var tallerNombreCliente = this.dataset.tallerNombreCliente;
+            var tallerPrecio = parseFloat(this.dataset.precio);
+            var abono = parseFloat(this.dataset.abono);
 
-        // Limpia el cuerpo de la tabla antes de agregar los nuevos detalles
-        detalleVentaBody.empty();
+            console.log('Taller seleccionado:', tallerId, tallerNombreCliente, tallerPrecio, abono);
 
-        // Crea la estructura de la tabla con sus títulos y estilos
-        var tabla = $('<table class="table table-striped"></table>');
-        var cabecera = $('<thead><tr><th>Nombre Producto</th><th>Cantidad</th><th>Subtotal</th><th>Método de Pago</th></tr></thead>');
-        tabla.append(cabecera);
 
-        // Crea el cuerpo de la tabla con los detalles de cada producto
-        var cuerpoTabla = $('<tbody></tbody>');
+            // Agregar el taller a la lista
+            agregarTallerALista(tallerId, tallerNombreCliente, tallerPrecio, abono);
+        });
+    });
 
-        // Itera sobre los productos en la lista y agrega filas a la tabla
-        Array.from(listaProductos.children).forEach(function (item) {
-            var cantidad = parseFloat(item.querySelector('.cantidad-input').value);
-            var nombreProducto = item.querySelector('span').textContent.split(' - Precio')[0];
-            var subtotal = cantidad * parseFloat(item.dataset.precio);
-
-            // Crea una fila para cada producto
-            var fila = $('<tr><td>' + nombreProducto + '</td><td>' + cantidad + '</td><td>$' + subtotal.toFixed(2) + '</td><td>Efectivo</td></tr>');
-            cuerpoTabla.append(fila);
+    function agregarTallerALista(tallerId, tallerNombreCliente, tallerPrecio, abono) {
+        var tallerExistente = listaTalleres.find(function (taller) {
+            return taller.id === tallerId;
         });
 
-        // Agrega el cuerpo a la tabla
-        tabla.append(cuerpoTabla);
+        if (tallerExistente) {
+            // Si el taller ya está en la lista, puedes actualizar la cantidad u otros detalles si es necesario
+            tallerExistente.cantidad = 1;
+            
+        } else {
+            // Calcular el precio total restando el abono
+            var precioTotal = tallerPrecio - abono;
+            // Agregar el nuevo taller a la lista
+            listaTalleres.push({
+                id: tallerId,
+                nombre: tallerNombreCliente,
+                precio: precioTotal,
+                cantidad: 1
+            });
 
-        // Agrega la tabla al contenedor
-        detalleVentaBody.append(tabla);
+            // Actualizar los campos ocultos con los IDs seleccionados
+            document.getElementById('id_taller_id_taller').value = tallerId;
+            // Mostrar mensaje o realizar otras acciones si es necesario
+            mostrarMensaje('Taller agregado correctamente', 'success');
+        }
 
-        // Oculta el modal de confirmación de venta
-        $('#confirmacionVenta').modal('hide');
-    });
+        actualizarTotal();
+        // Actualizar la interfaz según tus necesidades
+        actualizarListaTalleresEnInterfaz();
+    }
+
+
+    function actualizarListaTalleresEnInterfaz() {
+        var listaTalleresElement = document.getElementById('listaTalleres');
+        listaTalleresElement.innerHTML = '';
+        
+
+        listaTalleres.forEach(function (taller) {
+            var listItem = document.createElement('li');
+            listItem.innerHTML =
+                '<strong>ID:</strong> ' + taller.id +
+                ' - <strong>Nombre Cliente:</strong> ' + taller.nombre +
+                ' - <strong>Total a Pagar:</strong> $' + taller.precio.toFixed(2) +
+                ' <button class="btn btn-danger btn-eliminar-taller" data-id="' + taller.id + '">Eliminar</button>';
+
+            listaTalleresElement.appendChild(listItem);
+        });
+
+        document.querySelectorAll('.btn-eliminar-taller').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                var tallerId = this.dataset.id;
+                eliminarTallerDeLista(tallerId);
+            });
+        });
+    }
+
+    function eliminarTallerDeLista(tallerId) {
+        // Filtrar la lista para excluir el taller con el ID proporcionado
+        listaTalleres = listaTalleres.filter(function (taller) {
+            return taller.id !== tallerId;
+        });
+
+        actualizarTotal();
+
+        // Actualizar la interfaz después de eliminar
+        actualizarListaTalleresEnInterfaz();
+    }
+
+
+    function mostrarMensaje(mensaje, tipo) {
+        console.log('Mostrando mensaje:', mensaje, 'Tipo:', tipo);
+        Swal.fire({
+            title: tipo === 'success' ? 'Éxito' : 'Error',
+            text: mensaje,
+            icon: tipo,
+            timer: 1000, // Duración del mensaje en milisegundos (opcional)
+            showConfirmButton: false // Oculta el botón de confirmación (opcional)
+        });
+    }
 });
 </script>
 
@@ -334,20 +405,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="modal-footer" style="align-items: center; margin-right: 40px;">
-                           
                             <!-- Botón para abrir el modal de productos y Taller -->
                             <button type="button" style="background-color: #2959d8; color: white;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProductos">Seleccionar Producto</button>
                             <button type="button" style="background-color: #2959d8; color: white;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalTalleres">Seleccionar Agendamiento</button>
-                           
-                           
                                 <a href="{% url 'listar_venta' %}" class="btn btn-danger" style="width: 100px;">Cancelar</a>
                                 <button id="PAGAR" type="submit" class="btn btn-success" style="width: 100px;">PAGAR</button>
-                            
-                            
                         </div>
-                        
                     </form>
-                   
                     <!-- Lista para mostrar productos seleccionados -->
                     <div id="productosContainer" style="max-height: 200px; overflow-y: auto;">
                         <ul id="listaProductos"></ul>
@@ -356,13 +420,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div id="talleresContainer" style="max-height: 200px; overflow-y: auto;">
                         <ul id="listaTalleres"></ul>
                     </div>
-                    
                     <!-- Campo oculto para almacenar el total -->
                     <input type="hidden" id="id_total" name="total" value="0.00">
                     <!-- Campos ocultos para almacenar los IDs de producto y taller -->
                     <input type="hidden" id="id_producto_id_producto" name="producto_id_producto">
                     <input type="hidden" id="id_taller_id_taller" name="taller_id_taller">
-
                     {{ mensaje }}
                 </div>
             </div>
@@ -397,7 +459,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <td>${{ producto.precio_unitario | intcomma }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-agregar-producto" style="float: inline-end;"
-                                                    data-id="{{ producto.id_producto }}" data-nombre="{{ producto.nombre_producto }}"
+                                                    data-id="{{ producto.id_producto }}" 
+                                                    data-nombre="{{ producto.nombre_producto }}"
                                                     data-precio="{{ producto.precio_unitario }}">
                                                 Agregar
                                             </button>
@@ -415,128 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 
-    <script>
-        var listaTalleres = [];  // Lista para almacenar los talleres seleccionados
     
-        document.querySelectorAll('.btn-agregar-taller').forEach(function (btn) {
-            btn.addEventListener('click', function (event) {
-                event.preventDefault();
-    
-                var tallerId = this.dataset.id;
-                var tallerNombreCliente = this.dataset.tallerNombreCliente;
-                var tallerPrecio = parseFloat(this.dataset.precio);
-                var abono = parseFloat(this.dataset.abono);
-    
-                // Agregar el taller a la lista
-                agregarTallerALista(tallerId, tallerNombreCliente, tallerPrecio, abono);
-            });
-        });
-    
-        function agregarTallerALista(tallerId, tallerNombreCliente, tallerPrecio, abono) {
-            var tallerExistente = listaTalleres.find(function (taller) {
-                return taller.id === tallerId;
-            });
-    
-            if (tallerExistente) {
-                // Si el taller ya está en la lista, puedes actualizar la cantidad u otros detalles si es necesario
-                tallerExistente.cantidad = 1;
-            } else {
-                // Calcular el precio total restando el abono
-                var precioTotal = tallerPrecio - abono;
-    
-                // Agregar el nuevo taller a la lista
-                listaTalleres.push({
-                    id: tallerId,
-                    nombre: tallerNombreCliente,
-                    precio: precioTotal,
-                    cantidad: 1
-                });
-    
-                // Eliminar el taller del listado original
-                eliminarTallerDeListadoOriginal(tallerId);
-    
-                // Mostrar mensaje o realizar otras acciones si es necesario
-                mostrarMensaje('Taller agregado correctamente', 'success');
-            }
-    
-            // Actualizar la interfaz según tus necesidades
-            actualizarListaTalleresEnInterfaz();
-            // Actualizar la sección de agendamientos seleccionados en el formulario
-            actualizarAgendamientosSeleccionados();
-        }
-    
-        function actualizarListaTalleresEnInterfaz() {
-            var listaTalleresElement = document.getElementById('listaTalleres');
-            listaTalleresElement.innerHTML = '';  // Limpiar la lista antes de actualizarla
-    
-            listaTalleres.forEach(function (taller) {
-                var listItem = document.createElement('li');
-                listItem.innerHTML =
-                    '<strong>ID:</strong> ' + taller.id +
-                    ' - <strong>Nombre Cliente:</strong> ' + taller.nombre +
-                    ' - <strong>Total a Pagar:</strong> $' + taller.precio.toFixed(2) +
-                    ' <button class="btn btn-danger btn-eliminar-taller" data-id="' + taller.id + '">Eliminar</button>';
-    
-                listaTalleresElement.appendChild(listItem);
-            });
-    
-            // Agregar eventos para los botones de eliminar
-            document.querySelectorAll('.btn-eliminar-taller').forEach(function (btn) {
-                btn.addEventListener('click', function (event) {
-                    event.preventDefault();
-    
-                    var tallerId = this.dataset.id;
-                    eliminarTallerDeLista(tallerId);
-                });
-            });
-        }
-    
-        function eliminarTallerDeLista(tallerId) {
-            // Filtrar la lista para excluir el taller con el ID proporcionado
-            listaTalleres = listaTalleres.filter(function (taller) {
-                return taller.id !== tallerId;
-            });
-    
-            // Actualizar la interfaz después de eliminar
-            actualizarListaTalleresEnInterfaz();
-            // Actualizar la sección de agendamientos seleccionados en el formulario
-            actualizarAgendamientosSeleccionados();
-        }
-    
-        function actualizarAgendamientosSeleccionados() {
-            var agendamientosSeleccionadosElement = document.getElementById('agendamientosSeleccionados');
-            agendamientosSeleccionadosElement.innerHTML = '';  // Limpiar la sección antes de actualizarla
-    
-            listaTalleres.forEach(function (taller) {
-                var agendamientoItem = document.createElement('div');
-                agendamientoItem.innerHTML =
-                    '<strong>ID:</strong> ' + taller.id +
-                    ' - <strong>Nombre Cliente:</strong> ' + taller.nombre +
-                    ' - <strong>Total a Pagar:</strong> $' + taller.precio.toFixed(2);
-    
-                agendamientosSeleccionadosElement.appendChild(agendamientoItem);
-            });
-        }
-    
-        function mostrarMensaje(mensaje, tipo) {
-            Swal.fire({
-                title: tipo === 'success' ? 'Éxito' : 'Error',
-                text: mensaje,
-                icon: tipo,
-                timer: 1000, // Duración del mensaje en milisegundos (opcional)
-                showConfirmButton: false // Oculta el botón de confirmación (opcional)
-            });
-        }
-    
-        function actualizarTotal() {
-            var totalTalleres = listaTalleres.reduce(function (total, taller) {
-                return total + taller.precio * taller.cantidad;
-            }, 0);
-    
-            var totalInput = document.getElementById('id_total');
-            totalInput.value = totalTalleres.toFixed(2);
-        }
-    </script>
     
     <!-- Modal de talleres -->
     <div class="modal fade" id="modalTalleres" tabindex="-1" aria-labelledby="modalTalleresLabel" aria-hidden="true">
@@ -571,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <td>${{ taller.valor | intcomma }}</td>
                                     <td>{{ taller.abono }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-agregar-taller" style="float: inline-end;"
+                                        <button type="button" class="btn btn-primary btn-agregar-taller" style="float: inline-end;"
                                                 data-id="{{ taller.id_taller }}" 
                                                 data-tallerNombreCliente="{{ taller.cliente_rut_cliente.nombre_cliente }} {{ taller.cliente_rut_cliente.apePaterno }} {{ taller.cliente_rut_cliente.apeMaterno }}"
                                                 data-rutCliente="{{ taller.cliente_rut_cliente.formatted_rut }}"
@@ -579,8 +521,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                                 data-fechaIngreso="{{ taller.fecha_ingreso }}"
                                                 data-fechaTermino="{{ taller.fecha_termino }}"
                                                 data-precio="{{ taller.valor }}"
-                                                data-abono="{{ taller.abono }}"
-                                                >PAGAR
+                                                data-abono="{{ taller.abono }}">
+                                                Seleccionar
                                         </button>
                                     </td>
                                 </tr>
@@ -632,6 +574,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    
                         <button type="button" class="btn btn-success" id="confirmarVentaBtn">CONFIRMAR</button>
                     </div>
                 </div>
