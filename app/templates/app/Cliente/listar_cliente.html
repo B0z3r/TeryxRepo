@@ -165,7 +165,7 @@
                     <td>{{ p.formatted_rut }}</td>
                     <td>{{ p.nombre_cliente |capfirst }} {{ p.apePaterno |capfirst }} {{ p.apeMaterno |capfirst }}</td>
                     <td>{{ p.email }}</td>
-                    <td>{{ p.fono }}</td>
+                    <td>+56 {{ p.fono }}</td>
                     {% if perms.app.change_cliente %}
                     {% if perms.app.delete_cliente %}
                     <td>

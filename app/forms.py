@@ -163,22 +163,12 @@ class ProductoForm(forms.ModelForm):
     )
 
     precio_unitario = forms.DecimalField(
-        label='Precio Unitario',
+        label='Precio venta',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el precio unitario', 'required': False}),
         required=False,
     )
 
-    costo_real = forms.DecimalField(
-        label='Costo Real',
-        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el costo real del producto', 'required': False}),
-        required=False,
-    )
-
-    porcentaje_ganancia = forms.DecimalField(
-        label='Porcentaje de Ganancia (%)',
-        widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el porcentaje de ganancia', 'required': False}),
-        required=False,
-    )
+    
     stock = forms.IntegerField(
         label='Stock',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el stock del producto', 'required': False, 'class': 'no-spinner'}),
@@ -206,7 +196,7 @@ class ProductoForm(forms.ModelForm):
     )
     
     costo_real = forms.DecimalField(
-        label='Costo Real',
+        label='Valor con iva 19(%) agregado',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el costo real del producto', 'required': False}),
         required=False,
     )
@@ -219,72 +209,81 @@ class ProductoForm(forms.ModelForm):
 
     class Meta:
         model = Producto
-        fields = ["nombre_producto","marca","descripcion","precio_unitario","stock","categoria","nombre_proveedor","fecha_registro", "costo_real", "porcentaje_ganancia"]
+        fields = ["nombre_producto","marca","descripcion", "costo_real", "porcentaje_ganancia","precio_unitario","stock","categoria","nombre_proveedor","fecha_registro"]
 
 
 class ProveedorForm(forms.ModelForm):
-     
-     opc_consl_cat = [
-         ('', 'Selecciona una opción....'),
-        [0,"Indumentaria"],
-        [1,"Accesorio"],
-        [2,"Repuestos"]
+    opc_consl_cat = [
+        ('', 'Selecciona una opción....'),
+        [0, "Indumentaria"],
+        [1, "Accesorio"],
+        [2, "Repuestos"]
     ]
-     
-     nombre_proveedor = forms.CharField(
+
+    nombre_proveedor = forms.CharField(
         label='Nombre Proveedor',
         widget=forms.TextInput(attrs={'placeholder': 'Ingresa el nombre del proveedor', 'required': False}),
         required=False,
     )
 
-     rut_proveedor = forms.IntegerField(
+    rut_proveedor = forms.IntegerField(
         label='RUT Proveedor',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el RUT del proveedor', 'required': False}),
         required=False,
     )
 
-     email = forms.EmailField(
+    email = forms.EmailField(
         label='Correo Electrónico',
         widget=forms.EmailInput(attrs={'placeholder': 'Ingresa el correo electrónico del proveedor', 'required': False}),
         required=False,
     )
 
-     fono = forms.IntegerField(
+    fono = forms.IntegerField(
         label='Teléfono',
         widget=forms.NumberInput(attrs={'placeholder': 'Ingresa el teléfono del proveedor', 'required': False}),
         required=False,
     )
 
-     categoria = forms.ChoiceField(
+    categoria = forms.ChoiceField(
         label='Categoría',
         choices=opc_consl_cat,
         widget=forms.Select(attrs={'placeholder': 'Selecciona una opción', 'required': False}),
         required=False,
     )
 
-     pagina_web = forms.URLField(
+    pagina_web = forms.URLField(
         label='Página Web',
         widget=forms.URLInput(attrs={'placeholder': 'Ingresa la página web del proveedor', 'required': False}),
         required=False,
     )
 
-     class Meta:
+    class Meta:
         model = Proveedor
-        fields = '__all__' 
+        fields = '__all__'
 
-        def clean_rut_proveedor(self):
-            rut_proveedor = self.cleaned_data.get('rut_proveedor')
+    def clean_rut_proveedor(self):
+        rut_proveedor = self.cleaned_data.get('rut_proveedor')
 
-            if rut_proveedor is not None:
-                rut_str = str(rut_proveedor).replace(".", "").replace("-", "")
+        if rut_proveedor is not None:
+            rut_str = str(rut_proveedor).replace(".", "").replace("-", "")
             
             # Verifica que el RUT tenga un mínimo de 8 y un máximo de 9 dígitos
             if not (8 <= len(rut_str) <= 9):
                 raise ValidationError('El RUT debe tener entre 8 y 9 dígitos.')
 
-            return rut_proveedor
+        return rut_proveedor
+        
+    def clean_fono(self):
+        fono = self.cleaned_data.get('fono')
 
+        if fono is not None:
+            fono_str = str(fono)
+            
+            # Verifica que el teléfono tenga exactamente 9 dígitos y comience con '9'
+            if len(fono_str) != 9 or not fono_str.startswith('9'):
+                raise ValidationError('El teléfono debe tener 9 dígitos y comenzar con el número 9.')
 
+        return fono
 class TallerForm(forms.ModelForm):
 
     opc_tipo_arreglo = [
