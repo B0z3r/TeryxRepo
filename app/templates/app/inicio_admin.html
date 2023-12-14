@@ -306,7 +306,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for taller in talleres_atrasados_estado %}
+                  {% for taller in talleres_atrasados %}
                     <tr>
                       <td>{{ taller.id_taller }}</td>
                       <td>{{ taller.cliente_rut_cliente.rut_cliente }} - {{ taller.cliente_rut_cliente.nombre_cliente }} {{ taller.cliente_rut_cliente.apePaterno }} {{ taller.cliente_rut_cliente.apeMaterno }}</td>

@@ -12,7 +12,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from datetime import date
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from xhtml2pdf import pisa

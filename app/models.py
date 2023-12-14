@@ -78,7 +78,7 @@ class Producto(models.Model):
     precio_unitario = models.IntegerField('Precio Unitario')
     stock = models.IntegerField('Stock')
     categoria = models.IntegerField('Categoría', choices=opc_consl_cat)
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     fecha_registro = models.DateField('Fecha de Registro', default=datetime.now)
     
     def __str__(self):
