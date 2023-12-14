@@ -12,7 +12,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from datetime import date
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from xhtml2pdf import pisa
@@ -187,6 +186,7 @@ def listar_cliente(request):
     }
 
     return render(request, 'app/Cliente/listar_cliente.html', data)
+
 @permission_required('app.change_cliente')
 def modificar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
