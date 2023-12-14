@@ -189,111 +189,71 @@
           <div class="card-body">
             <div class="table-responsive">
               
-              <table id="example" class="table table-striped-columns table-hover data-table boleta-table">
+         
+<table id="example" class="table table-striped-columns table-hover data-table boleta-table">
+  <thead>
+      <tr>
+          <th>Nº</th>
+          <th>Estado</th>
+          <th>Modelo de Bicicleta</th>
+          <th>Fecha de Inicio</th>
+          <th>Fecha de Término</th>
+          <th>Rut cliente</th>
+          <th>Nombre del Cliente</th>
+          <th>Teléfono</th>
+          <th>Tipo de Arreglo</th>
+          <th>Valor del Arreglo</th>
+          <th>Descipción</th>
+          <th>Tipo de Pago</th>
+          <th>Abono</th>
+          <th>Total</th>
+          {% if perms.app.change_proveedor %}
+          <th>Opciones</th>
+          {% endif %}
+      </tr>
+  </thead>
+  <tbody>
+      {% for datos in entity %}
+      <tr>
+          <td>{{ datos.id_taller }}</td>
+          <td style="color: 
+              {% if datos.estado == 0 %} orange; 
+              {% elif datos.estado == 1 %} green;
+              {% else %} red;
+              {% endif %}">
+              {{ datos.get_estado_display }}
+          </td>
+          <td>{{ datos.modelo_bicicleta }}</td>
+          <td>{{ datos.fecha_ingreso }}</td>
+          <td>{{ datos.fecha_termino }}</td>
+          <td>{{ datos.cliente_rut_cliente.formatted_rut }}</td>
+          <td>
+              {{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}
+          </td>
+          <td>{{ datos.cliente_rut_cliente.fono }}</td>
+          <td>{{ datos.get_tipo_arreglo_display }}</td>
+          <td>${{ datos.valor | intcomma }}</td>
+          <td>{{ datos.descripcion }}</td>
+          <td>{{ datos.get_estado_pago_display}}</td>
+          <td>${{ datos.abono | intcomma }}</td>
+          <td>${{ datos.total_neto | intcomma }}</td>
+          {% if perms.app.change_venta %}
+          {% if perms.app.change_venta %}
+          <td id="opciones">
+              {% if perms.app.change_venta %}
+                  <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-info btn-md"></a>
+              {% endif %}
+              {% if perms.app.change_venta %}
+              <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn bi-trash btn-danger btn-md"></a>
+              {% endif %}
               
-               
-                <div class="d-flex justify-content-center" style="padding-bottom: 10px;">
-                  <div class="card" style="width: 500px; border-radius: 20px;">
-                    <div class="card-body"  >
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="titulo-container">
-                                        <h5 class="titulo-estado mb-0">ATRASADO</h5>
-                                    </div>
-                                    <div class="linea-vertical mx-2"></div>
-                                    <div class="estado-container">
-                                        <div class="estado-cuadro rojo"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="titulo-container">
-                                        <h5 class="titulo-estado mb-0">EN PROCESO</h5>
-                                    </div>
-                                    <div class="linea-vertical mx-2"></div>
-                                    <div class="estado-container">
-                                        <div class="estado-cuadro" style="background-color: rgb(218, 107, 5);"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="titulo-container">
-                                        <h5 class="titulo-estado mb-0">TERMINADO</h5>
-                                    </div>
-                                    <div class="linea-vertical mx-2"></div>
-                                    <div class="estado-container">
-                                        <div class="estado-cuadro" style="background-color: rgb(0, 131, 0);"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-                
-              
-              
-              
-                <thead>
-
-                  
-                  <tr>
-                    <th>Nº</th>
-                    <th>Estado</th>
-                    <th>Modelo de Bicicleta</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha de Término</th>
-                    <th>Rut cliente</th>
-                    <th>Nombre del Cliente</th>
-                    <th>Teléfono</th>
-                    <th>Tipo de Arreglo</th>
-                    <th>Valor del Arreglo</th>
-                    <th>Descipción</th>
-                    <th>Tipo de Pago</th>
-                    <th>Abono</th>
-                    <th>Total</th>
-                    <th>Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  {% for datos in entity %}
-                  <tr>
-                    <td>{{ datos.id_taller }}</td>
-                    <td style="color: 
-                      {% if datos.estado == 0 %}  orange; {% elif datos.estado == 1 %}green;{% else %}red;{% endif %}">
-                      {{ datos.get_estado_display }}
-                    </td>
-
-                    <td>{{ datos.modelo_bicicleta }}</td>
-                    <td>{{ datos.fecha_ingreso }}</td>
-                    <td>{{ datos.fecha_termino }}</td>
-                    <td>{{ datos.cliente_rut_cliente.formatted_rut }}</td>
-                    <td>
-                      {{ datos.cliente_rut_cliente.nombre_cliente }} {{ datos.cliente_rut_cliente.apePaterno }} {{ datos.cliente_rut_cliente.apeMaterno }}
-                  </td>
-                    <td>{{ datos.cliente_rut_cliente.fono }}</td>
-                    <td>{{ datos.get_tipo_arreglo_display }}</td>
-                    <td>${{ datos.valor | intcomma }}</td>
-                    <td>{{ datos.descripcion }}</td>
-                    <td>{{ datos.get_estado_pago_display}}</td>
-                    <td>${{ datos.abono | intcomma }}</td>
-                    <td>${{ datos.total_neto | intcomma }}</td>
-                    {% if perms.app.change_venta %}
-                    {% if perms.app.delete_venta %}
-                    <td id="opciones">
-                      <a href="{% url 'modificar_taller' datos.id_taller %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                      <a href="#" onclick="eliminarTaller({{datos.id_taller}})" class="btn  bi-trash btn-danger btn-md"></a>
-                    </td>
-                    {% endif %}
-                    {% endif %}
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+            </td>
+      {% endif %}
+      {% endif %}
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
               <div>{% include 'app/paginator.html' %}</div>
             </div>
           </div>

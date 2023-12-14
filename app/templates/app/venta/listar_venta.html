@@ -195,15 +195,18 @@
                             </td>
                             <td>{{ p.tipopago|upper }}</td>
                             <td>${{ p.total|intcomma|upper }}</td>
-                            {% if perms.app.change_venta %}
-                            {% if perms.app.delete_venta %}
+                            
+                       
                             <td>
+                                {% if perms.app.change_venta %}
                                 <a href="{% url 'modificar_venta' p.id_venta %}" class="btn bi-pencil-square btn-info btn-md"></a>
-                                               
+                                {% endif %}
+                                {% if perms.app.delete_venta %}       
                                 <a href="#" onclick="eliminarVenta({{p.id_venta}})" class="btn bi-trash btn-danger btn-md"></a>
+                                {% endif %}
                             </td>
-                            {% endif %}
-                            {% endif %}
+                       
+                           
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -95,13 +95,17 @@
                     <td>{{ p.first_name }} {{ p.last_name }}</td>
                     <td>{{ p.email }}</td>
 
-                    {% if perms.app.change_colaborador %} 
-                    {% if perms.app.delete_colaborador %}
+                  
+                  
                     <td>
+                      {% if perms.app.change_colaborador %} 
                       <a href="{% url 'modificar_colaborador' p.id %}" class="btn btn-info bi-pencil-square btn-md"></a>
+                      {% endif %} 
+                      {% if perms.app.delete_colaborador %}
                       <a href="#" onclick="eliminarColaborador({{p.id}})" class="btn bi-trash btn-danger btn-md"></a>
+                      {% endif %}
                     </td>
-                    {% endif %} {% endif %}
+                   
                   </tr>
                   {% endfor %}
                 </tbody>

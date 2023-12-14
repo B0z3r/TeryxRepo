@@ -159,8 +159,13 @@
                                             <th>Correo</th>
                                             <th>Telefono</th>
                                             <th>Categoría</th>
+                                           
                                             <th>Web</th>
+                                            {% if perms.app.change_proveedor %}
+                                                {% if perms.app.delete_proveedor %}
                                             <th>Opciones</th>
+                                            {% endif %}
+                                            {% endif %}
                                         </tr>
                                     </thead>
                                     
@@ -176,10 +181,18 @@
                                                 <td>{{ p.pagina_web }}</td>
                                                 {% if perms.app.change_proveedor %}
                                                 {% if perms.app.delete_proveedor %}
-                                                    <td><a href="{% url 'modificar_proveedor' p.rut_proveedor %}" class="btn bi-pencil-square btn-info btn-sm"></a>
-                                                      <a href="#" onclick="eliminarProveedor({{ p.rut_proveedor }})" class="btn  bi-trash btn-danger btn-sm"></a></td>
-                                                {% endif %}
-                                                {% endif %}
+
+                                                    <td>
+                                                        {% if perms.app.change_proveedor %}
+                                                        <a href="{% url 'modificar_proveedor' p.rut_proveedor %}" class="btn bi-pencil-square btn-info btn-sm"></a>
+                                                        {% endif %}
+                                                        {% if perms.app.delete_proveedor %}
+                                                        <a href="#" onclick="eliminarProveedor({{ p.rut_proveedor }})" class="btn  bi-trash btn-danger btn-sm"></a>
+                                                        {% endif %}
+                                                    </td>
+                                                    {% endif %}
+                                                    {% endif %}
+                                            
                                                
                                             </tr>
                                             {% endfor %}

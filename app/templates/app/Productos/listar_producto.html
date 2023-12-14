@@ -267,13 +267,16 @@
                           </button>
                         </td>
                         <td>{{ p.get_categoria_display }}</td>
-                        {% if perms.app.change_producto %} {% if perms.app.delete_producto %}
+                         
                           <td>
+                            {% if perms.app.change_producto %}
                             <a href="{% url 'modificar_producto' p.id_producto %}" class="btn btn-info bi-pencil-square btn-md"></a>
+                            {% endif %}
+                            {% if perms.app.delete_producto %}
                             <a href="#" onclick="eliminarProducto({{ p.id_producto }})" class="btn bi-trash btn-danger btn-md"></a>
-                            
+                            {% endif %}
                           </td>
-                        {% endif %} {% endif %}
+                        
                       </tr>
                       {% endfor %}
                     </tbody>

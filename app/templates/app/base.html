@@ -83,7 +83,7 @@
         <div class="offcanvas-body p-2">
             <nav class="navbar-dark">
                 <ul class="navbar-nav">
-                    <li style="padding-left: 10px;">
+                    <li style="padding-left: 40px;">
                         <div class="text-muted small fw-bold text-uppercase px-4 " style="padding-top: 10px;">Menú</div>
                     </li>
                     <li class="my-2">
@@ -92,13 +92,14 @@
                     <li>
                         <a href="{% url 'inicio_admin' %}" class="nav-link px-3 active" style="padding-top:5px;">
                             <span class="me-3"><i class="bi bi-house-door"></i></span>
-                            <span>Inicio</span>
+                            <span style="padding-left: 10px;">Inicio</span>
                         </a>
                     </li>
+                    {% if perms.app.add_regcolaborador %}
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                    
                     <li>
                         <a href="{% url 'listar_colaborador' %}" class="nav-link px-3 active" style="padding-top:5px;">
                             <span class="me-3"><i class="bi bi-people-fill"></i></span>
@@ -108,10 +109,19 @@
                        
                     </li>
                     {% endif %}
+
+                    
+                    {% if perms.app.add_cliente  %}
+                    {% if perms.app.view_cliente  %}
+              
+
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                   
+
+
+
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts2">
@@ -129,29 +139,42 @@
                                 <li class="my-2">
                                     <hr class="dropdown-divider bg-light" />
                                 </li>
+                                
                                 <li>
                                     <a href="{% url 'agregar_cliente' %}" class="nav-link px-3">
                                         <span class="me-2"><i class="bi bi-person-plus-fill"></i></span>
                                         <span>Registrar Clientes</span>
                                     </a>
                                 </li>
+                           
+
                                 <li class="my-2">
                                     <hr class="dropdown-divider bg-light" />
                                 </li>
+                              
                                 <li>
                                     <a href="{% url 'listar_cliente' %}" class="nav-link px-3">
                                         <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
                                         <span>Historial De Clientes</span>
                                     </a>
                                 </li>
+                               
                             </ul>
                         </div>
                     </li>
                     {% endif %}
+                    {% endif %}
+               
+                   
+
+                    {% if perms.app.add_venta  %}
+                    {% if perms.app.view_venta  %}
+                   
+                   
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                   
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts3">
@@ -188,10 +211,14 @@
                         </div>
                     </li>
                     {% endif %}
+                    {% endif %}
+                
+                    {% if perms.app.add_taller  %}
+                    {% if perms.app.view_taller  %}
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                 
                     <li>
                         <a class="nav-link px-3 sidebar-link active " data-bs-toggle="collapse"
                             data-bs-target="#layouts4">
@@ -228,10 +255,13 @@
                         </div>
                     </li>
                     {% endif %}
+                    {% endif %}
+                    {% if perms.app.add_producto  %}
+                    {% if perms.app.view_producto  %}
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                   
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts5">
@@ -270,10 +300,12 @@
                         </div>
                     </li>
                     {% endif %}
+                    {% endif %}
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />
                     </li>
-                    {% if perms.app.add_regcolaborador %}
+                    {% if perms.app.add_producto  %}
+                    {% if perms.app.view_producto  %}
                     <li>
                         <a class="nav-link px-3 sidebar-link active" data-bs-toggle="collapse"
                             data-bs-target="#layouts7">
@@ -309,6 +341,7 @@
                             </ul>
                         </div>
                     </li>
+                    {% endif %}
                     {% endif %}
                     <li class="my-2">
                         <hr class="dropdown-divider bg-light" />

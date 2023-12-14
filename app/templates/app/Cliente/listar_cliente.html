@@ -166,15 +166,19 @@
                     <td>{{ p.nombre_cliente |capfirst }} {{ p.apePaterno |capfirst }} {{ p.apeMaterno |capfirst }}</td>
                     <td>{{ p.email }}</td>
                     <td>+56 {{ p.fono }}</td>
-                    {% if perms.app.change_cliente %}
-                    {% if perms.app.delete_cliente %}
+                    
+                    
                     <td>
+                      {% if perms.app.change_cliente %}
                       <a href="{% url 'modificar_cliente' p.rut_cliente %}" class="btn bi-pencil-square  btn-info btn-md"></a>
+                      {% endif %}
                       <a href="{% url 'historial_cliente' p.rut_cliente %}" class="btn bi-file-earmark-text btn-secondary btn-md"></a>
+                      {% if perms.app.delete_cliente %}
                       <a href="#" onclick="eliminarCliente({{p.rut_cliente}})" class="btn bi-trash btn-danger btn-md"></a>
+                      {% endif %}
                     </td>
-                    {% endif %}
-                    {% endif %}
+                   
+                    
                   </tr>
                   {% endfor %}
                 </tbody>
